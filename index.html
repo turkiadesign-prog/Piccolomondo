@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Regular.otf" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Light.otf" crossorigin>
+<link rel="preload" as="font" type="font/ttf" href="./fonts/InstrumentSerif-Regular.ttf" crossorigin>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -71,7 +75,7 @@
           <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
         </sc-for>
       </div>
-      <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:6px">
+      <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:{{ hamburgerMarginLeft }}">
         <span style="width:26px;height:2px;background:#FED0CF"></span>
         <span style="width:26px;height:2px;background:#FED0CF"></span>
         <span style="width:26px;height:2px;background:#FED0CF"></span>
@@ -143,24 +147,24 @@
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
-      <img src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
     </div>
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
-          <img src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
@@ -229,7 +233,7 @@
       <div style="width:60%;flex-shrink:0;position:relative;aspect-ratio:16/10;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
         <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
           <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-            <img src="{{ img.src }}" alt="" style="{{ img.style }}">
+            <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
           </sc-for>
         </sc-for>
         <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -264,7 +268,7 @@
     <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
         <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-          <img src="{{ img.src }}" alt="" style="{{ img.style }}">
+          <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
         </sc-for>
       </sc-for>
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -320,24 +324,24 @@
   <div data-screen-label="story-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
     <div style="display:inline-flex;animation:ribbonScrollReverse 24s linear infinite;align-items:center">
       <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+        <img loading="lazy" decoding="async" src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
       <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+        <img loading="lazy" decoding="async" src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
     </div>
   </div>
 
   <!-- STORY LEGACY SECTION -->
   <div data-screen-label="brand-story-legacy" style="padding:{{ legacyTopPadding }} 24px 60px;background:#F4EEE8;overflow-x:hidden;min-height:40vh;max-width:1200px;margin:0 auto;display:flex;gap:16px;align-items:{{ legacyAlign }};flex-wrap:wrap;justify-content:center">
-    <img src="./assets/story-legacy-illustration.png" alt="His legacy, shaped into our identity" style="max-width:{{ legacyImgMaxWidth }};width:100%;height:auto;flex-shrink:0;margin:0 auto 0 {{ legacyImgOffset }}">
+    <img loading="lazy" decoding="async" src="./assets/story-legacy-illustration.png" alt="His legacy, shaped into our identity" style="max-width:{{ legacyImgMaxWidth }};width:100%;height:auto;flex-shrink:0;margin:0 auto 0 {{ legacyImgOffset }}">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="max-width:440px">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
         <div style="font-family:'Instrument Serif',serif;font-size:28px;color:#344315" dangerouslySetInnerHTML="{{ legacyTitleHtml }}"></div>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
-            <img src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
           </sc-for>
         </div>
       </div>
@@ -350,7 +354,7 @@
         <div style="font-family:'Instrument Serif',serif;font-size:24px;font-style:italic;color:#344315;line-height:1.25;letter-spacing:0.5px" dangerouslySetInnerHTML="{{ legacyTitleHtmlMobile }}"></div>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
-            <img src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
           </sc-for>
         </div>
       </div>
@@ -394,8 +398,8 @@
           <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,4.5vw,54px);color:#2A1002;margin:0">{{ t.menu.title }}</h2>
         </div>
         <div style="position:absolute;top:50%;left:calc(50% + 190px);transform:translateY(-50%);width:120px;height:160px;flex-shrink:0;display:{{ illusDisplay }}">
-          <img src="./assets/stamp-hands-pink.png" alt="" style="{{ menuStampBackStyle }}">
-          <img src="./assets/stamp-man-orange.png" alt="" style="{{ menuStampFrontStyle }}">
+          <img loading="lazy" decoding="async" src="./assets/stamp-hands-pink.png" alt="" style="{{ menuStampBackStyle }}">
+          <img loading="lazy" decoding="async" src="./assets/stamp-man-orange.png" alt="" style="{{ menuStampFrontStyle }}">
         </div>
       </div>
 
@@ -599,8 +603,8 @@
 
       <div style="flex:1 1 320px;min-width:280px;position:relative;width:100%;max-width:{{ contactMapMaxWidth }};margin:{{ contactMapMarginTop }} auto 0">
         
-      <img src="./assets/contact-map.png" alt="Piccolo Mondo location map" style="width: 100%; max-width: 100%; object-fit: contain; display: block; border-radius: 0px; height: auto">
-        <img src="./assets/chair-floating.png" alt="" style="position: absolute; top: 10%; left: 62%; width: 12%; height: auto; animation: chairFloat 3.2s ease-in-out infinite; pointer-events: none"></div>
+      <img loading="lazy" decoding="async" src="./assets/contact-map.png" alt="Piccolo Mondo location map" style="width: 100%; max-width: 100%; object-fit: contain; display: block; border-radius: 0px; height: auto">
+        <img loading="lazy" decoding="async" src="./assets/chair-floating.png" alt="" style="position: absolute; top: 10%; left: 62%; width: 12%; height: auto; animation: chairFloat 3.2s ease-in-out infinite; pointer-events: none"></div>
     </div>
   </div>
 
@@ -611,7 +615,7 @@
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:56px;width:100%;max-width:1100px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
-        <img src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
+        <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px; min-width: 140px; font-family: Calibre Light">
@@ -647,7 +651,7 @@
 
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;align-items:center;gap:32px;width:100%;max-width:480px">
-      <img src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
 
       <div style="display:grid;grid-template-columns:auto auto;justify-content:center;column-gap:40px;row-gap:28px;width:100%">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
@@ -1375,9 +1379,9 @@ class Component extends DCLogic {
       if (!el) return;
       const max = el.scrollWidth - el.clientWidth;
       if (max <= 0) return;
-      const next = el.scrollLeft + 1;
+      const next = el.scrollLeft + 1.8;
       el.scrollLeft = next >= max ? 0 : next;
-    }, 30);
+    }, 20);
   }
   _pauseAutoScroll(timerKey) {
     if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
@@ -1759,7 +1763,7 @@ class Component extends DCLogic {
     return {
       t, isMobile, isDesktop, chairTiltTransform, headerScriptImages,
       logoHeight: isMobile ? '72px' : '92px',
-      logoMarginLeft: isMobile ? '0px' : '28px',
+      logoMarginLeft: isMobile ? '-10px' : '28px',
       heroCompStyle: isMobile ? 'flex-direction:column;gap:20px' : '',
       heroTextWrap: isMobile ? 'white-space:normal;text-align:center' : 'white-space:nowrap',
       chairSize: isMobile ? 'min(70vw,360px)' : 'min(34vw,360px)',
@@ -1857,6 +1861,7 @@ class Component extends DCLogic {
       navPadding: isMobile ? '16px 10px' : '18px 48px',
       navJustify: isMobile ? 'center' : 'space-between',
       navGroupGap: isMobile ? '20px' : '44px',
+      hamburgerMarginLeft: isMobile ? '16px' : '6px',
       navOpen: this.state.navOpen,
       toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
       setLangEn: () => this.setState({ lang: 'en' }),
