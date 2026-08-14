@@ -55,7 +55,7 @@
   <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
     <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
       <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
-        <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msrxngg6-sydl.png" alt="Piccolo Mondo" style="height:{{ logoHeight }};width:auto;display:block;filter:brightness(0) saturate(100%) invert(80%) sepia(31%) saturate(486%) hue-rotate(302deg) brightness(103%) contrast(97%)">
+        <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msrxngg6-sydl.png" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block;filter:brightness(0) saturate(100%) invert(80%) sepia(31%) saturate(486%) hue-rotate(302deg) brightness(103%) contrast(97%)">
       </a>
 
       <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
@@ -125,7 +125,7 @@
       <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
       <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
         <sc-if value="{{ chairVisible }}" hint-placeholder-val="{{ true }}">
-          <img src="./assets/chair-floating.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
+          <img src="./assets/chair-floating.webp" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
         </sc-if>
         <sc-if value="{{ hoverPreviewSrc }}" hint-placeholder-val="{{ false }}">
           <div style="{{ hoverPreviewStyle }}"></div>
@@ -147,7 +147,7 @@
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
@@ -159,7 +159,7 @@
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="lazy" decoding="async" src="./assets/story-collage.jpg" alt="" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
@@ -190,7 +190,7 @@
   <div data-screen-label="gallery" style="background:#F4EEE8;padding:{{ galleryPadding }};overflow:hidden;margin-top:{{ galleryMarginTop }};margin-bottom:{{ galleryMarginBottom }}">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative">
-      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:auto;scroll-behavior:auto;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -205,7 +205,7 @@
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="position:relative">
-      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:auto;scroll-behavior:auto;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:200px;height:260px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -368,7 +368,7 @@
   <!-- STORY GALLERY -->
   <div data-screen-label="story-gallery" style="background:#F4EEE8;padding:30px 0 70px;overflow:hidden">
     <div style="position:relative">
-      <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:auto;scroll-behavior:auto;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ storyGalleryItems }}" as="item" hint-placeholder-count="18">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -535,8 +535,14 @@
           <input required="{{ true }}" value="{{ reservation.name }}" onChange="{{ onNameChange }}" placeholder="{{ t.reservation.labels.name }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <input required="{{ true }}" value="{{ reservation.phone }}" onChange="{{ onPhoneChange }}" placeholder="{{ t.reservation.labels.phone }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <input value="{{ reservation.email }}" onChange="{{ onEmailChange }}" placeholder="{{ t.reservation.labels.email }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3">
-          <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.date }}</label>
+            <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.time }}</label>
+            <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
+          </div>
           <input type="number" min="1" max="20" value="{{ reservation.guests }}" onChange="{{ onGuestsChange }}" placeholder="{{ t.reservation.labels.guests }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <textarea value="{{ reservation.notes }}" onChange="{{ onNotesChange }}" placeholder="{{ t.reservation.labels.notes }}" rows="3" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;resize:vertical"></textarea>
           <button type="submit" style="grid-column:span 2;width:100%;box-sizing:border-box;background:#344315;color:#F4EEE8;border:none;padding:15px;borderRadius:999px;font-weight:300;font-family:'Calibre Light',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer" style-hover="background:#401413">{{ t.reservation.submit }}</button>
@@ -603,8 +609,8 @@
 
       <div style="flex:1 1 320px;min-width:280px;position:relative;width:100%;max-width:{{ contactMapMaxWidth }};margin:{{ contactMapMarginTop }} auto 0">
         
-      <img loading="lazy" decoding="async" src="./assets/contact-map.png" alt="Piccolo Mondo location map" style="width: 100%; max-width: 100%; object-fit: contain; display: block; border-radius: 0px; height: auto">
-        <img loading="lazy" decoding="async" src="./assets/chair-floating.png" alt="" style="position: absolute; top: 10%; left: 62%; width: 12%; height: auto; animation: chairFloat 3.2s ease-in-out infinite; pointer-events: none"></div>
+      <img loading="lazy" decoding="async" src="./assets/contact-map.webp" alt="Piccolo Mondo location map" style="width: 100%; max-width: 100%; object-fit: contain; display: block; border-radius: 0px; height: auto">
+        <img loading="lazy" decoding="async" src="./assets/chair-floating.webp" alt="" style="position: absolute; top: 10%; left: 62%; width: 12%; height: auto; animation: chairFloat 3.2s ease-in-out infinite; pointer-events: none"></div>
     </div>
   </div>
 
@@ -1438,7 +1444,7 @@ class Component extends DCLogic {
   legacyTimelineData() {
     const lang = this.state.lang;
     const localized = T[lang].story.legacyTimeline;
-    return this._legacyTimelineData || localized.map(d => ({ year: d.year, text: d.text, image: './assets/story-collage.jpg' }));
+    return this._legacyTimelineData || localized.map(d => ({ year: d.year, text: d.text, image: './assets/story-collage-opt.webp' }));
   }
   buildLegacyTimeline() {
     const data = this.legacyTimelineData();
@@ -1658,8 +1664,8 @@ class Component extends DCLogic {
     const photoStack = [1,2,3,4,5,6,7,10].map((n, i) => {
       const rot = (n % 2 === 0 ? 1 : -1) * (3 + (n % 4) * 2);
       return {
-        src: './assets/story-photos/' + n + '.png',
-        style: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/story-photos/' + n + '.png\');background-size:cover;background-position:center;transform:rotate(' + rot + 'deg) scale(0.98);z-index:' + n + ';opacity:' + (i <= this.state.photoStackIndex ? 1 : 0) + ';'
+        src: './assets/story-photos/' + n + '.webp',
+        style: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/story-photos/' + n + '.webp\');background-size:cover;background-position:center;transform:rotate(' + rot + 'deg) scale(0.98);z-index:' + n + ';opacity:' + (i <= this.state.photoStackIndex ? 1 : 0) + ';'
       };
     });
     const tilt = this._chairTilt || { rx: 0, ry: 0 };
@@ -1892,8 +1898,8 @@ class Component extends DCLogic {
       chairVisible: !this.state.photoStackOpen,
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
-      galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '.jpg\')' })),
-      storyGalleryItems: Array.from({ length: 18 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 9) + 1) + '.png\')' })),
+      galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
+      storyGalleryItems: Array.from({ length: 18 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 9) + 1) + '.webp\')' })),
       handwriteRef: this._handwriteRefCb,
       handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
       excerptLine: {
