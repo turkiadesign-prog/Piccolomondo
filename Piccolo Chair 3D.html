@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Piccolo Mondo Chair</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+  html, body { margin: 0; height: 100%; background: transparent !important; overflow: hidden; }
+  #canvasHost { position: absolute; inset: 0; background: transparent; touch-action: none; }
+  canvas { display: block; background: transparent; }
+</style>
+</head>
+<body>
+<div id="canvasHost"></div>
+<script type="module">
+  import * as THREE from 'three';
+
+  const host = document.getElementById('canvasHost');
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  host.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+  camera.position.set(0, 0.05, 2.5);
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d2c4, 1.1));
+  const key = new THREE.DirectionalLight(0xffffff, 2.0);
+  key.position.set(3, 5, 4);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.5);
+  fill.position.set(-3, 2, -3);
+  scene.add(fill);
+
+  const walnut = new THREE.MeshStandardMaterial({ color: 0x5b3a24, roughness: 0.55, metalness: 0.05, name: 'walnut' });
+  const walnutDark = new THREE.MeshStandardMaterial({ color: 0x3d2716, roughness: 0.6, metalness: 0.05, name: 'walnut_dark' });
+  const cane = new THREE.MeshStandardMaterial({ color: 0xc9a563, roughness: 0.75, metalness: 0.0, name: 'cane' });
+
+  const chair = new THREE.Group();
+  chair.name = 'bentwood_chair';
+
+  const legRadius = 0.018;
+  const seatY = 0.46;
+  const backTopY = 0.98;
+
+  // Front legs: cabriole-style bow, floor to seat corner.
+  function frontLeg(x) {
+    const pts = [
+      new THREE.Vector3(x * 1.05, 0, 0.24),
+      new THREE.Vector3(x * 1.12, seatY * 0.32, 0.235),
+      new THREE.Vector3(x * 1.0, seatY * 0.68, 0.21),
+      new THREE.Vector3(x * 0.82, seatY, 0.17)
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo = new THREE.TubeGeometry(curve, 24, legRadius, 16, false);
+    const mesh = new THREE.Mesh(geo, walnut);
+    mesh.name = 'front_leg';
+    return mesh;
+  }
+  chair.add(frontLeg(0.21));
+  chair.add(frontLeg(-0.21));
+
+  // Back leg + post: one continuous bentwood piece from floor through the
+  // seat corner up to the crest rail, as in the reference photos.
+  function backLegPost(x) {
+    const pts = [
+      new THREE.Vector3(x * 1.0, 0, -0.20),
+      new THREE.Vector3(x * 1.08, seatY * 0.3, -0.215),
+      new THREE.Vector3(x * 0.98, seatY * 0.65, -0.19),
+      new THREE.Vector3(x * 0.83, seatY, -0.155),
+      new THREE.Vector3(x * 0.85, seatY + 0.25, -0.06),
+      new THREE.Vector3(x * 0.78, backTopY, -0.045)
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo = new THREE.TubeGeometry(curve, 32, 0.02, 16, false);
+    const mesh = new THREE.Mesh(geo, walnut);
+    mesh.name = 'back_leg_post';
+    return mesh;
+  }
+  chair.add(backLegPost(0.21));
+  chair.add(backLegPost(-0.21));
+
+  function stretcher(x1, z1, x2, z2, y, dip) {
+    const pts = [new THREE.Vector3(x1, y, z1), new THREE.Vector3((x1 + x2) / 2, y - dip, (z1 + z2) / 2), new THREE.Vector3(x2, y, z2)];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo = new THREE.TubeGeometry(curve, 16, 0.012, 12, false);
+    const mesh = new THREE.Mesh(geo, walnutDark);
+    mesh.name = 'stretcher';
+    return mesh;
+  }
+  chair.add(stretcher(0.20, 0.22, 0.19, -0.18, 0.185, 0.055));
+  chair.add(stretcher(-0.20, 0.22, -0.19, -0.18, 0.185, 0.055));
+  chair.add(stretcher(0.19, -0.18, -0.19, -0.18, 0.15, 0.02));
+  chair.add(stretcher(0.20, 0.22, -0.20, 0.22, 0.16, 0.045));
+
+  // Seat: rounded, slightly pear-shaped (wider at back, tapering to front).
+  const seatShape = new THREE.Shape();
+  seatShape.moveTo(0, -0.185);
+  seatShape.bezierCurveTo(0.15, -0.185, 0.235, -0.06, 0.225, 0.09);
+  seatShape.bezierCurveTo(0.215, 0.19, 0.11, 0.2, 0, 0.2);
+  seatShape.bezierCurveTo(-0.11, 0.2, -0.215, 0.19, -0.225, 0.09);
+  seatShape.bezierCurveTo(-0.235, -0.06, -0.15, -0.185, 0, -0.185);
+  const seatGeo = new THREE.ExtrudeGeometry(seatShape, { depth: 0.028, bevelEnabled: true, bevelThickness: 0.007, bevelSize: 0.009, bevelSegments: 3, curveSegments: 32 });
+  seatGeo.rotateX(-Math.PI / 2);
+  seatGeo.rotateY(Math.PI);
+  seatGeo.translate(0, seatY, -0.015);
+  const seatFrame = new THREE.Mesh(seatGeo, walnut);
+  seatFrame.name = 'seat_frame';
+  chair.add(seatFrame);
+
+  const caneShape = seatShape.clone();
+  const caneGeo = new THREE.ShapeGeometry(caneShape, 32);
+  caneGeo.rotateX(-Math.PI / 2);
+  caneGeo.rotateY(Math.PI);
+  caneGeo.scale(0.9, 1, 0.9);
+  caneGeo.translate(0, seatY + 0.026, -0.015);
+  const caneMesh = new THREE.Mesh(caneGeo, cane);
+  caneMesh.name = 'cane_seat';
+  chair.add(caneMesh);
+
+  const topRailShape = new THREE.Shape();
+  topRailShape.moveTo(-0.2, 0);
+  topRailShape.quadraticCurveTo(0, 0.05, 0.2, 0);
+  topRailShape.quadraticCurveTo(0, -0.025, -0.2, 0);
+  const topRailGeo = new THREE.ExtrudeGeometry(topRailShape, { depth: 0.05, bevelEnabled: true, bevelThickness: 0.006, bevelSize: 0.006, bevelSegments: 2, curveSegments: 24 });
+  topRailGeo.translate(0, backTopY, -0.07);
+  const topRail = new THREE.Mesh(topRailGeo, walnut);
+  topRail.name = 'top_rail';
+  chair.add(topRail);
+
+  // Back loop splat: a hollow "staple" shape mortised between the seat
+  // rail and the crest rail, matching the D-shaped loop in the reference.
+  function loopSplatShape() {
+    const outerHalfW = 0.078, outerH = 0.315, thickness = 0.022;
+    const shape = new THREE.Shape();
+    shape.moveTo(-outerHalfW, 0);
+    shape.lineTo(-outerHalfW, outerH - outerHalfW);
+    shape.absarc(0, outerH - outerHalfW, outerHalfW, Math.PI, 0, true);
+    shape.lineTo(outerHalfW, 0);
+    shape.lineTo(-outerHalfW, 0);
+    const innerHalfW = outerHalfW - thickness;
+    const innerBottom = 0.05;
+    const hole = new THREE.Path();
+    hole.moveTo(-innerHalfW, innerBottom);
+    hole.lineTo(-innerHalfW, outerH - outerHalfW);
+    hole.absarc(0, outerH - outerHalfW, innerHalfW, Math.PI, 0, true);
+    hole.lineTo(innerHalfW, innerBottom);
+    hole.lineTo(-innerHalfW, innerBottom);
+    shape.holes.push(hole);
+    return shape;
+  }
+  const loopGeo = new THREE.ExtrudeGeometry(loopSplatShape(), { depth: 0.022, bevelEnabled: false, curveSegments: 24 });
+  loopGeo.translate(0, seatY + 0.015, -0.075);
+  const loopMesh = new THREE.Mesh(loopGeo, walnutDark);
+  loopMesh.name = 'back_loop';
+  chair.add(loopMesh);
+
+  const box = new THREE.Box3().setFromObject(chair);
+  const centerY = (box.min.y + box.max.y) / 2;
+  const baseY = -centerY;
+  chair.position.y = baseY;
+
+  const baseRotY = Math.PI * 0.15;
+  chair.rotation.y = baseRotY;
+  scene.add(chair);
+
+  function resize() {
+    const w = host.clientWidth || 1, h = host.clientHeight || 1;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(host);
+  resize();
+
+  // Pointer-driven tilt (desktop) + drag (touch) — smooth, subtle, no aggressive spin.
+  let targetYaw = 0, targetPitch = 0, dragYaw = 0;
+  let dragging = false, lastX = 0;
+  const YAW_RANGE = 0.28, PITCH_RANGE = 0.08;
+
+  window.addEventListener('pointermove', (e) => {
+    if (dragging) return;
+    const nx = (e.clientX / window.innerWidth) * 2 - 1;
+    const ny = (e.clientY / window.innerHeight) * 2 - 1;
+    targetYaw = nx * YAW_RANGE;
+    targetPitch = -ny * PITCH_RANGE;
+  });
+  host.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; host.setPointerCapture(e.pointerId); });
+  host.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+    dragYaw += dx * 0.006;
+  });
+  host.addEventListener('pointerup', () => { dragging = false; });
+  host.addEventListener('pointercancel', () => { dragging = false; });
+
+  let curYaw = 0, curPitch = 0;
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    curYaw += (targetYaw + dragYaw - curYaw) * 0.04;
+    curPitch += (targetPitch - curPitch) * 0.04;
+    chair.rotation.y = baseRotY + curYaw;
+    chair.rotation.x = curPitch;
+    chair.position.y = baseY + Math.sin(t * (2 * Math.PI / 5)) * 0.04;
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
