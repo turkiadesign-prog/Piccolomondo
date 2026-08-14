@@ -53,7 +53,7 @@
 
   <!-- NAV -->
   <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
-    <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }};margin-right:6px">
+    <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
       <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
         <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msrxngg6-sydl.png" alt="Piccolo Mondo" style="height:{{ logoHeight }};width:auto;display:block;filter:brightness(0) saturate(100%) invert(80%) sepia(31%) saturate(486%) hue-rotate(302deg) brightness(103%) contrast(97%)">
       </a>
@@ -70,12 +70,12 @@
     </div>
 
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
-      <div style="position:relative;height:80px;width:160px;flex-shrink:0">
+      <div style="position:relative;height:80px;width:160px;flex-shrink:0;display:flex;justify-content:center">
         <sc-for list="{{ headerScriptImages }}" as="shot" hint-placeholder-count="0">
           <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
         </sc-for>
       </div>
-      <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:{{ hamburgerMarginLeft }}">
+      <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:{{ hamburgerMarginLeft }};flex-shrink:0">
         <span style="width:26px;height:2px;background:#FED0CF"></span>
         <span style="width:26px;height:2px;background:#FED0CF"></span>
         <span style="width:26px;height:2px;background:#FED0CF"></span>
@@ -324,10 +324,10 @@
   <div data-screen-label="story-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
     <div style="display:inline-flex;animation:ribbonScrollReverse 24s linear infinite;align-items:center">
       <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img loading="lazy" decoding="async" src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
       <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img loading="lazy" decoding="async" src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
     </div>
   </div>
@@ -535,8 +535,8 @@
           <input required="{{ true }}" value="{{ reservation.name }}" onChange="{{ onNameChange }}" placeholder="{{ t.reservation.labels.name }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <input required="{{ true }}" value="{{ reservation.phone }}" onChange="{{ onPhoneChange }}" placeholder="{{ t.reservation.labels.phone }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <input value="{{ reservation.email }}" onChange="{{ onEmailChange }}" placeholder="{{ t.reservation.labels.email }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413">
-          <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413">
+          <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3">
+          <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3">
           <input type="number" min="1" max="20" value="{{ reservation.guests }}" onChange="{{ onGuestsChange }}" placeholder="{{ t.reservation.labels.guests }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
           <textarea value="{{ reservation.notes }}" onChange="{{ onNotesChange }}" placeholder="{{ t.reservation.labels.notes }}" rows="3" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;resize:vertical"></textarea>
           <button type="submit" style="grid-column:span 2;width:100%;box-sizing:border-box;background:#344315;color:#F4EEE8;border:none;padding:15px;borderRadius:999px;font-weight:300;font-family:'Calibre Light',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer" style-hover="background:#401413">{{ t.reservation.submit }}</button>
@@ -1763,7 +1763,7 @@ class Component extends DCLogic {
     return {
       t, isMobile, isDesktop, chairTiltTransform, headerScriptImages,
       logoHeight: isMobile ? '72px' : '92px',
-      logoMarginLeft: isMobile ? '-10px' : '28px',
+      logoMarginLeft: isMobile ? '0px' : '28px',
       heroCompStyle: isMobile ? 'flex-direction:column;gap:20px' : '',
       heroTextWrap: isMobile ? 'white-space:normal;text-align:center' : 'white-space:nowrap',
       chairSize: isMobile ? 'min(70vw,360px)' : 'min(34vw,360px)',
@@ -1858,10 +1858,10 @@ class Component extends DCLogic {
             (isTop ? 'animation:stampPop 1.4s ease both;' : '')
         };
       }),
-      navPadding: isMobile ? '16px 10px' : '18px 48px',
-      navJustify: isMobile ? 'center' : 'space-between',
+      navPadding: isMobile ? '16px 18px' : '18px 48px',
+      navJustify: isMobile ? 'space-between' : 'space-between',
       navGroupGap: isMobile ? '20px' : '44px',
-      hamburgerMarginLeft: isMobile ? '16px' : '6px',
+      hamburgerMarginLeft: isMobile ? '0px' : '6px',
       navOpen: this.state.navOpen,
       toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
       setLangEn: () => this.setState({ lang: 'en' }),
