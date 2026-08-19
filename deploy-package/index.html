@@ -26,6 +26,8 @@
     @keyframes gentlePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
     @keyframes stampReveal { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
     @keyframes chairFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-28px); } }
+    @keyframes jiddoScrollUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+    @keyframes jiddoScrollDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
     .story-scroll-hide::-webkit-scrollbar { display: none; }
     @keyframes stampPop { 0% { opacity: 0; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes ribbonScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
@@ -33,6 +35,9 @@
     @keyframes gallerySlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes fadeInStoryPanel { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes scrollBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+    @keyframes jiddoFloat { 0% { transform: translateY(0) rotate(var(--jr, 0deg)); } 100% { transform: translateY(var(--jd, -6px)) rotate(calc(var(--jr, 0deg) * -1)); } }
+    @keyframes jiddoRibbonUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+    @keyframes jiddoRibbonDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
   </style>
 </helmet>
 
@@ -55,15 +60,16 @@
   <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
     <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
       <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
-        <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msrxngg6-sydl.png" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block;filter:brightness(0) saturate(100%) invert(80%) sepia(31%) saturate(486%) hue-rotate(302deg) brightness(103%) contrast(97%)">
+        <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msx7n2k1-cfgs.png" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
       </a>
 
       <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;align-items:center;gap:52px;font-family:'Calibre Light',sans-serif;text-transform:uppercase">
           <a href="#home" onClick="{{ goHome }}" style="{{ navLinkHomeStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
           <a href="#story" onClick="{{ goStory }}" style="{{ navLinkStoryStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
+          <a href="#jiddo" onClick="{{ goJiddo }}" style="{{ navLinkJiddoStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.jiddo }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="{{ navLinkMenuStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="#reservation" onClick="{{ goReservation }}" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="{{ navLinkContactStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
       </sc-if>
@@ -107,8 +113,9 @@
       <button onClick="{{ toggleNav }}" style="position:absolute;top:24px;right:24px;background:none;border:none;color:#FED0CF;font-size:28px;cursor:pointer">×</button>
       <a href="#home" onClick="{{ goHomeMobile }}" style="{{ mobileNavHomeStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.home }}</a>
       <a href="#story" onClick="{{ goStoryMobile }}" style="{{ mobileNavStoryStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.story }}</a>
+      <a href="#jiddo" onClick="{{ goJiddoMobile }}" style="{{ mobileNavJiddoStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.jiddo }}</a>
       <a href="#menu" onClick="{{ goMenuMobile }}" style="{{ mobileNavMenuStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.menu }}</a>
-      <a href="#reservation" onClick="{{ goReservationMobile }}" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
+      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
       <a href="#contact" onClick="{{ goContactMobile }}" style="{{ mobileNavContactStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.contact }}</a>
       <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
         <button onClick="{{ setLangEn }}" style="{{ langBtnEnStyleMobile }}">EN</button>
@@ -219,7 +226,7 @@
     </div>
     </sc-if>
     <div style="text-align:center;margin-top:{{ reserveMarginTop }}">
-      <a href="#reservation" onClick="{{ goReservation }}" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
     </div>
   </div>
 
@@ -322,12 +329,12 @@
 
   <!-- STORY RIBBON -->
   <div data-screen-label="story-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
-    <div style="display:inline-flex;animation:ribbonScrollReverse 24s linear infinite;align-items:center">
-      <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+    <div style="display:inline-flex;animation:ribbonScrollReverse 110s linear infinite;align-items:center">
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
-      <sc-for list="{{ storyRibbonItems }}" as="i" hint-placeholder-count="6">
-        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeight }};width:auto;flex-shrink:0;margin:0 4px">
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
     </div>
   </div>
@@ -380,11 +387,48 @@
         <button onClick="{{ storyGalleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
       </div>
       <div style="text-align:center;margin-top:32px">
-        <a href="#reservation" onClick="{{ goReservation }}" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
       </div>
     </div>
   </div>
 
+  </sc-if>
+
+  <!-- OUR JIDDO PAGE (placeholder, same design as Our Story for now) -->
+  <sc-if value="{{ isJiddo }}" hint-placeholder-val="{{ false }}">
+  <div id="jiddo" data-screen-label="jiddo" style="background:#F4EEE8;position:relative;height:100vh;overflow:hidden">
+    <div style="position:absolute;inset:0;display:flex;gap:{{ jiddoColGap }}">
+      <sc-for list="{{ jiddoColumns }}" as="col" hint-placeholder-count="6">
+        <div style="flex:1;position:relative;overflow:hidden">
+          <div style="{{ col.trackStyle }}">
+            <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
+              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
+                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
+              </sc-if>
+              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
+              </sc-if>
+              <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
+                <img loading="lazy" decoding="async" src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
+              </sc-if>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;width:100%;pointer-events:none">
+      <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:{{ jiddoTitleSize }};color:#FED0CF;line-height:1;white-space:nowrap">OUR JIDDO</div>
+    </div>
+  </div>
+  <div data-screen-label="jiddo-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
+    <div style="display:inline-flex;animation:ribbonScrollReverse 45s linear infinite;align-items:center;will-change:transform">
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/jiddo-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};aspect-ratio:3174/2178;width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/jiddo-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};aspect-ratio:3174/2178;width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+    </div>
+  </div>
   </sc-if>
 
   <!-- MENU PAGE -->
@@ -573,6 +617,7 @@
           <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
           <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:4px" style-hover="border-bottom-color:#401413">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
 
           <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-top:20px;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
           <div style="color:#401413;font-size:16px;font-weight:300">{{ t.footer.hoursDays }}</div>
@@ -593,6 +638,7 @@
             <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
             <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
             <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Instagram</a>
+            <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
           </div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
@@ -629,7 +675,7 @@
         <a href="#home" onClick="{{ goHome }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
         <a href="#story" onClick="{{ goStory }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
         <a href="#menu" onClick="{{ goMenu }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-        <a href="#reservation" onClick="{{ goReservation }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
         <a href="#contact" onClick="{{ goContact }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
       </div>
 
@@ -640,6 +686,7 @@
         <a href="tel:+40212225755" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
         <div style="display:flex;gap:14px;margin-top:8px">
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Facebook</a>
         </div>
       </div>
 
@@ -666,6 +713,7 @@
           <a href="tel:+40722205020" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">0722 20 50 20</a>
           <a href="tel:+40212225755" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:8px" style-hover="border-bottom-color:#FED0CF">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">Facebook</a>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
@@ -673,7 +721,7 @@
           <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
           <a href="#story" onClick="{{ goStory }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="#reservation" onClick="{{ goReservation }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
 
@@ -712,7 +760,12 @@
           <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px">
             <div style="align-self:flex-start;background:#ffffff;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%">{{ t.chat.greeting }}</div>
             <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="0">
-              <div style="{{ msg.style }}">{{ msg.text }}</div>
+              <div style="{{ msg.style }}">
+                {{ msg.text }}
+                <sc-if value="{{ msg.linkUrl }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:6px"><a href="{{ msg.linkUrl }}" target="_blank" rel="noopener" style="color:#401413;text-decoration:underline;font-weight:700">{{ msg.linkLabel }}</a></div>
+                </sc-if>
+              </div>
             </sc-for>
           </div>
           <div style="display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap">
@@ -1004,7 +1057,17 @@ const TIMELINE = [
 
 const T = {
   en: {
-    nav: { home: 'Home', story: 'Our Story', menu: 'Menu', reservation: 'Reservation', contact: 'Contact', reserveBtn: 'Reserve a Table' },
+    nav: { home: 'Home', story: 'Our Story', jiddo: 'Our Jiddo', menu: 'Menu', reservation: 'Reservation', contact: 'Contact', reserveBtn: 'Reserve a Table' },
+    jiddo: { title: 'Our Jiddo', subtitle: 'The man behind our small world.', fragments: {
+      c1993: 'Bucharest, 1993', cGather: 'One of many evenings around the table', c2000: 'Building the new home',
+      c2008: 'Every chapter, another scene',
+      t1: 'He arrived with an idea of home.',
+      t2: 'Hospitality was never taught. It was simply how he lived.',
+      t3: 'Before there was a restaurant, there was a table.',
+      tChair: 'His chair remains at the heart of our story.',
+      finalLine1: 'His small world became ours.',
+      finalLine2: "And we're still carrying it forward."
+    } },
     hero: {
       eyebrow: 'Rooted in Lebanese Dining · Since 1993',
       titleLine1: 'Generations at the table.',
@@ -1037,7 +1100,7 @@ const T = {
       timeline: [
         { year: '1993', title: 'Where His Small World Began', text: 'In 1993, our grandfather brought Piccolo Mondo to Bucharest, his own small world, built around food, family, and the generosity that defined him.\nAt a time when Lebanese cuisine was still unfamiliar to the city, he opened the first Lebanese restaurant in Bucharest, introducing not only its flavors, but the culture of hospitality behind them. Through his table, he shared the warmth, generosity, and traditions he had brought with him from home.\nPiccolo Mondo began in a different location then, a humble beginning for something that would grow far beyond what he first imagined.\nThis is where it all started.' },
         { year: '2000\u20132002', title: 'A New Home, Built Together', text: 'A new chapter began. Piccolo Mondo found a new home, the home we still welcome you into today.\nIt was built stone by stone, shaped not only by our grandfather, but by the people who stood beside him. Many of those early employees became family, and some are still with us today, carrying their own memories of those years and stories of working side by side with him.\nIn 2002, the doors opened at Strada Clucerului 9, Bucure\u0219ti.\nA new place meant new beginnings: new tables to gather around, new stories to tell, and new memories to build. But the spirit remained the same, the generosity and hospitality our grandfather had brought to Bucharest in 1993.\nA new home, for the same small world.' },
-        { year: '2008', title: 'Every Chapter Became Part of Us', text: 'By 2008, Piccolo Mondo had lived through many chapters. The interiors changed more than once, some we loved, and some\u2026 well, let\u2019s just say they were part of the journey. Every version left something behind and became another scene in the story that shaped us.\nThere were countless celebrations, long evenings, and familiar faces. Regular guests became friends, and the team who had stood beside our grandfather from the early days became family, many of them still part of Piccolo Mondo today.\nBecause Piccolo Mondo was never only a restaurant. It was our grandfather\u2019s small world, built around people, generosity, and the joy of gathering around one table.\nOur legacy is still being written, and every chapter is filled with your love.' }
+        { year: '2008', title: 'Every Chapter Became Part of Us', text: 'By 2008, Piccolo Mondo had lived through many chapters. The interiors changed more than once, some we loved, and some\u2026 well, they became part of the journey.\nBut what mattered most was what happened around the tables: celebrations, long evenings, familiar faces, and regular guests who became old friends.\nPiccolo Mondo was never only a restaurant. It was our grandfather\u2019s small world, built around people, generosity, and the joy of gathering together.\nOur legacy is still being written, and every chapter is filled with your love.' }
       ],
       legacyTimeline: [
         { year: '2012', text: 'Small text describing what happened in 2012.' },
@@ -1080,24 +1143,41 @@ const T = {
       placeholder: 'Type a question\u2026', send: 'Send',
       quick: [
         { key: 'hours', label: 'Hours?' },
-        { key: 'address', label: 'Where are you?' },
+        { key: 'address', label: 'Location' },
         { key: 'reservation', label: 'Book a table' },
-        { key: 'story', label: 'Our story' }
+        { key: 'story', label: 'Our story' },
+        { key: 'review', label: 'Loved your visit?' }
       ],
       faq: {
         hours: 'We\u2019re open every day from 11:30 to 00:30.',
         address: 'You can find us at Str. Clucerului 9, Sector 1, Bucharest.',
-        reservation: 'You can reserve a table in the Reservation section, or call us at 0722 20 50 20 / 021 222 57 55.',
+        reservation: 'You can book instantly online, or call us at 0722 20 50 20 / 021 222 57 55.',
         menu: 'Our menu celebrates Lebanese cuisine: mezze, grilled mains, and desserts like baklava and knafeh. Check the Menu section above.',
         story: 'Piccolo Mondo began at a small table with our grandfather in 1993. Rooted in Lebanese culture, he believed cooking was a way to bring people together and share generosity without words \u2014 every recipe carried a memory, every dish a sense of home. As the restaurant passed to the next generations, his values stayed at the heart of everything we do: authentic flavors, time-honored techniques, and warm hospitality. Today his chair has become our symbol \u2014 him, with his back to us, quietly watching the small world he created keep growing. This is our legacy. Served at the table.',
         contact: 'Email us at restaurant@piccolomondo.ro, or call 0722 20 50 20 / 021 222 57 55.',
         greetingReply: 'Hello! Ask me about our hours, location, menu, reservations, or our story.',
-        fallback: 'I\u2019m still learning! For anything specific, reach us at restaurant@piccolomondo.ro or check the Contact section.'
+        fallback: 'I\u2019m still learning! For anything specific, reach us at restaurant@piccolomondo.ro or check the Contact section.',
+        issue: 'I\u2019m sorry to hear that. You can call us at 0722 20 50 20 / 021 222 57 55, email restaurant@piccolomondo.ro, or just type your message here and I\u2019ll prepare an email to send it straight to the restaurant.',
+        askForMessage: 'Go ahead and type your message \u2014 I\u2019ll open an email to the restaurant with it ready to send.',
+        messagePrepared: 'I\u2019ve prepared an email with your message \u2014 just hit send in the window that opened. We\u2019ll get back to you soon.',
+        reviewLink: 'That means so much to us. If you have a moment, we\u2019d love for you to share it with others:',
+        reviewLinkLabel: 'Leave a Google review \u2192',
+        reservationLinkLabel: 'Reserve a table \u2192'
       }
     }
   },
   ro: {
-    nav: { home: 'Acasă', story: 'Povestea Noastră', menu: 'Meniu', reservation: 'Rezervare', contact: 'Contact', reserveBtn: 'Rezervă o Masă' },
+    nav: { home: 'Acasă', story: 'Povestea Noastră', jiddo: 'Jiddo-ul Nostru', menu: 'Meniu', reservation: 'Rezervare', contact: 'Contact', reserveBtn: 'Rezervă o Masă' },
+    jiddo: { title: 'Jiddo-ul Nostru', subtitle: 'Omul din spatele micii noastre lumi.', fragments: {
+      c1993: 'București, 1993', cGather: 'O seară dintre multele în jurul mesei', c2000: 'Construind noul cămin',
+      c2008: 'Fiecare capitol, o nouă scenă',
+      t1: 'A venit cu o idee despre casă.',
+      t2: 'Ospitalitatea nu a fost învățată. Așa a trăit mereu.',
+      t3: 'Înainte să existe un restaurant, a existat o masă.',
+      tChair: 'Scaunul lui rămâne în centrul poveștii noastre.',
+      finalLine1: 'Micuța lui lume a devenit a noastră.',
+      finalLine2: 'Și încă o ducem mai departe.'
+    } },
     hero: {
       eyebrow: 'Rădăcini în Bucătăria Libaneză \u00b7 Din 1993',
       titleLine1: 'Generații la aceeași masă.',
@@ -1175,17 +1255,24 @@ const T = {
         { key: 'hours', label: 'Program?' },
         { key: 'address', label: 'Unde sunteți?' },
         { key: 'reservation', label: 'Rezervă o masă' },
-        { key: 'story', label: 'Povestea noastră' }
+        { key: 'story', label: 'Povestea noastră' },
+        { key: 'review', label: 'Ai fost la noi?' }
       ],
       faq: {
         hours: 'Suntem deschiși în fiecare zi de la 11:30 la 00:30.',
         address: 'Ne găsești pe Str. Clucerului 9, Sector 1, București.',
-        reservation: 'Poți rezerva o masă în secțiunea Rezervare, sau ne poți suna la 0722 20 50 20 / 021 222 57 55.',
+        reservation: 'Poți rezerva instant online, sau ne poți suna la 0722 20 50 20 / 021 222 57 55.',
         menu: 'Meniul nostru celebrează bucătăria libaneză: mezze, feluri principale la grătar și deserturi precum baclava și knafeh.',
         story: 'Piccolo Mondo a început la o masă mică alături de bunicul nostru, în 1993. Cu rădăcini în cultura libaneză, el credea că gătitul aduce oamenii împreună și exprimă generozitate fără cuvinte \u2014 fiecare rețetă purta o amintire, fiecare fel un sentiment de acasă. Pe măsură ce restaurantul a trecut la generațiile următoare, valorile lui au rămas în centrul a tot ceea ce facem: arome autentice, tehnici tradiționale și ospitalitate caldă. Astăzi, scaunul lui a devenit simbolul nostru \u2014 el, cu spatele la noi, veghind lin asupra lumii mici pe care a creat-o. Aceasta este moștenirea noastră. Servită la masă.',
         contact: 'Scrie-ne la restaurant@piccolomondo.ro, sau sună la 0722 20 50 20 / 021 222 57 55.',
         greetingReply: 'Bună! Întreabă-mă despre program, locație, meniu, rezervări sau povestea noastră.',
-        fallback: 'Încă învăț! Pentru orice întrebare specifică, scrie-ne la restaurant@piccolomondo.ro sau vezi secțiunea Contact.'
+        fallback: 'Încă învăț! Pentru orice întrebare specifică, scrie-ne la restaurant@piccolomondo.ro sau vezi secțiunea Contact.',
+        issue: 'Îmi pare rău să aud asta. Ne poți suna la 0722 20 50 20 / 021 222 57 55, ne poți scrie la restaurant@piccolomondo.ro, sau poți scrie mesajul aici și îl pregătesc într-un email trimis direct restaurantului.',
+        askForMessage: 'Scrie mesajul tău \u2014 voi pregăti un email către restaurant, gata de trimis.',
+        messagePrepared: 'Am pregătit un email cu mesajul tău \u2014 apasă trimite în fereastra care s-a deschis. Îți vom răspunde cât mai rapid.',
+        reviewLink: 'Înseamnă foarte mult pentru noi. Dacă ai un moment, ne-ar plăcea să îl împarți și cu alții:',
+        reviewLinkLabel: 'Lasă o recenzie pe Google \u2192',
+        reservationLinkLabel: 'Rezervă o masă \u2192'
       }
     }
   }
@@ -1201,6 +1288,7 @@ class Component extends DCLogic {
     chatOpen: false,
     chatInput: '',
     chatMessages: [],
+    chatAwaitingMessage: false,
     isMobile: false,
     reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' },
     reservationSubmitted: false,
@@ -1258,7 +1346,9 @@ class Component extends DCLogic {
       './assets/menu-header-arabic.png',
       './assets/menu-header-arabic-1.png',
       './assets/menu-header-arabic-2.png',
-      './assets/menu-header-arabic-3.png'
+      './assets/menu-header-arabic-3.png',
+      './assets/menu-header-arabic-5.png',
+      './assets/menu-header-arabic-6.png'
     ];
     this._headerScriptIdx = 0;
     this._headerScriptInterval = setInterval(() => {
@@ -1319,6 +1409,9 @@ class Component extends DCLogic {
       this._lastSpyPage = this.state.page;
       this.setupCategorySpy();
     }
+    if (this.state.page !== 'jiddo') {
+      this.teardownJiddoParallax();
+    }
   }
   setupCategorySpy() {
     if (this._catObserver) { this._catObserver.disconnect(); this._catObserver = null; }
@@ -1339,6 +1432,12 @@ class Component extends DCLogic {
       els.forEach(el => this._catObserver.observe(el));
     });
   }
+  scrollToMenuTop() {
+    const el = document.getElementById('menu');
+    if (!el) return;
+    this._suppressSpyUntil = Date.now() + 900;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+  }
   scrollToCategoryAnchor(anchorId) {
     const el = document.getElementById(anchorId);
     if (!el) return;
@@ -1347,6 +1446,7 @@ class Component extends DCLogic {
     window.scrollTo({ top, behavior: 'smooth' });
   }
   componentWillUnmount() {
+    clearTimeout(this._chatHintTimeout);
     if (this._catObserver) this._catObserver.disconnect();
     document.removeEventListener('scroll', this._menuScrollHandler, true);
     window.removeEventListener('resize', this._onResize);
@@ -1428,6 +1528,54 @@ class Component extends DCLogic {
   }
   scrollCatTabs(dir) {
     if (this._catTabsScrollEl) this._catTabsScrollEl.scrollBy({ left: dir * 160, behavior: 'smooth' });
+  }
+  jiddoImagePool() {
+    return Array.from({ length: 17 }, (_, i) => './assets/jiddo-photo-' + (i + 1) + '.png').filter(src => src !== './assets/jiddo-photo-2.png' && src !== './assets/jiddo-photo-15.png');
+  }
+  teardownJiddoParallax() {
+    if (this._jiddoTimer) { clearInterval(this._jiddoTimer); this._jiddoTimer = null; }
+    this.teardownJiddoVideos();
+  }
+  setMutedVideoRef(el) {
+    if (!el) return;
+    el.muted = true;
+    el.volume = 0;
+    if (!this._jiddoVideoObserver) {
+      this._jiddoVideoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        });
+      }, { threshold: 0.15 });
+    }
+    this._jiddoVideoObserver.observe(el);
+  }
+  teardownJiddoVideos() {
+    if (this._jiddoVideoObserver) { this._jiddoVideoObserver.disconnect(); this._jiddoVideoObserver = null; }
+  }
+  jiddoBuildColumns() {
+    const pool = this.jiddoImagePool();
+    const videos = ['./assets/jiddo-video-1.mp4', './assets/jiddo-video-2.mp4', './assets/jiddo-video-3.mp4', './assets/jiddo-video-4.mp4'];
+    const isMobile = this.state.isMobile;
+    const numCols = isMobile ? 3 : 6;
+    const durations = [36, 44, 30, 46, 38, 42];
+    const colWidthPx = window.innerWidth / numCols;
+    const imgHeightPx = colWidthPx * 4 / 3;
+    const neededCount = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / imgHeightPx)));
+    return Array.from({ length: numCols }, (_, c) => {
+      const start = c * 5;
+      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false }));
+      const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
+      const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
+      const doubled = single.concat(single);
+      const dir = c % 2 === 0 ? 'jiddoScrollDown' : 'jiddoScrollUp';
+      const duration = durations[c % durations.length];
+      return {
+        items: doubled,
+        trackStyle: 'position:absolute;top:0;left:0;width:100%;animation:' + dir + ' ' + duration + 's linear infinite'
+      };
+    });
   }
   storyTimelineData() {
     const lang = this.state.lang;
@@ -1564,6 +1712,13 @@ class Component extends DCLogic {
   updateSize() {
     this.setState({ isMobile: window.innerWidth < 860 });
   }
+  _startChatHintCycle() {
+    const cycle = (visible) => {
+      this.setState({ chatHintOpacity: visible ? 1 : 0 });
+      this._chatHintTimeout = setTimeout(() => cycle(!visible), visible ? 3000 : 2000);
+    };
+    cycle(true);
+  }
 
   _clearStampTimers() {
     (this._stampTimeouts || []).forEach(id => clearTimeout(id));
@@ -1640,15 +1795,36 @@ class Component extends DCLogic {
     if (/(menu|food|vegan|meniu|mânca)/.test(msg)) return faq.menu;
     if (/(story|history|legacy|tradition|founder|origin|1993|istorie|poveste|mostenire|moștenire|traditie|tradiție|grandfather|bunic)/.test(msg)) return faq.story;
     if (/(contact|phone|email|telefon)/.test(msg)) return faq.contact;
+    if (/(leave (us )?a review|write a review|review us|google review|loved your visit|las\u0103 o recenzie|recenzie google|ai fost la noi)/.test(msg)) return faq.reviewLink;
+    if (/(complain|complaint|issue|problem|review|bad|upset|angry|disappoint|reclam|problemă|nemulțumit|nemultumit|plângere|plangere)/.test(msg)) return faq.issue;
+    if (/(leave a message|send a message|message you|mesaj|lasă un mesaj|lasa un mesaj|trimite un mesaj)/.test(msg)) return faq.askForMessage;
     if (/(hi|hello|salut|bună|buna)/.test(msg)) return faq.greetingReply;
     return faq.fallback;
   }
 
   pushExchange(userText) {
     const lang = this.state.lang;
-    const answer = this.faqAnswer(lang, userText);
+    const faq = T[lang].chat.faq;
     const userMsg = { style: 'align-self:flex-end;background:#344315;color:#F4EEE8;padding:10px 14px;borderRadius:14px 14px 2px 14px;font-size:13.5px;line-height:1.5;max-width:85%', text: userText };
-    const botMsg = { style: 'align-self:flex-start;background:#ffffff;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%', text: answer };
+    let answer;
+    if (this.state.chatAwaitingMessage) {
+      const subject = encodeURIComponent('Message from website chat');
+      const body = encodeURIComponent(userText);
+      window.open('mailto:restaurant@piccolomondo.ro?subject=' + subject + '&body=' + body, '_blank');
+      answer = faq.messagePrepared;
+      this.setState({ chatAwaitingMessage: false });
+    } else {
+      answer = this.faqAnswer(lang, userText);
+      if (answer === faq.askForMessage) this.setState({ chatAwaitingMessage: true });
+    }
+    const isReview = answer === faq.reviewLink;
+    const isReservation = answer === faq.reservation;
+    const botMsg = {
+      style: 'align-self:flex-start;background:#FED0CF;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%;font-weight:' + (isReview ? '600' : '400'),
+      text: answer,
+      linkUrl: isReview ? 'https://www.google.com/maps?cid=4951164950577469656' : (isReservation ? 'https://piccolo-mondo.ialoc.ro?experience=focus&locale=' + lang : ''),
+      linkLabel: isReview ? faq.reviewLinkLabel : (isReservation ? faq.reservationLinkLabel : '')
+    };
     this.setState(s => ({ chatMessages: [...s.chatMessages, userMsg, botMsg], chatInput: '' }));
   }
 
@@ -1657,10 +1833,13 @@ class Component extends DCLogic {
     const t = T[lang];
     const headerScriptIdx = this.state.headerScriptIdx || 0;
     const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.png'];
-    const headerScriptImages = headerScriptImgs.map((src, i) => ({
-      src,
-      style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.8s ease;opacity:' + (i === headerScriptIdx ? 1 : 0) + ';'
-    }));
+    const headerScriptImages = headerScriptImgs.map((src, i) => {
+      const isLastTwo = i >= headerScriptImgs.length - 2;
+      return {
+        src,
+        style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.8s ease;opacity:' + (i === headerScriptIdx ? 1 : 0) + ';' + (isLastTwo ? 'transform:scale(0.8);' : '')
+      };
+    });
     const photoStack = [1,2,3,4,5,6,7,10].map((n, i) => {
       const rot = (n % 2 === 0 ? 1 : -1) * (3 + (n % 4) * 2);
       return {
@@ -1683,7 +1862,7 @@ class Component extends DCLogic {
     const isFood = this.state.menuGroup === 'food';
     const groupPill = (key, label) => ({
       key, label,
-      onClick: () => this.setState({ menuGroup: key }),
+      onClick: () => { this.setState({ menuGroup: key }); this.scrollToMenuTop(); },
       style: 'padding:11px 26px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid #344315;' +
         (this.state.menuGroup === key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315'),
       rectStyle: 'flex:1;padding:13px 10px;borderRadius:8px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid #344315;' +
@@ -1784,7 +1963,8 @@ class Component extends DCLogic {
       reservationTopPadding: isMobile ? '190px' : '250px',
       storyPageTopPadding: isMobile ? '104px' : '150px',
       storyRibbonPadding: isMobile ? '5px 0' : '10px 0',
-      storyRibbonImgHeight: isMobile ? '24px' : '36px',
+      storyRibbonImgHeight: isMobile ? '32px' : '48px',
+      storyRibbonImgHeightOriginal: isMobile ? '24px' : '36px',
       legacyImgMaxWidth: isMobile ? '900px' : '480px',
       legacyAlign: isMobile ? 'flex-start' : 'center',
       legacyTopPadding: isMobile ? '4px' : '60px',
@@ -1811,7 +1991,8 @@ class Component extends DCLogic {
       toggleLegacyOpen: () => this.toggleLegacyOpen(),
       legacyPlusRotate: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? 'rotate(45deg)' : 'rotate(0deg)',
       legacyPanelMaxHeight: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? '600px' : '0px',
-      storyRibbonItems: Array.from({length: 6}),
+      storyRibbonItems: Array.from({length: 12}),
+      storyRibbonItemsOriginal: Array.from({length: 50}),
       legacyStamps: this.legacyStampList().map((s, i) => ({
         src: s.src,
         style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:' + (i === (this.state.legacyStampIndex || 0) ? 1 : 0) + ';transition:opacity 0.6s ease;transform:rotate(' + ((i % 2 === 0 ? -1 : 1) * (6 + (i * 2) % 5)) + 'deg)'
@@ -1824,26 +2005,36 @@ class Component extends DCLogic {
       stopBubble: e => e.stopPropagation(),
       isHome: this.state.page === 'home',
       isStory: this.state.page === 'story',
+      isJiddo: this.state.page === 'jiddo',
+      jiddoColGap: this.state.isMobile ? '6px' : '10px',
+      jiddoTitleSize: this.state.isMobile ? 'clamp(36px,11vw,60px)' : 'clamp(64px,7vw,130px)',
+      jiddoMemories: [],
+      jiddoColumns: this.state.page === 'jiddo' ? this.jiddoBuildColumns() : [],
+      setMutedVideoRef: el => this.setMutedVideoRef(el),
       isMenu: this.state.page === 'menu',
       isReservation: this.state.page === 'reservation',
       isContact: this.state.page === 'contact',
       goHome: this.goTo('home'),
       goStory: this.goTo('story'),
+      goJiddo: this.goTo('jiddo'),
       goMenu: this.goTo('menu'),
       goReservation: this.goTo('reservation'),
       goContact: this.goTo('contact'),
       goStoryMobile: e => { this.goTo('story')(e); },
+      goJiddoMobile: e => { this.goTo('jiddo')(e); },
       goHomeMobile: e => { this.goTo('home')(e); },
       goMenuMobile: e => { this.goTo('menu')(e); },
       goReservationMobile: e => { this.goTo('reservation')(e); },
       goContactMobile: e => { this.goTo('contact')(e); },
       navLinkHomeStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'home' ? '#FED0CF' : 'transparent'),
       navLinkStoryStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'story' ? '#FED0CF' : 'transparent'),
+      navLinkJiddoStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'jiddo' ? '#FED0CF' : 'transparent'),
       navLinkMenuStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'menu' ? '#FED0CF' : 'transparent'),
       navLinkReservationStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'reservation' ? '#FED0CF' : 'transparent'),
       navLinkContactStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'contact' ? '#FED0CF' : 'transparent'),
       mobileNavHomeStyle: this.mobileNavStyle('home'),
       mobileNavStoryStyle: this.mobileNavStyle('story'),
+      mobileNavJiddoStyle: this.mobileNavStyle('jiddo'),
       mobileNavMenuStyle: this.mobileNavStyle('menu'),
       mobileNavReservationStyle: this.mobileNavStyle('reservation'),
       mobileNavContactStyle: this.mobileNavStyle('contact'),
@@ -1899,7 +2090,7 @@ class Component extends DCLogic {
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
       galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
-      storyGalleryItems: Array.from({ length: 18 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 9) + 1) + '.webp\')' })),
+      storyGalleryItems: Array.from({ length: 20 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 10) + 1) + '.webp\')' })),
       handwriteRef: this._handwriteRefCb,
       handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
       excerptLine: {
@@ -2008,7 +2199,9 @@ class Component extends DCLogic {
       showChat: this.props.showChatWidget ?? true,
       chatOpen: this.state.chatOpen,
       chatIcon: this.state.chatOpen ? '×' : '\u2022\u2022\u2022',
-      toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen })),
+      showChatHint: !this.state.chatOpen && !this.state.chatHintDismissed,
+      chatHintOpacity: this.state.chatHintOpacity ?? 1,
+      toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen, chatHintDismissed: true })),
       chatMessages: this.state.chatMessages,
       chatInput: this.state.chatInput,
       onChatInputChange: e => this.setState({ chatInput: e.target.value }),
