@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Regular.otf" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Light.otf" crossorigin>
+<link rel="preload" as="font" type="font/ttf" href="./fonts/InstrumentSerif-Regular.ttf" crossorigin>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <script src="./image-slot.js"></script>
+  <style>
+    @font-face { font-family: 'Calibre'; src: url('./fonts/Calibre-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Calibre Light'; src: url('./fonts/Calibre-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+    @font-face { font-family: 'Instrument Serif'; src: url('./fonts/InstrumentSerif-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Mapalie'; src: url('./fonts/Mapalie.otf') format('opentype'); font-weight: 400; font-display: swap; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; }
+    * { box-sizing: border-box; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.9) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes gentlePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    @keyframes stampReveal { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    @keyframes chairFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-28px); } }
+    @keyframes jiddoScrollUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+    @keyframes jiddoScrollDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+    .story-scroll-hide::-webkit-scrollbar { display: none; }
+    @keyframes stampPop { 0% { opacity: 0; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes ribbonScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @keyframes ribbonScrollReverse { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes gallerySlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes fadeInStoryPanel { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+    @keyframes jiddoFloat { 0% { transform: translateY(0) rotate(var(--jr, 0deg)); } 100% { transform: translateY(var(--jd, -6px)) rotate(calc(var(--jr, 0deg) * -1)); } }
+    @keyframes jiddoRibbonUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+    @keyframes jiddoRibbonDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+  </style>
+</helmet>
+
+<div style="font-family:'Calibre',sans-serif;color:#2A1002;background:#F4EEE8;overflow-x:hidden">
+
+  <!-- LOADER -->
+  <div style="position:fixed;inset:0;z-index:100;background:#344315;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:{{ loaderOpacity }};visibility:{{ loaderVisibility }};pointer-events:{{ loaderPointerEvents }};transition:opacity 0.7s ease,visibility 0.7s">
+    <div style="position:relative;width:200px;height:290px">
+      <sc-for list="{{ stamps }}" as="stamp" hint-placeholder-count="6">
+        <div style="{{ stamp.wrapStyle }}"></div>
+      </sc-for>
+    </div>
+    <div style="margin-top:26px;width:160px;height:2px;background:rgba(244,238,232,0.25);position:relative;overflow:hidden;borderRadius:2px">
+      <div style="position:absolute;left:0;top:0;bottom:0;background:#FED0CF;width:{{ stampProgress }}%;transition:width 1.4s ease"></div>
+    </div>
+  </div>
+
+
+  <!-- NAV -->
+  <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
+    <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
+      <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
+        <img src="./piccolo-mondo_primary-logo_pastel-pink_r-msx7n2k1-cfgs.png" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
+      </a>
+
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:52px;font-family:'Calibre Light',sans-serif;text-transform:uppercase">
+          <a href="#home" onClick="{{ goHome }}" style="{{ navLinkHomeStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
+          <a href="#story" onClick="{{ goStory }}" style="{{ navLinkStoryStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
+          <a href="#jiddo" onClick="{{ goJiddo }}" style="{{ navLinkJiddoStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.jiddo }}</a>
+          <a href="#menu" onClick="{{ goMenu }}" style="{{ navLinkMenuStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="#contact" onClick="{{ goContact }}" style="{{ navLinkContactStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;height:80px;width:160px;flex-shrink:0;display:flex;justify-content:center">
+        <sc-for list="{{ headerScriptImages }}" as="shot" hint-placeholder-count="0">
+          <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
+        </sc-for>
+      </div>
+      <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:{{ hamburgerMarginLeft }};flex-shrink:0">
+        <span style="width:26px;height:2px;background:#FED0CF"></span>
+        <span style="width:26px;height:2px;background:#FED0CF"></span>
+        <span style="width:26px;height:2px;background:#FED0CF"></span>
+      </button>
+    </sc-if>
+
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;left:1021px;top:63px;transform:translate(-50%,-50%);height:76px;width:260px;display:flex;align-items:center;justify-content:center">
+        
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative;height:74px;width:275px;flex-shrink:0">
+        <sc-for list="{{ headerScriptImages }}" as="shot" hint-placeholder-count="0">
+          <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-family:'Calibre Light',sans-serif;font-weight:300;font-size:13px;white-space:nowrap">
+        <button onClick="{{ setLangEn }}" style="{{ langBtnEnStyle }}">EN</button>
+        <button onClick="{{ setLangRo }}" style="{{ langBtnRoStyle }}">RO</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:#344315;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px">
+      <button onClick="{{ toggleNav }}" style="position:absolute;top:24px;right:24px;background:none;border:none;color:#FED0CF;font-size:28px;cursor:pointer">×</button>
+      <a href="#home" onClick="{{ goHomeMobile }}" style="{{ mobileNavHomeStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.home }}</a>
+      <a href="#story" onClick="{{ goStoryMobile }}" style="{{ mobileNavStoryStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.story }}</a>
+      <a href="#jiddo" onClick="{{ goJiddoMobile }}" style="{{ mobileNavJiddoStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.jiddo }}</a>
+      <a href="#menu" onClick="{{ goMenuMobile }}" style="{{ mobileNavMenuStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.menu }}</a>
+      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
+      <a href="#contact" onClick="{{ goContactMobile }}" style="{{ mobileNavContactStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.contact }}</a>
+      <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+        <button onClick="{{ setLangEn }}" style="{{ langBtnEnStyleMobile }}">EN</button>
+        <button onClick="{{ setLangRo }}" style="{{ langBtnRoStyleMobile }}">RO</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- HOME PAGE -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <!-- HERO -->
+  <div id="home" data-screen-label="hero" style="position:relative;min-height:80vh;background:#F4EEE8;display:flex;align-items:center;justify-content:center;padding:150px 24px 24px;overflow:hidden;scroll-margin-top:0">
+    <div style="position:relative;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;max-width:1100px;{{ heroCompStyle }}">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
+      <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
+        <sc-if value="{{ chairVisible }}" hint-placeholder-val="{{ true }}">
+          <img src="./assets/chair-floating.webp" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
+        </sc-if>
+        <sc-if value="{{ hoverPreviewSrc }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ hoverPreviewStyle }}"></div>
+        </sc-if>
+        <sc-if value="{{ photoStackOpen }}" hint-placeholder-val="{{ false }}">
+          <sc-for list="{{ photoStack }}" as="photo" hint-placeholder-count="0">
+            <div style="{{ photo.style }}"></div>
+          </sc-for>
+        </sc-if>
+      </div>
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Lebanese at heart.</span>
+    </div>
+    <a href="#" onClick="{{ scrollToStory }}" aria-label="Scroll down" style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);animation:scrollBounce 1.8s ease-in-out infinite;text-decoration:none;color:#344315;font-size:26px;line-height:1;cursor:pointer">↓</a>
+  </div>
+
+  
+
+  <!-- STORY TEASER -->
+  <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;width:100%;max-width:1600px">
+      <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="width:100%">
+      <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+        <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
+          <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+        </div>
+      </div>
+      <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
+        <div style="height:100%;width:45%;background:#401413;border-radius:2px;position:absolute;top:0;left:{{ storyScrollBarLeft }};transition:left 0.05s linear"></div>
+      </div>
+    </div>
+    </sc-if>
+    <div style="position:relative;margin-top:{{ storyBtnMarginTop }}">
+      <a href="#story" onClick="{{ goStory }}" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:2px">{{ t.story.readMore }}</a>
+    </div>
+  </div>
+
+  <!-- SCROLLING RIBBON -->
+  <div data-screen-label="ribbon" style="background:#FED0CF;overflow:hidden;padding:16px 0;white-space:nowrap;margin-top:{{ ribbonMarginTop }}">
+    <div style="display:inline-flex;animation:ribbonScroll 22s linear infinite">
+      <sc-for list="{{ ribbonItems }}" as="item" hint-placeholder-count="8">
+        <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#401413;padding:0 28px;flex-shrink:0">{{ item }}</span>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- SLIDING GALLERY -->
+  <div data-screen-label="gallery" style="background:#F4EEE8;padding:{{ galleryPadding }};overflow:hidden;margin-top:{{ galleryMarginTop }};margin-bottom:{{ galleryMarginBottom }}">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+        <div style="display:inline-flex;gap:20px">
+          <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
+            <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:32px;margin-top:24px">
+        <button onClick="{{ galleryScrollLeft }}" aria-label="Previous" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">←</button>
+        <button onClick="{{ galleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="position:relative">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+        <div style="display:inline-flex;gap:20px">
+          <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
+            <div style="width:200px;height:260px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:32px;margin-top:20px">
+        <button onClick="{{ galleryScrollLeft }}" aria-label="Previous" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">←</button>
+        <button onClick="{{ galleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
+      </div>
+    </div>
+    </sc-if>
+    <div style="text-align:center;margin-top:{{ reserveMarginTop }}">
+      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+    </div>
+  </div>
+
+  </sc-if>
+
+  <!-- BRAND STORY PAGE -->
+  <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
+  <div id="story" data-screen-label="brand-story" style="padding:{{ storyPageTopPadding }} 0 60px;background:#F4EEE8;min-height:60vh;overflow-x:hidden">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1300px;margin:0 auto;padding:0 24px;display:flex;gap:48px;align-items:flex-start">
+      <div style="width:60%;flex-shrink:0;position:relative;aspect-ratio:16/10;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
+        <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
+          <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
+            <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
+          </sc-for>
+        </sc-for>
+        <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
+          <sc-if value="{{ item.isActive }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ item.hasMultipleImages }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ item.onPrev }}" aria-label="Previous image" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;borderRadius:50%;border:1px solid rgba(244,238,232,0.7);background:rgba(0,0,0,0.15);color:#F4EEE8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">←</button>
+              <button onClick="{{ item.onNext }}" aria-label="Next image" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;borderRadius:50%;border:1px solid rgba(244,238,232,0.7);background:rgba(0,0,0,0.15);color:#F4EEE8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">→</button>
+              <div style="position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:2">
+                <sc-for list="{{ item.dots }}" as="dot" hint-placeholder-count="0">
+                  <button onClick="{{ dot.onClick }}" style="{{ dot.style }}" aria-label="Show image" onMouseDown="{{ stopBubble }}"></button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </sc-if>
+        </sc-for>
+      </div>
+      <div style="width:40%;position:relative;min-height:340px">
+        <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
+          <div style="{{ item.infoWrapStyle }}">
+            <div style="font-family:'Instrument Serif',serif;font-size:32px;color:#2A1002;margin-bottom:4px">{{ item.year }}</div>
+            <sc-if value="{{ item.title }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:32px;color:#344315;margin-bottom:14px">{{ item.title }}</div>
+            </sc-if>
+            <div style="font-size:16px;line-height:1.8;color:#401413;font-family:'Calibre Light',sans-serif;white-space:pre-line;text-wrap:pretty">{{ item.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
+      <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
+        <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
+          <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
+        </sc-for>
+      </sc-for>
+      <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
+        <sc-if value="{{ item.isActive }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ item.hasMultipleImages }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ item.onPrev }}" aria-label="Previous image" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;borderRadius:50%;border:1px solid rgba(244,238,232,0.7);background:rgba(0,0,0,0.15);color:#F4EEE8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">←</button>
+            <button onClick="{{ item.onNext }}" aria-label="Next image" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;borderRadius:50%;border:1px solid rgba(244,238,232,0.7);background:rgba(0,0,0,0.15);color:#F4EEE8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">→</button>
+            <div style="position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:2">
+              <sc-for list="{{ item.dots }}" as="dot" hint-placeholder-count="0">
+                <button onClick="{{ dot.onClick }}" style="{{ dot.style }}" aria-label="Show image" onMouseDown="{{ stopBubble }}"></button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,1fr);margin-top:20px">
+      <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
+        <div onClick="{{ item.onClick }}" style="cursor:pointer;padding:0 24px">
+          <div style="{{ item.lineStyle }}"></div>
+          <div style="padding-top:14px;text-align:center;font-family:'Calibre Light',sans-serif;font-size:13px;letter-spacing:0.5px;color:{{ item.dateColor }};transition:color 0.3s ease">{{ item.year }}</div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:8px 24px 0">
+      <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
+        <div style="border-bottom:1px solid rgba(64,20,19,0.2)">
+          <div onClick="{{ item.onClick }}" style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:18px 0;cursor:pointer">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+              <span style="font-family:'Instrument Serif',serif;font-size:22px;color:#2A1002">{{ item.year }}</span>
+              <sc-if value="{{ item.title }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:19px;color:#344315">{{ item.title }}</span>
+              </sc-if>
+            </div>
+            <span style="font-size:22px;color:#401413;flex-shrink:0;display:inline-block;transform:{{ item.plusRotate }};transition:transform 0.3s ease">+</span>
+          </div>
+          <div style="max-height:{{ item.panelMaxHeight }};overflow:hidden;transition:max-height 0.35s ease">
+            <div style="padding:0 0 20px;font-size:15px;line-height:1.8;color:#401413;font-family:'Calibre Light',sans-serif;white-space:pre-line;text-wrap:pretty">{{ item.text }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- STORY RIBBON -->
+  <div data-screen-label="story-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
+    <div style="display:inline-flex;animation:ribbonScrollReverse 110s linear infinite;align-items:center">
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/story-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- STORY LEGACY SECTION -->
+  <div data-screen-label="brand-story-legacy" style="padding:{{ legacyTopPadding }} 24px 60px;background:#F4EEE8;overflow-x:hidden;min-height:40vh;max-width:1200px;margin:0 auto;display:flex;gap:16px;align-items:{{ legacyAlign }};flex-wrap:wrap;justify-content:center">
+    <img loading="lazy" decoding="async" src="./assets/story-legacy-illustration.png" alt="His legacy, shaped into our identity" style="max-width:{{ legacyImgMaxWidth }};width:100%;height:auto;flex-shrink:0;margin:0 auto 0 {{ legacyImgOffset }}">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:440px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div style="font-family:'Instrument Serif',serif;font-size:28px;color:#344315" dangerouslySetInnerHTML="{{ legacyTitleHtml }}"></div>
+        <div style="position:relative;width:110px;height:140px;flex-shrink:0">
+          <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+          </sc-for>
+        </div>
+      </div>
+      <div style="font-size: 16px; line-height: 1.8; color: #401413; font-family: 'Calibre Light',sans-serif; white-space: pre-line; text-wrap: pretty; width: 408px; height: 291px">{{ t.story.legacyParagraph }}</div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="width:100%;max-width:600px;margin-top:{{ legacyTextMarginTop }}">
+      <div onClick="{{ toggleLegacyOpen }}" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 0;border-bottom:1px solid rgba(64,20,19,0.2);cursor:pointer">
+        <div style="font-family:'Instrument Serif',serif;font-size:24px;font-style:italic;color:#344315;line-height:1.25;letter-spacing:0.5px" dangerouslySetInnerHTML="{{ legacyTitleHtmlMobile }}"></div>
+        <div style="position:relative;width:110px;height:140px;flex-shrink:0">
+          <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+          </sc-for>
+        </div>
+      </div>
+      <div style="max-height:{{ legacyPanelMaxHeight }};overflow:hidden;transition:max-height 0.4s ease">
+        <div style="padding:18px 0 4px;font-size:15px;line-height:1.8;color:#401413;font-family:'Calibre Light',sans-serif;white-space:pre-line;text-wrap:pretty">{{ t.story.legacyParagraph }}</div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- STORY GALLERY -->
+  <div data-screen-label="story-gallery" style="background:#F4EEE8;padding:30px 0 70px;overflow:hidden">
+    <div style="position:relative">
+      <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+        <div style="display:inline-flex;gap:20px">
+          <sc-for list="{{ storyGalleryItems }}" as="item" hint-placeholder-count="18">
+            <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:32px;margin-top:24px">
+        <button onClick="{{ storyGalleryScrollLeft }}" aria-label="Previous" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">←</button>
+        <button onClick="{{ storyGalleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
+      </div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+      </div>
+    </div>
+  </div>
+
+  </sc-if>
+
+  <!-- OUR JIDDO PAGE (placeholder, same design as Our Story for now) -->
+  <sc-if value="{{ isJiddo }}" hint-placeholder-val="{{ false }}">
+  <div id="jiddo" data-screen-label="jiddo" style="background:#F4EEE8;position:relative;height:100vh;overflow:hidden">
+    <div style="position:absolute;inset:0;display:flex;gap:{{ jiddoColGap }}">
+      <sc-for list="{{ jiddoColumns }}" as="col" hint-placeholder-count="6">
+        <div style="flex:1;position:relative;overflow:hidden">
+          <div style="{{ col.trackStyle }}">
+            <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
+              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
+                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
+              </sc-if>
+              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
+              </sc-if>
+              <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
+                <img loading="lazy" decoding="async" src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
+              </sc-if>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;width:100%;pointer-events:none">
+      <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:{{ jiddoTitleSize }};color:#FED0CF;line-height:1;white-space:nowrap">OUR JIDDO</div>
+    </div>
+  </div>
+  <div data-screen-label="jiddo-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
+    <div style="display:inline-flex;animation:ribbonScrollReverse 45s linear infinite;align-items:center;will-change:transform">
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/jiddo-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};aspect-ratio:3174/2178;width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+      <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
+        <img src="./assets/jiddo-ribbon-arabic.png" alt="" style="height:{{ storyRibbonImgHeightOriginal }};aspect-ratio:3174/2178;width:auto;flex-shrink:0;margin:0 4px">
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- MENU PAGE -->
+  <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+  <div id="menu" data-screen-label="menu" style="padding:200px 24px 100px;background:#F4EEE8;position:relative;overflow-x:hidden">
+    
+    <div style="max-width:1080px;margin:0 auto;position:relative">
+      <div style="position:relative;margin-bottom:48px">
+        <div style="text-align:center">
+          <div style="color:#344315;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px">{{ t.menu.eyebrow }}</div>
+          <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,4.5vw,54px);color:#2A1002;margin:0">{{ t.menu.title }}</h2>
+        </div>
+        <div style="position:absolute;top:50%;left:calc(50% + 190px);transform:translateY(-50%);width:120px;height:160px;flex-shrink:0;display:{{ illusDisplay }}">
+          <img loading="lazy" decoding="async" src="./assets/stamp-hands-pink.png" alt="" style="{{ menuStampBackStyle }}">
+          <img loading="lazy" decoding="async" src="./assets/stamp-man-orange.png" alt="" style="{{ menuStampFrontStyle }}">
+        </div>
+      </div>
+
+      <div ref="{{ setMenuTabsSentinel }}"></div>
+      <div ref="{{ setMenuTabsWrapper }}" style="{{ menuTabsWrapperStyle }}">
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px">
+        <sc-for list="{{ menuGroupTabs }}" as="tab" hint-placeholder-count="2">
+          <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ isFood }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px">
+        <sc-for list="{{ menuTabs }}" as="tab" hint-placeholder-count="4">
+          <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+      </sc-if>
+      <sc-if value="{{ isDrinks }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px">
+        <sc-for list="{{ drinkTabs }}" as="tab" hint-placeholder-count="4">
+          <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+      </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:10px;margin-bottom:14px">
+        <sc-for list="{{ menuGroupTabs }}" as="tab" hint-placeholder-count="2">
+          <button onClick="{{ tab.onClick }}" style="{{ tab.rectStyle }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:32px">
+        <button onClick="{{ catTabsScrollLeftFn }}" aria-label="Previous" style="background:none;border:none;color:#344315;font-size:18px;cursor:pointer;padding:4px;flex-shrink:0">←</button>
+        <sc-if value="{{ isFood }}" hint-placeholder-val="{{ true }}">
+        <div ref="{{ setCatTabsScrollRef }}" style="display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+          <sc-for list="{{ menuTabs }}" as="tab" hint-placeholder-count="4">
+            <button data-tab-key="{{ tab.key }}" onClick="{{ tab.onClick }}" style="{{ tab.lineStyle }};flex-shrink:0">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+        </sc-if>
+        <sc-if value="{{ isDrinks }}" hint-placeholder-val="{{ false }}">
+        <div ref="{{ setCatTabsScrollRef }}" style="display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+          <sc-for list="{{ drinkTabs }}" as="tab" hint-placeholder-count="4">
+            <button data-tab-key="{{ tab.key }}" onClick="{{ tab.onClick }}" style="{{ tab.lineStyle }};flex-shrink:0">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+        </sc-if>
+        <button onClick="{{ catTabsScrollRightFn }}" aria-label="Next" style="background:none;border:none;color:#344315;font-size:18px;cursor:pointer;padding:4px;flex-shrink:0">→</button>
+      </div>
+      </sc-if>
+      </div>
+      <sc-if value="{{ menuTabsFixed }}" hint-placeholder-val="{{ false }}">
+        <div style="height:{{ menuTabsSpacerHeight }}px"></div>
+      </sc-if>
+
+      <sc-if value="{{ isFood }}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{ foodSections }}" as="sec" hint-placeholder-count="4">
+        <div id="{{ sec.anchorId }}" data-cat-group="food" data-cat-key="{{ sec.key }}" style="scroll-margin-top:220px;margin-bottom:56px">
+          <div style="text-align:center;margin-bottom:32px">
+            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315">{{ sec.label }}</div>
+            <div style="font-size:16px;color:rgba(64,20,19,0.6);margin-top:4px">{{ sec.desc }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px">
+            <sc-for list="{{ sec.items }}" as="item" hint-placeholder-count="0">
+              <div style="background:#ffffff;border:1px solid rgba(52,67,21,0.1);borderRadius:8px;overflow:hidden">
+                <div style="position:relative;width:100%;aspect-ratio:4/3">
+                  <sc-if value="{{ item.photoSrc }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ item.photoBgStyle }}"></div>
+                  </sc-if>
+                  <sc-if value="{{ item.noPhoto }}" hint-placeholder-val="{{ true }}">
+                    <image-slot id="{{ item.photoId }}" shape="rect" placeholder="Drop a dish photo" style="position:absolute;inset:0;background:#344315"></image-slot>
+                  </sc-if>
+                </div>
+                <div style="padding:20px 24px 24px">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px">
+                    <span style="font-family:'Instrument Serif',serif;font-size:23px;color:#2A1002">{{ item.name }}</span>
+                  </div>
+                  <div style="font-size:16px;color:#401413;line-height:1.6;margin-bottom:10px">{{ item.desc }}</div>
+                  <div style="color:#344315;font-weight:400;font-size:16px;white-space:nowrap">{{ item.price }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      </sc-if>
+      <sc-if value="{{ isDrinks }}" hint-placeholder-val="{{ false }}">
+      <sc-for list="{{ drinkSections }}" as="sec" hint-placeholder-count="4">
+        <div id="{{ sec.anchorId }}" data-cat-group="drinks" data-cat-key="{{ sec.key }}" style="scroll-margin-top:220px;margin-bottom:48px">
+          <div style="text-align:center;margin-bottom:32px">
+            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315">{{ sec.label }}</div>
+            <div style="font-size:16px;color:rgba(64,20,19,0.6);margin-top:4px">{{ sec.desc }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+            <sc-for list="{{ sec.items }}" as="item" hint-placeholder-count="6">
+              <div style="background:#ffffff;border:1px solid rgba(52,67,21,0.1);borderRadius:8px;padding:18px 20px;display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                <span style="font-family:'Instrument Serif',serif;font-size:19px;color:#2A1002">{{ item.name }}</span>
+                <span style="color:#344315;font-weight:400;font-size:14px;white-space:nowrap">{{ item.price }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      </sc-if>
+
+    </div>
+  </div>
+
+  </sc-if>
+
+  <!-- RESERVATION PAGE -->
+  <sc-if value="{{ isReservation }}" hint-placeholder-val="{{ false }}">
+  <div id="reservation" data-screen-label="reservation" style="padding:{{ reservationTopPadding }} 24px 100px;background:#401413">
+    <div style="max-width:640px;margin:0 auto;text-align:center">
+      <div style="color: #FED0CF; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; font-family: Calibre Light">{{ t.reservation.eyebrow }}</div>
+      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#F4EEE8;margin:0 0 16px">{{ t.reservation.title }}</h2>
+      <p style="color: rgba(244,238,232,0.75); font-size: 15px; line-height: 1.7; margin: 0 0 44px; font-family: Calibre Light; text-wrap: balance">{{ t.reservation.blurb }}</p>
+    </div>
+
+    <sc-if value="{{ showReservationForm }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ reservationSubmitted }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:480px;margin:0 auto;background:#F4EEE8;borderRadius:12px;padding:40px 32px;text-align:center;animation:popIn 0.5s ease both">
+          <div style="font-family:'Instrument Serif',serif;font-size:26px;color:#344315;margin-bottom:10px">{{ t.reservation.confirmTitle }}</div>
+          <p style="font-size:14px;color:#401413;line-height:1.7;margin:0 0 24px">{{ t.reservation.confirmBody }}</p>
+          <button onClick="{{ resetReservation }}" style="background:none;border:1px solid #344315;color:#344315;padding:10px 22px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer">{{ t.reservation.backBtn }}</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ reservationNotSubmitted }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submitReservation }}" style="max-width:560px;width:100%;margin:0 auto;background:#F4EEE8;borderRadius:12px;padding:{{ reservationFormPadding }};display:grid;grid-template-columns:1fr 1fr;gap:16px;box-sizing:border-box">
+          <input required="{{ true }}" value="{{ reservation.name }}" onChange="{{ onNameChange }}" placeholder="{{ t.reservation.labels.name }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
+          <input required="{{ true }}" value="{{ reservation.phone }}" onChange="{{ onPhoneChange }}" placeholder="{{ t.reservation.labels.phone }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
+          <input value="{{ reservation.email }}" onChange="{{ onEmailChange }}" placeholder="{{ t.reservation.labels.email }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.date }}</label>
+            <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.time }}</label>
+            <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
+          </div>
+          <input type="number" min="1" max="20" value="{{ reservation.guests }}" onChange="{{ onGuestsChange }}" placeholder="{{ t.reservation.labels.guests }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
+          <textarea value="{{ reservation.notes }}" onChange="{{ onNotesChange }}" placeholder="{{ t.reservation.labels.notes }}" rows="3" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;resize:vertical"></textarea>
+          <button type="submit" style="grid-column:span 2;width:100%;box-sizing:border-box;background:#344315;color:#F4EEE8;border:none;padding:15px;borderRadius:999px;font-weight:300;font-family:'Calibre Light',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer" style-hover="background:#401413">{{ t.reservation.submit }}</button>
+        </form>
+      </sc-if>
+    </sc-if>
+    <sc-if value="{{ showReservationCta }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:480px;margin:0 auto;text-align:center;background:#F4EEE8;borderRadius:12px;padding:40px 32px">
+        <a href="tel:0722205020" style="text-decoration:none;display:block;background:#344315;color:#F4EEE8;padding:15px;borderRadius:999px;font-weight:700;font-size:15px;margin-bottom:14px">{{ t.reservation.callCta }}</a>
+        <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#344315;font-weight:700;font-size:14px">{{ t.reservation.emailCta }}</a>
+      </div>
+    </sc-if>
+  </div>
+
+  </sc-if>
+
+  <!-- CONTACT PAGE -->
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <div id="contact" data-screen-label="contact" style="padding:{{ contactTopPadding }} 24px {{ contactBottomPadding }};background:#FED0CF;{{ contactCenterStyle }}">
+    <div style="max-width:1000px;margin:0 auto 0 auto;padding-left:{{ contactPaddingLeft }};display:flex;gap:16px;flex-wrap:wrap;justify-content:{{ contactJustify }}">
+      <div style="flex:0 1 340px;min-width:280px">
+        <div style="color:#344315;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px">{{ t.contact.eyebrow }}</div>
+        <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#2A1002;margin:0 0 32px">{{ t.contact.title }}</h2>
+
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:'Calibre Light',sans-serif">
+          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">restaurant@piccolomondo.ro</a>
+          <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
+          <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
+          <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:4px" style-hover="border-bottom-color:#401413">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
+
+          <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-top:20px;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
+          <div style="color:#401413;font-size:16px;font-weight:300">{{ t.footer.hoursDays }}</div>
+          <div style="color:#401413;font-size:16px;font-weight:300">{{ t.footer.hoursTime }}</div>
+
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;margin-top:20px;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">
+            Str. Clucerului 9, Sector 1<br>București
+          </a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-weight:300;font-size:16px;border-bottom:1px solid #401413;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:32px;font-family:'Calibre Light',sans-serif;justify-content:center;text-align:left">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.eyebrow }}</div>
+            <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">restaurant@piccolomondo.ro</a>
+            <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
+            <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
+            <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Instagram</a>
+            <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
+            <div style="color:#401413;font-size:15px;font-weight:300">{{ t.footer.hoursDays }}</div>
+            <div style="color:#401413;font-size:15px;font-weight:300">{{ t.footer.hoursTime }}</div>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;margin-top:10px;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">
+              Str. Clucerului 9, Sector 1<br>București
+            </a>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-weight:300;font-size:15px;border-bottom:1px solid #401413;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="flex:1 1 320px;min-width:280px;position:relative;width:100%;max-width:{{ contactMapMaxWidth }};margin:{{ contactMapMarginTop }} auto 0">
+        
+      <img loading="lazy" decoding="async" src="./assets/contact-map.webp" alt="Piccolo Mondo location map" style="width: 100%; max-width: 100%; object-fit: contain; display: block; border-radius: 0px; height: auto">
+        <img loading="lazy" decoding="async" src="./assets/chair-floating.webp" alt="" style="position: absolute; top: 10%; left: 62%; width: 12%; height: auto; animation: chairFloat 3.2s ease-in-out infinite; pointer-events: none"></div>
+    </div>
+  </div>
+
+  </sc-if>
+
+  <!-- FOOTER -->
+  <div data-screen-label="footer" style="background:#401413;padding:64px 24px 32px;display:flex;flex-direction:column;align-items:center;gap:40px;border-top:1px solid rgba(254,208,207,0.25)">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:56px;width:100%;max-width:1100px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+        <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; min-width: 140px; font-family: Calibre Light">
+        <div style="font-size: 14px; font-weight: 300; letter-spacing: 2.4px; text-transform: uppercase; color: #FED0CF; margin-bottom: 4px">{{ t.footer.pagesLabel }}</div>
+        <a href="#home" onClick="{{ goHome }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
+        <a href="#story" onClick="{{ goStory }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
+        <a href="#menu" onClick="{{ goMenu }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+        <a href="#contact" onClick="{{ goContact }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
+        <div style="font-size: 14px; font-weight: 300; letter-spacing: 2.4px; text-transform: uppercase; color: #FED0CF; margin-bottom: 4px; font-family: Calibre Light">{{ t.footer.contactLabel }}</div>
+        <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
+        <a href="tel:+40722205020" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">0722 20 50 20</a>
+        <a href="tel:+40212225755" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
+        <div style="display:flex;gap:14px;margin-top:8px">
+          <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Facebook</a>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
+        <div style="font-size: 14px; font-weight: 300; letter-spacing: 2.4px; text-transform: uppercase; color: #FED0CF; margin-bottom: 4px; font-family: Calibre Light">{{ t.footer.hoursLabel }}</div>
+        <div style="color: #FED0CF; font-size: 15px; font-weight: 300; font-family: Calibre Light">{{ t.footer.hoursDays }}</div>
+        <div style="color: #FED0CF; font-size: 15px; font-weight: 300; font-family: Calibre Light">{{ t.footer.hoursTime }}</div>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; margin-top: 8px; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">
+          Str. Clucerului 9, Sector 1<br>București
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-weight: 300; font-size: 15px; border-bottom: 1px solid #FED0CF; width: fit-content; padding-bottom: 2px; margin-top: 4px; font-family: Calibre Light" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:32px;width:100%;max-width:480px">
+      <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
+
+      <div style="display:grid;grid-template-columns:auto auto;justify-content:center;column-gap:40px;row-gap:28px;width:100%">
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
+          <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.contactLabel }}</div>
+          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
+          <a href="tel:+40722205020" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">0722 20 50 20</a>
+          <a href="tel:+40212225755" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
+          <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:8px" style-hover="border-bottom-color:#FED0CF">Instagram</a>
+          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">Facebook</a>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
+          <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.pagesLabel }}</div>
+          <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
+          <a href="#story" onClick="{{ goStory }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
+          <a href="#menu" onClick="{{ goMenu }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="#contact" onClick="{{ goContact }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
+          <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.locationLabel }}</div>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">
+            Str. Clucerului 9, Sector 1<br>București
+          </a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-weight:300;font-size:15px;border-bottom:1px solid #FED0CF;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
+          <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.hoursLabel }}</div>
+          <div style="color:#FED0CF;font-size:15px;font-weight:300">{{ t.footer.hoursDays }}</div>
+          <div style="color:#FED0CF;font-size:15px;font-weight:300">{{ t.footer.hoursTime }}</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="width:100%;max-width:1100px;border-top:1px solid rgba(254,208,207,0.2);padding-top:20px;font-size:12px;font-weight:300;color:rgba(254,208,207,0.6);text-align:center">{{ t.footer.rights }}</div>
+  </div>
+
+  <!-- AI CHAT WIDGET -->
+  <sc-if value="{{ showChat }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;bottom:24px;right:24px;z-index:70;display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+      <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="width:min(92vw,340px);height:min(70vh,460px);background:#F4EEE8;borderRadius:16px;box-shadow:0 20px 50px rgba(0,0,0,0.3);display:flex;flex-direction:column;overflow:hidden;animation:popIn 0.3s ease both">
+          <div style="background:#344315;color:#F4EEE8;padding:16px 18px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-family:'Instrument Serif',serif;font-size:24px">{{ t.chat.title }}</div>
+              <div style="font-size:14px;color:rgba(244,238,232,0.7)">{{ t.chat.subtitle }}</div>
+            </div>
+            <button onClick="{{ toggleChat }}" style="background:none;border:none;color:#F4EEE8;font-size:22px;cursor:pointer;line-height:1">×</button>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="align-self:flex-start;background:#ffffff;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%">{{ t.chat.greeting }}</div>
+            <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="0">
+              <div style="{{ msg.style }}">
+                {{ msg.text }}
+                <sc-if value="{{ msg.linkUrl }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:6px"><a href="{{ msg.linkUrl }}" target="_blank" rel="noopener" style="color:#401413;text-decoration:underline;font-weight:700">{{ msg.linkLabel }}</a></div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap">
+            <sc-for list="{{ quickReplies }}" as="q" hint-placeholder-count="4">
+              <button onClick="{{ q.onClick }}" style="background:#FED0CF;border:none;color:#401413;font-size:11.5px;font-weight:600;padding:7px 12px;borderRadius:999px;cursor:pointer">{{ q.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(52,67,21,0.12)">
+            <input value="{{ chatInput }}" onChange="{{ onChatInputChange }}" onKeyDown="{{ onChatKeyDown }}" placeholder="{{ t.chat.placeholder }}" style="flex:1;padding:10px 14px;borderRadius:999px;border:1px solid rgba(52,67,21,0.25);font-size:13px;font-family:inherit">
+            <button onClick="{{ sendChatMessage }}" style="background:#344315;color:#F4EEE8;border:none;width:38px;height:38px;borderRadius:50%;cursor:pointer;font-size:16px">→</button>
+          </div>
+        </div>
+      </sc-if>
+      <button onClick="{{ toggleChat }}" style="width:58px;height:58px;borderRadius:50%;background:#344315;border:none;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center" style-hover="animation:gentlePulse 0.6s ease">
+        <span style="color:#F4EEE8;font-size:24px">{{ chatIcon }}</span>
+      </button>
+    </div>
+  </sc-if>
+
+  <!-- RESERVATION CONFIRMATION STAMP SEQUENCE -->
+  <sc-if value="{{ stampSequenceActive }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:200;overflow:hidden;background:#344315;opacity:{{ stampOverlayOpacity }};transition:opacity 700ms ease">
+      <div style="position:absolute;inset:-2%;width:104%;height:104%;display:grid;grid-template-columns:{{ stampGridTemplateColumns }};grid-template-rows:{{ stampGridTemplateRows }};opacity:{{ stampGridOpacity }};transition:opacity 500ms ease">
+        <sc-for list="{{ stampCells }}" as="cell" hint-placeholder-count="0">
+          <div style="{{ cell.style }}"><img src="{{ cell.src }}" alt="" style="width:100%;height:100%;object-fit:contain;display:block"></div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ stampMessageVisible }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <div style="opacity:{{ stampMessageOpacity }};transition:opacity 500ms ease;text-align:center;padding:28px 40px">
+            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(26px,3.2vw,34px);color:#F4EEE8;margin-bottom:8px">{{ t.reservation.stampThanks }}</div>
+            <div style="font-family:Calibre Light,sans-serif;font-size:15px;color:#F4EEE8;line-height:1.6">{{ t.reservation.stampBody }}</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {},
+  &quot;defaultLanguage&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;en&quot;, &quot;options&quot;: [&quot;en&quot;, &quot;ro&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot; },
+  &quot;showChatWidget&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; },
+  &quot;reservationMode&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;form&quot;, &quot;options&quot;: [&quot;form&quot;, &quot;cta&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot; }
+}">
+const STAMPS = [
+  { src: './assets/stamp-6.png', rotate: -7 },
+  { src: './assets/stamp-4.png', rotate: 5 },
+  { src: './assets/stamp-1.png', rotate: -4 },
+  { src: './assets/stamp-3.png', rotate: 6 },
+  { src: './assets/stamp-5.png', rotate: -3 },
+  { src: './assets/stamp-2.png', rotate: 4 }
+];
+const CONFIRM_STAMPS = [
+  { src: './assets/stamp-2.png' },
+  { src: './assets/stamp-3.png' },
+  { src: './assets/stamp-5.png' },
+  { src: './assets/stamp-1.png' },
+  { src: './assets/stamp-6.png' },
+  { src: './assets/stamp-4.png' }
+];
+
+function normImg(s) {
+  return s.toLowerCase().replace(/\.[a-z0-9]+$/,'').replace(/\s*\(\d+\)\s*$/,'').replace(/[^a-z0-9]/g,'');
+}
+const IMG_BASE = 'https://meniu.piccolomondo.ro/assets/images/';
+function mk(img, weight, price, name, descRo, descEn) {
+  return { img: img ? IMG_BASE + encodeURIComponent(img).replace(/%2F/g, '/') : '', weight, price, name, descRo: descRo || '', descEn: descEn || descRo || '' };
+}
+const MENU_CATEGORIES = [
+  { key: 'aperitive-reci', ro: 'Aperitive Reci', en: 'Cold Starters', descRo: 'Aperitive reci traditionale', descEn: 'Traditional cold starters', items: [
+    mk('Hommos.webp','180gr','38,00 lei','Hommos Simplu','Pasta de naut cu sos de susan','Chickpea paste with tahini sauce'),
+    mk('Hommos cu masline.webp','220gr','39,00 lei','Hommos Cu Masline Verzi','Pasta de naut cu sos de susan si masline verzi','Chickpea paste with tahini and green olives'),
+    mk('hommos beiruty.webp','180gr','38,00 lei','Hommos Beiruty','Pasta de naut, usturoi, patrunjel, lamaie, ardei iute','Chickpea paste, garlic, parsley, lemon, chili'),
+    mk('Hommos snobar.webp','195gr','44,00 lei','Hommos Snobar','Pasta de naut cu seminte de pin','Chickpea paste with pine nuts'),
+    mk('Hommos carne snobar.webp','230gr','49,00 lei','Hommos Carne Snobar','Pasta de naut cu carne si seminte de pin','Chickpea paste with meat and pine nuts'),
+    mk('Hommos cu trufe.webp','180gr','57,00 lei','Hommos Cu Trufe','Pasta de naut cu sos de susan si trufe','Chickpea paste with tahini and truffles'),
+    mk('Baba kanouj.webp','180gr','38,00 lei','Baba Kanouj','Salata de vinete cu pasta de susan','Eggplant salad with tahini'),
+    mk('Baba kanouj turk.webp','190gr','39,00 lei','Baba Kanouj Turk','Salata de vinete turceasca','Turkish-style eggplant salad'),
+    mk('Lubia.webp','200gr','39,00 lei','Lubia','Fasole verde (rosii, ceapa)','Green beans (tomato, onion)'),
+    mk('Bamia.webp','200gr','42,00 lei','Bamia','Bame (rosii, ceapa)','Okra (tomato, onion)'),
+    mk('Magdous.webp','100gr','44,00 lei','Makdous','Vinete umplute cu nuca si ardei','Eggplant stuffed with walnut and pepper'),
+    mk('Zacusca mixta.webp','180gr','42,00 lei','Zacusca De Vinete / Dovlecei','Refreshments eggplant / pumpkins','Eggplant / pumpkin refreshments'),
+    mk('Sarmalute Vegetariene.webp','110gr','39,00 lei','Sarmale','Sarmalute vegetariene','Vegetarian stuffed vine leaves'),
+    mk('Labneh.webp','180gr','37,00 lei','Labneh','Crema de iaurt','Yogurt cream'),
+    mk('Labneh usturoi.webp','180gr','38,00 lei','Labneh Usturoi','Crema de iaurt cu usturoi si menta','Yogurt cream with garlic and mint'),
+    mk('Labneh zattar.webp','210gr','40,00 lei','Labneh Cu Zaatar','Crema de iaurt condimentata cu zaatar','Yogurt cream seasoned with zaatar'),
+    mk('Sanclis.webp','100gr','45,00 lei','Sanclis','Branza libaneza condimentata','Spiced Lebanese cheese'),
+    mk('Bastarma.webp','50gr','49,00 lei','Bastarma','Pastrama de vita','Beef pastrami'),
+    mk('Muhamara.webp','200gr','43,00 lei','Muhamara','Pasta de nuca picanta','Spicy walnut paste')
+  ]},
+  { key: 'aperitive-calde', ro: 'Aperitive Calde', en: 'Hot Starters', descRo: 'Aperitive calde traditionale', descEn: 'Traditional hot starters', items: [
+    mk('Halumi.webp','150gr','48,00 lei','Halumi Prajita','Halumi prajit','Fried Halumi cheese'),
+    mk('Halumi cu sos pesto.webp','120gr','52,00 lei','Halumi Cu Sos Pesto','Halumi cu sos pesto','Halumi cheese with pesto sauce'),
+    mk('Caracatita cu sos de lamaie.webp','125gr','60,00 lei','Caracatita Cu Sos De Lamaie','Caracatita cu sos de lamaie si coriandru','Octopus with lemon and coriander sauce'),
+    mk('Batata.webp','200gr','34,00 lei','Batata','Cartofi iuti cu usturoi si coriandru','Spicy potatoes with garlic and coriander'),
+    mk('Creveti cu sos de lamaie si coriandru.webp','150gr','60,00 lei','Creveti Cu Sos De Lamaie','Creveti cu sos de lamaie, coriandru, usturoi','Shrimps with lemon sauce, coriander, garlic'),
+    mk('Fatte hommos.webp','400gr','49,00 lei','Fatte','Naut boabe, paine, iaurt (carne sau limba)','Chickpeas, bread, yogurt (meat or tongue)'),
+    mk('Fatte cu creveti.webp','450gr','59,00 lei','Fatte Cu Creveti','Naut boabe, paine, iaurt, creveti','Chickpeas, bread, yogurt, shrimp'),
+    mk('Falafel.webp','150gr','43,00 lei','Falafel','Chiftelute vegetariene din naut si legume','Vegetarian chickpea and vegetable patties'),
+    mk('Foul mudamas.webp','300gr','38,00 lei','Foul Moudamas','Fasole libaneza, usturoi, lamaie, ulei de masline','Lebanese beans, garlic, lemon, olive oil'),
+    mk('Makanec.webp','125gr','48,00 lei','Makanic','Carnaciori libanezi cu seminte de pin','Lebanese sausages with pine nuts'),
+    mk('Sogoc.webp','125gr','48,00 lei','Sogoc','Carnaciori libanezi','Lebanese sausages'),
+    mk('Creier de miel.webp','100gr','55,00 lei','Creier De Miel','Creier de miel','Lamb brain'),
+    mk('Ras asfour vitel.webp','250gr','68,00 lei','Ras Asfour De Vita','Muschi de vita cu ceapa si sos de rodii','Beef tenderloin with onion and pomegranate sauce'),
+    mk('RASASFOR PUI.webp','250gr','60,00 lei','Ras Asfour De Pui','Piept de pui cu ceapa si sos de rodii','Chicken breast with onion and pomegranate sauce'),
+    mk('ras-asfour-fish.webp','250gr','60,00 lei','Ras Asfour De Peste','File de peste cu ceapa si sos de rodii','Fish fillet with onion and pomegranate sauce'),
+    mk('Kebeh.webp','45gr','10,00 lei / bucata','Kibbeh Prajit','Chiftelute libaneze','Lebanese fried kibbeh (per piece)'),
+    mk('organe.webp','250gr','85,00 lei','Organe','Organe','Mixed offal'),
+    mk('Limba de miel.webp','100gr','55,00 lei','Limba De Miel','Limba de miel','Lamb tongue'),
+    mk('Ficatei de pui.webp','150gr','42,00 lei','Ficatei De Pui','Ficatei de pui','Chicken liver'),
+    mk('Arayess carne.webp','150gr','61,00 lei','Arayess Cu Carne','Lipie libaneza cu carne','Lebanese flatbread with meat'),
+    mk('Arayess cascaval.webp','150gr','46,00 lei','Arayess Cu Cascaval','Lipie libaneza cu cascaval','Lebanese flatbread with cheese'),
+    mk('Roll branza.webp','30gr','11,00 lei / bucata','Branza Roll','Rulouri cu branza','Cheese rolls (per piece)'),
+    mk('Spanac.webp','45gr','10,00 lei / bucata','Spanac','Pateuri cu spanac','Spinach pastries (per piece)'),
+    mk('sambusek carne.webp','45gr','10,00 lei / bucata','Sambousek Carne','Pateuri cu carne','Meat pastries (per piece)'),
+    mk('Sambusek branza.webp','45gr','10,00 lei / bucata','Sambousek Branza','Pateuri cu branza','Cheese pastries (per piece)')
+  ]},
+  { key: 'salate', ro: 'Salate', en: 'Salads', descRo: 'Salate traditionale', descEn: 'Traditional salads', items: [
+    mk('Salata armeniana.webp','250gr','48,00 lei','Salata Armeneasca','Salata picanta tocata marunt','Finely chopped spicy salad'),
+    mk('Tabouleh.webp','225gr','46,00 lei','Tabouleh','Salata de patrunjel (rosii, ceapa, burgul)','Parsley salad (tomato, onion, bulgur)'),
+    mk('Fattouche.webp','280gr','48,00 lei','Fattouche','Salata asortata cu crutoane de paine','Mixed salad with bread croutons'),
+    mk('Salata rae.webp','260gr','45,00 lei','Salata Rae','Salata asortata','Assorted salad'),
+    mk('salata Arak.webp','250gr','48,00 lei','Salata Arak','Rosii cu usturoi, ulei de masline si condimente','Tomatoes with garlic, olive oil and spices'),
+    mk('Salata de masline.webp','150gr','40,00 lei','Salata De Masline','Salata de masline','Olives salad')
+  ]},
+  { key: 'supe', ro: 'Supe', en: 'Soups', descRo: 'Supe traditionale', descEn: 'Traditional soups', items: [
+    mk('Supa crema de ciuperci.webp','250gr','45,00 lei','Supa Crema De Ciuperci','Supa crema de ciuperci si ceapa','Mushroom / onion soup'),
+    mk('supa crema de linte.webp','250gr','45,00 lei','Supa Crema De Linte','Supa crema de linte','Lentil soup'),
+    mk('Supa vacuta.webp','250gr','45,00 lei','Supa De Vacuta','Supa de vacuta','Beef soup'),
+    mk('Supa pui.webp','250gr','45,00 lei','Supa De Pui','Supa de pui','Chicken soup')
+  ]},
+  { key: 'preparate-crude', ro: 'Preparate Crude', en: 'Raw Preparations', descRo: 'Preparate crude traditionale', descEn: 'Traditional raw preparations', items: [
+    mk('kebeh crud.webp','120gr','68,00 lei','Kibbeh','Kibbeh crud','Raw kibbeh'),
+    mk('Habra.webp','100gr','68,00 lei','Habra','Pasta din carne de oaie','Raw lamb meat paste'),
+    mk('Cig kafta.webp','125gr','68,00 lei','Cig Kafta','Carne cruda picanta','Spicy raw meat'),
+    mk('kafta crud.webp','125gr','68,00 lei','Kafta','Kafta cruda','Raw kafta')
+  ]},
+  { key: 'cuptor', ro: 'Cuptor', en: 'Brick Oven', descRo: 'Specialitati la cuptor de caramida', descEn: 'Brick oven specialties', items: [
+    mk('Lipie.webp','220gr','13,00 lei','Lipie','Lipie','Bread'),
+    mk('lahme bajin.webp','200gr','48,00 lei','Lahme Bajeen Mare','Placinta cu carne','Meat pie'),
+    mk('lahme bajin special.webp','250gr','50,00 lei','Lahme Bajeen Special','Pizza cu carne si cascaval','Pizza with meat and cheese'),
+    mk('Sfiha.webp','40gr','11,00 lei','Sfiha','Pateuri cu carne','Meat pastries'),
+    mk('Manakish zattar.webp','250gr','32,00 lei','Manakish Zaatar','Blat de pizza cu cimbru, ulei de masline','Pizza dough with thyme, olive oil'),
+    mk('Manakish cascaval.webp','250gr','41,00 lei','Manakish Cascaval','Blat de pizza cu cascaval','Pizza dough with cheese'),
+    mk('paine masline.webp','200gr','32,00 lei','Paine Cu Masline','Paine cu masline','Olive bread')
+  ]},
+  { key: 'garnituri', ro: 'Garnituri', en: 'Sides', descRo: 'Garnituri traditionale', descEn: 'Traditional sides', items: [
+    mk('Cartofi cu ierburi.webp','150gr','29,00 lei','Cartofi Cu Ierburi','Cartofi cu menta si usturoi','Potatoes with mint and garlic'),
+    mk('Orez basmati.webp','175gr','28,00 lei','Orez Basmati','Orez basmati','Basmati rice'),
+    mk('Orez cu migdale si stafide.webp','180gr','34,00 lei','Orez Cu Migdale Si Stafide','Orez cu stafide si migdale','Rice with raisins and almonds'),
+    mk('Piure cu trufe.webp','180gr','37,00 lei','Piure Cu Trufe','Piure de cartofi cu trufe','Mashed potatoes with truffles')
+  ]},
+  { key: 'mixed-grill', ro: 'Mixed Grill', en: 'Mixed Grill', descRo: 'Frigarui mixte la carbuni', descEn: 'Mixed charcoal skewers', items: [
+    mk('', '300gr', '125,00 lei', 'Mixed Grill', 'Frigarui de pui, frigarui de vita si kafta kebab (carne tocata)', 'Chicken skewers, beef skewers and kafta kebab (minced meat)')
+  ]},
+  { key: 'berbecut', ro: 'Berbecut', en: 'Lamb', descRo: 'Specialitati berbecut la carbuni', descEn: 'Charcoal-grilled lamb specialties', items: [
+    mk('Castaleta.webp','350gr','99,00 lei','Castaleta','Cotlete de berbecut','Lamb chops'),
+    mk('Shis muschiulet.webp','250gr','110,00 lei','Shis Kebab Muschiulet Berbecut','Frigarui din muschiulet de berbecut','Lamb tenderloin shis kebab'),
+    mk('kafta.webp','270gr','89,00 lei','Kafta','Kebab carne tocata','Minced meat kebab'),
+    mk('kafta special.webp','300gr','91,00 lei','Kafta Speciala','Kebab carne tocata cu sos de rosii','Minced meat kebab with tomato sauce')
+  ]},
+  { key: 'pui', ro: 'Pui', en: 'Chicken', descRo: 'Specialitati pui la carbuni', descEn: 'Charcoal-grilled chicken specialties', items: [
+    mk('Chicken chops.webp','200gr','90,00 lei','Chicken Chops','Kebab turcesc de pui','Turkish chicken kebab'),
+    mk('Shis taouk.webp','200gr','85,00 lei','Shis Taouk','Kebab de pui','Chicken kebab'),
+    mk('Pui grill.webp','300gr','90,00 lei','Pui La Gratar','Jumatate de pui la gratar','Half chicken grilled'),
+    mk('pui special.webp','300gr','91,00 lei','Pui Special','Jumatate de pui la gratar','Half chicken grilled'),
+    mk('SARHAT pui.webp','200gr','85,00 lei','Sarhat De Pui','Mini steak din piept de pui cu usturoi si lamaie','Chicken breast mini steak with garlic and lemon'),
+    mk('Aripioare de pui.webp','250gr','85,00 lei','Aripioare De Pui','Aripioare de pui','Chicken wings'),
+    mk('Aripioare speciale.webp','280gr','89,00 lei','Aripioare De Pui Speciale','Aripioare de pui cu usturoi si lamaie','Chicken wings with garlic and lemon')
+  ]},
+  { key: 'peste', ro: 'Peste', en: 'Fish', descRo: 'Specialitati peste la carbuni', descEn: 'Charcoal-grilled fish specialties', items: [
+    mk('Peste dorada.webp','550gr','140,00 lei','Peste Dorada','','')
+  ]},
+  { key: 'vita', ro: 'Vita', en: 'Beef', descRo: 'Specialitati vita la carbuni', descEn: 'Charcoal-grilled beef specialties', items: [
+    mk('Shis kebab.webp','200gr','120,00 lei','Shis Kebab','Frigarui de vita','Beef skewers'),
+    mk('SARHAT VITA.webp','200gr','120,00 lei','Sarhat De Vita','Mini steak din muschi de vita cu usturoi si lamaie','Beef tenderloin mini steak with garlic and lemon')
+  ]},
+  { key: 'a-la-carte', ro: 'À La Carte', en: 'À La Carte', descRo: 'Preparate a la carte', descEn: 'À la carte dishes', items: [
+    mk('SHAORMA PUI.webp','250gr','95,00 lei','Shaorma Libaneza De Pui','Shaorma libaneza de pui','Lebanese chicken shaorma'),
+    mk('SHAORMA VITA.webp','250gr','110,00 lei','Shaorma Libaneza De Vita','Shaorma libaneza de vita','Lebanese beef shaorma'),
+    mk('Alexandra pane.webp','150gr','85,00 lei','Alexandra Pane','Piept de pui pane','Chicken breast crumbed')
+  ]},
+  { key: 'orientale', ro: 'Orientale', en: 'Oriental Specials', descRo: 'Specialitati speciale la carbuni', descEn: 'Charcoal-grilled oriental specials', items: [
+    mk('princess.webp','300gr','99,00 lei','Princess Kebab Pui','Chicken kebab turcesc condimentat','Spiced Turkish-style chicken kebab'),
+    mk('fishne-kebab.webp','250gr','105,00 lei','Fishne Kebab','Kebab cu visine','Kebab with sour cherries'),
+    mk('asmali kebeb.webp','300gr','115,00 lei','Asmali Kebab','Kebab de carne cu condimente orientale si sos usor aromat','Meat kebab with oriental spices and lightly flavored sauce'),
+    mk('alinazik.webp','250gr','105,00 lei','Ali Nazek','Vinete, iaurt, sos de rosii, muschiulet de berbecut','Eggplant, yogurt, tomato sauce, lamb tenderloin'),
+    mk('Iskander kebab.webp','300gr','105,00 lei','Iskander Kebab','Kafta, paine, iaurt in sos de rosii','Kafta, bread, yogurt in tomato sauce'),
+    mk('Adana kebab.webp','340gr','105,00 lei','Adana Kebab','Frigarui din carne picanta de miel','Spicy lamb meat skewers'),
+    mk('antakia.webp','340gr','105,00 lei','Antakya Kebab','Kebab turcesc condimentat','Spiced Turkish kebab'),
+    mk('domatezli kebab.webp','340gr','105,00 lei','Domatezli Kebab','Kebab cu carne si rosii','Kebab with meat and tomatoes'),
+    mk('PATUCANU KEBAB.webp','340gr','105,00 lei','Patucanu Kebab','Kebab cu carne si vinete','Kebab with meat and eggplant'),
+    mk('beyti.webp','340gr','105,00 lei','Beyti Kebab','Carne tocata invelita in paine la gratar','Minced meat wrapped in grilled bread'),
+    mk('urfa.webp','340gr','105,00 lei','Urfa Kebab','Carne de oaie tocata fara condimente la gratar','Grilled minced lamb, unseasoned')
+  ]},
+  { key: 'desert', ro: 'Desert', en: 'Dessert', descRo: 'Deserturi traditionale', descEn: 'Traditional desserts', items: [
+    mk('Baclava.webp','100gr','50,00 lei','Baclava','',''),
+    mk('Crem caramel.webp','150gr','45,00 lei','Creme Caramel','',''),
+    mk('Baclava.webp','150gr','55,00 lei','Baclava Cu Inghetata','',''),
+    mk('','','40,00 lei','Mary Cream','',''),
+    mk('Kastalia speciala.webp','250gr','48,00 lei','Kastalia Special','',''),
+    mk('Kastalia.webp','200gr','45,00 lei','Kastalia','',''),
+    mk('Osmalia.webp','100gr','45,00 lei','Osmalia','',''),
+    mk('Knefe.webp','150gr','50,00 lei','Knefe','',''),
+    mk('Halawa jibneh.webp','150gr','50,00 lei','Halawa Jibneh','',''),
+    mk('Desert piccolo mondo.webp','150gr','45,00 lei','Special Piccolo Mondo','',''),
+    mk('Milohas ciocolata.webp','180gr','45,00 lei','Milhojas De Ciocolata','','')
+  ]}
+];
+
+function dr(name, price, size) {
+  return { name, price: (size ? size + ' \u00b7 ' : '') + price };
+}
+const DRINK_CATEGORIES = [
+  { key: 'lichioruri', ro: 'Lichioruri', en: 'Liqueurs', size: '40ml', items: [
+    dr('Amaretto Disaronno','22,00 lei'), dr('Bailey\u2019s Iris Cream','22,00 lei'), dr('Grand Marnier','22,00 lei'), dr('Tia Maria','22,00 lei')
+  ]},
+  { key: 'coniac', ro: 'Coniac / Brandy', en: 'Cognac / Brandy', size: '40ml', items: [
+    dr('Hennessy VS','30,00 lei'), dr('Martell VS','30,00 lei'), dr('Hennessy VSOP','48,00 lei'), dr('Martell VSOP','45,00 lei'), dr('Hennessy XO','135,00 lei'), dr('Martell XO','130,00 lei')
+  ]},
+  { key: 'gin-tonics', ro: 'Gin & Tonics', en: 'Gin & Tonics', size: '250ml', items: [
+    dr('Tanqueray London & Tonic','35,00 lei'), dr('Tanqueray 10 & Tonic','38,00 lei'), dr('Gordon\u2019s Pink & Tonic','35,00 lei')
+  ]},
+  { key: 'long-drinks', ro: 'Long Drinks & Cocktailuri', en: 'Long Drinks & Cocktails', size: '250ml', items: [
+    dr('Piccolo Cocktail','45,00 lei'), dr('Pornostar Martini','42,00 lei'), dr('Blue Monday','40,00 lei'), dr('Rossini','40,00 lei'), dr('Malfi Rossa','40,00 lei'), dr('Arak Buck','40,00 lei'), dr('Captain & Cola','38,00 lei'), dr('Ketel One Tonic / Juice','38,00 lei'), dr('Disaronno Fizz','38,00 lei'), dr('Mojito','38,00 lei'), dr('Negroni','38,00 lei'), dr('Aperol Spritz','44,00 lei'), dr('Campari Spritz','39,00 lei'), dr('Campari Orange','41,00 lei'), dr('Hugo','41,00 lei')
+  ]},
+  { key: 'bauturi-arabesti', ro: 'B\u0103uturi Arabesti', en: 'Arabic Drinks', size: '', items: [
+    dr('Arak','30,00 lei','50ml')
+  ]},
+  { key: 'aperitiv', ro: 'Aperitiv / Digestiv / Vermut', en: 'Aperitif / Digestif / Vermouth', size: '40ml', items: [
+    dr('Campari','18,00 lei'), dr('Cinzano Bianco / Rosso','18,00 lei'), dr('Fernet Branca / Branca Menta','22,00 lei'), dr('Jagermeister','22,00 lei'), dr('Amaro Montenegro','22,00 lei'), dr('Amaro Averna','22,00 lei'), dr('Limoncello','19,00 lei')
+  ]},
+  { key: 'tequila', ro: 'Tequila', en: 'Tequila', size: '40ml', items: [
+    dr('Jose Cuervo Silver / Gold','24,00 lei'), dr('Adiccion Anejo','115,00 lei')
+  ]},
+  { key: 'rom', ro: 'Rom', en: 'Rum', size: '40ml', items: [
+    dr('Captain Morgan Gold','24,00 lei'), dr('Don Papa','34,00 lei')
+  ]},
+  { key: 'vodca', ro: 'Vodca', en: 'Vodka', size: '40ml', items: [
+    dr('Belvedere','30,00 lei'), dr('Absolut','22,00 lei'), dr('Beluga','40,00 lei'), dr('Grey Goose','34,00 lei')
+  ]},
+  { key: 'whiskey', ro: 'Whiskey', en: 'Whiskey', size: '40ml', items: [
+    dr('Johnnie Walker Blue Label','80,00 lei'), dr('Johnnie Walker Black Label','29,00 lei'), dr('Johnnie Walker Gold Label','41,00 lei'), dr('Royal Salute 21 YO','92,00 lei'), dr('Glenmoragie','42,00 lei'), dr('Chivas 12 YO','29,00 lei'), dr('Lagavulin','60,00 lei'), dr('Glenlivet 15 YO','44,00 lei'), dr('Glenfiddich 12 YO','60,00 lei')
+  ]},
+  { key: 'vinuri-rosii', ro: 'Vinuri Rosii', en: 'Red Wines', size: '750ml', items: [
+    dr('Serve Terra Romana Cab. Sauvg.','145,00 lei'), dr('Negrini Agum Negru de Dragasani','145,00 lei'), dr('Negrini Hex Cab. Sauv. & Merlot','125,00 lei'), dr('Garboiu Constantin','350,00 lei'), dr('Davino Iacob Rosu','205,00 lei'), dr('Davino Ceptura Rouge','270,00 lei'), dr('Purcari Nocturne Rara Neagra','155,00 lei'), dr('Prince Matei Merlot','260,00 lei'), dr('Liliac Red Cuvee','160,00 lei'), dr('Recas Cuvee Uberland','260,00 lei'), dr('Gitana Lupi','240,00 lei'), dr('Dom. Bogdan Cuvee Experience','160,00 lei'), dr('Recas Selene Merlot','175,00 lei'), dr('Negrini - Merlot (Pahar)','35,00 lei','200ml'), dr('Serve Terra Romana (Pahar)','48,00 lei','200ml')
+  ]},
+  { key: 'vinuri-rosii-import', ro: 'Vinuri Rosii Import', en: 'Imported Red Wines', size: '750ml', items: [
+    dr('Banfi Rosso di Montalcino','210,00 lei'), dr('Banfi Chianti Clasico','195,00 lei'), dr('Banfi Brunello di Montalcino','400,00 lei'), dr('Amarone della Valpolicella','340,00 lei'), dr('Ksara','205,00 lei')
+  ]},
+  { key: 'vinuri-rose', ro: 'Vinuri Rose', en: 'Ros\u00e9 Wines', size: '750ml', items: [
+    dr('Recas Sole Rose','170,00 lei'), dr('Serve Terra Romana Rose','185,00 lei'), dr('Negrini Hex Rose','125,00 lei'), dr('Negrini Agum Rose','165,00 lei'), dr('Liliac Rose','155,00 lei'), dr('Davino Ceptura Rose','210,00 lei'), dr('Sarica Niculitel Caii de la Letea','160,00 lei'), dr('Budureasca Premium','140,00 lei'), dr('Purcari Nocturne Rose','165,00 lei'), dr('Averesti Busuioaca','165,00 lei'), dr('Serve Couvee Sissi Rose','95,00 lei','375ml'), dr('Negrini (Pahar)','35,00 lei','200ml'), dr('Serve Terra Romana (Pahar)','48,00 lei','200ml')
+  ]},
+  { key: 'vinuri-import-rose', ro: 'Vinuri Import Rose', en: 'Imported Ros\u00e9 Wines', size: '750ml', items: [
+    dr('Bulgarini Chiaretto','160,00 lei'), dr('Feudi di San Gregorio - Visione','180,00 lei')
+  ]},
+  { key: 'vinuri-albe', ro: 'Vinuri Albe', en: 'White Wines', size: '750ml', items: [
+    dr('Serve Terra Romana Chardonnay','185,00 lei'), dr('Sarica Niculitel Caii de la Letea','150,00 lei'), dr('Negrini Hex Sauv. Blanc & Feteasca','125,00 lei'), dr('Negrini Agum Sauv. Bl.','150,00 lei'), dr('Liliac Cuvee Antonia','155,00 lei'), dr('Recas Sole Chardonnay','195,00 lei'), dr('Recas Solo Quinta','250,00 lei'), dr('Davino Iacob','195,00 lei'), dr('Davino Ceptura Blanc','250,00 lei'), dr('Budureasca Premium Fume','165,00 lei'), dr('Purcari Nocturne Pinot Gris','165,00 lei'), dr('Puricari Vinohora Fet. Alaba','165,00 lei'), dr('Garboiu Bacanta Sarba SE','190,00 lei'), dr('Garboiu Bacanta Sauv. Blanc','170,00 lei'), dr('Dom. Bogdan Cuvee Experience','165,00 lei'), dr('Magiq Vinarte Dulce','250,00 lei'), dr('Averesti Daimond Zghihara','165,00 lei'), dr('Negrini - Sauvignon Blanc (Pahar)','35,00 lei','200ml'), dr('Serve Terra Romana (Pahar)','48,00 lei','200ml')
+  ]},
+  { key: 'vinuri-albe-import', ro: 'Vinuri Albe Import', en: 'Imported White Wines', size: '750ml', items: [
+    dr('Banfi San Angelo Pinot Grigio','220,00 lei'), dr('Greco di Tufo di San Gregorio','190,00 lei'), dr('Louis Latour Chablis "La Chanfleu"','240,00 lei'), dr('Planeta Cometa','225,00 lei'), dr('Abbazia di Novacella Gewurztraminer','210,00 lei'), dr('Chateau Ksara','205,00 lei'), dr('Bulgarini','190,00 lei')
+  ]},
+  { key: 'cafea', ro: 'Cafea', en: 'Coffee', size: '', items: [
+    dr('Caf\u00e9 Frapp\u00e9','29,00 lei'), dr('Cafea Arabeasca','19,50 lei'), dr('Ceai Ibric','29,00 lei'), dr('Espresso','19,50 lei'), dr('Espresso Dublu','26,00 lei'), dr('Cafea Alba','16,00 lei'), dr('Espresso Decaf','19,00 lei'), dr('Cappucino','25,00 lei'), dr('Caffe Latte','27,00 lei'), dr('Ceai','19,50 lei')
+  ]},
+  { key: 'apa-sucuri', ro: 'Apa / Sucuri', en: 'Water / Juices', size: '', items: [
+    dr('Pepsi (Regular / Max / Twist / 7up / Mirinda)','17,50 lei','250ml'), dr('Lipton (Lamaie / Piersica)','18,00 lei','250ml'), dr('Prigat (Portocale / Piersica / Pere / Kiwi / Capsuni si Banana)','18,00 lei','250ml'), dr('Apa Plata / Minerala Aqua Carpatica','16,50 lei','330ml'), dr('Apa Plata / Minerala Aqua Carpatica','27,00 lei','750ml'), dr('Aqua Panna','28,00 lei','750ml'), dr('Apa San Pellegrino','28,00 lei','750ml'), dr('Fentimans Cola Bio','26,00 lei','250ml'), dr('Fentimans Rose Limonade','26,00 lei','250ml'), dr('Granini Mere','21,00 lei','250ml'), dr('Airan','20,00 lei','250ml'), dr('Apa Perrier','33,50 lei','250ml'), dr('Fresh Orange, Grapefruit','27,00 lei','250ml'), dr('Fresh Morcov, Mar','27,00 lei','250ml'), dr('Fresh de Rodii','43,00 lei','250ml'), dr('Fresh de Ananas','38,00 lei','250ml'), dr('Limonada','23,00 lei','250ml'), dr('Limonada cu Menta','24,50 lei','250ml'), dr('Limonada cu Ghimbir si Fructe','26,00 lei','250ml'), dr('Red Bull','21,00 lei','250ml'), dr('Three Cents Ginger Beer','25,00 lei','200ml'), dr('Three Cents Pink Grapefruit','25,00 lei','200ml')
+  ]},
+  { key: 'bere', ro: 'Bere', en: 'Beer', size: '330ml', items: [
+    dr('Heineken','22,00 lei'), dr('Heineken 0 Alcool','22,00 lei'), dr('Leffe','26,00 lei'), dr('Ursus','22,00 lei'), dr('Heineken Halba','22,00 lei','400ml'), dr('Peroni','22,00 lei'), dr('Budweiser','29,00 lei'), dr('Corona','27,00 lei'), dr('Ginger Beer','27,00 lei'), dr('Bere Nefiltrata Krombacher','29,00 lei')
+  ]},
+  { key: 'sampanie', ro: 'Sampanie / Proseco', en: 'Champagne / Prosecco', size: '750ml', items: [
+    dr('Bortolin Angelo Brut Prosecco','165,00 lei'), dr('Fantinel One&Only Extra Dry','135,00 lei'), dr('Fantinel One&Only Rose','150,00 lei'), dr('Grande Vento','120,00 lei'), dr('Grande Vento Rose','140,00 lei'), dr('Moet Brut','610,00 lei'), dr('Moet Rose','610,00 lei'), dr('Dom Perignon','3200,00 lei'), dr('Asti Martini','195,00 lei')
+  ]},
+  { key: 'narghilea', ro: 'Narghilea', en: 'Shisha', size: '', items: [
+    dr('Narghilea Arome Clasic','145,00 lei'), dr('Narghilea Arome Lady / Mi Amore / Love 66','155,00 lei'), dr('Narghilea Cap Fruct (Mar, Portocala, Grepf)','190,00 lei')
+  ]}
+];
+
+const TIMELINE = [
+  { year: '1993', en: { title: 'The First Table', caption: 'Grandfather opens Piccolo Mondo\u2019s doors, one small table at a time.' }, ro: { title: 'Prima Masă', caption: 'Bunicul deschide ușile Piccolo Mondo, cu o singură masă.' } },
+  { year: '\u201990s', en: { title: 'A Recipe Becomes a Ritual', caption: 'Family recipes are written down and passed hand to hand.' }, ro: { title: 'Rețeta Devine Ritual', caption: 'Rețetele de familie sunt scrise și transmise mai departe.' } },
+  { year: '2000s', en: { title: 'A New Generation', caption: 'The kitchen passes to the next generation, values unchanged.' }, ro: { title: 'O Nouă Generație', caption: 'Bucătăria trece generației următoare, valorile rămân aceleași.' } },
+  { year: 'Today', en: { title: 'Generations at the Table', caption: 'Piccolo Mondo keeps growing, rooted in the same story.' }, ro: { title: 'Generații la Aceeași Masă', caption: 'Piccolo Mondo continuă să crească, rămânând fidel poveștii sale.' } }
+];
+
+const T = {
+  en: {
+    nav: { home: 'Home', story: 'Our Story', jiddo: 'Our Jiddo', menu: 'Menu', reservation: 'Reservation', contact: 'Contact', reserveBtn: 'Reserve a Table' },
+    jiddo: { title: 'Our Jiddo', subtitle: 'The man behind our small world.', fragments: {
+      c1993: 'Bucharest, 1993', cGather: 'One of many evenings around the table', c2000: 'Building the new home',
+      c2008: 'Every chapter, another scene',
+      t1: 'He arrived with an idea of home.',
+      t2: 'Hospitality was never taught. It was simply how he lived.',
+      t3: 'Before there was a restaurant, there was a table.',
+      tChair: 'His chair remains at the heart of our story.',
+      finalLine1: 'His small world became ours.',
+      finalLine2: "And we're still carrying it forward."
+    } },
+    hero: {
+      eyebrow: 'Rooted in Lebanese Dining · Since 1993',
+      titleLine1: 'Generations at the table.',
+      titleLine2: 'Lebanese at heart.',
+      blurb: 'A family story served fresh every day \u2014 honest Lebanese cooking, shared the way it was meant to be.',
+      ctaReserve: 'Reserve a Table',
+      ctaMenu: 'View Menu'
+    },
+    storyTeaser: {
+      eyebrow: 'Our Story',
+      excerpt: 'What began at a small table with our grandfather has grown into a place where generations gather, shaped by family, tradition and the warmth of Lebanese hospitality.',
+      cta: 'Read our story \u2192',
+      caption: 'Since 1993'
+    },
+    story: {
+      eyebrow: 'Brand Story',
+      title: 'A family story. A living legacy.',
+      paragraphs: [
+        'Rooted in Lebanese culture, our story is one of family, patience, and love for honest food. Our grandfather believed that cooking was more than a craft \u2014 it was a way of bringing people together, of preserving tradition, and of sharing generosity without words. Every recipe created carried a memory, every dish a sense of home.',
+        'As the restaurant passed from one generation to the next, his values remained at the heart of everything we do. We honor his legacy by staying true to our roots, using authentic flavors, time-honored techniques, and warm hospitality that feels personal and genuine.',
+        'Today, we continue to grow \u2014 modern in spirit, yet grounded in tradition. A place where Lebanese dining is experienced the way it was meant to be: shared, heartfelt, and full of soul.',
+        'This is our legacy. Served at the table.'
+      ],
+      timelineTitle: 'The Scrapbook',
+      timelineNote: 'Placeholder dates & stories \u2014 to be finalized with real family history and photos.',
+      readMore: 'Read our story',
+      reserveCta: 'Reserve your table',
+      legacyTitle: 'Today, Carrying His Small<br>World Forward',
+      legacyParagraph: 'Today, Piccolo Mondo continues through the generations that came after our grandfather, his children and grandchildren, growing with time while staying rooted in the values he left behind.\nOur new identity brings his presence back to the heart of the story. His chair becomes our symbol: our grandfather, with his back to us, quietly watching the small world he created continue to grow.\nThe food, the generosity, the familiar faces and the feeling of gathering around one table remain unchanged.\nWe move forward, but always with our grandfather beside us.\nThis is our legacy. Served at the table.',
+      timeline: [
+        { year: '1993', title: 'Where His Small World Began', text: 'In 1993, our grandfather brought Piccolo Mondo to Bucharest, his own small world, built around food, family, and the generosity that defined him.\nAt a time when Lebanese cuisine was still unfamiliar to the city, he opened the first Lebanese restaurant in Bucharest, introducing not only its flavors, but the culture of hospitality behind them. Through his table, he shared the warmth, generosity, and traditions he had brought with him from home.\nPiccolo Mondo began in a different location then, a humble beginning for something that would grow far beyond what he first imagined.\nThis is where it all started.' },
+        { year: '2000\u20132002', title: 'A New Home, Built Together', text: 'A new chapter began. Piccolo Mondo found a new home, the home we still welcome you into today.\nIt was built stone by stone, shaped not only by our grandfather, but by the people who stood beside him. Many of those early employees became family, and some are still with us today, carrying their own memories of those years and stories of working side by side with him.\nIn 2002, the doors opened at Strada Clucerului 9, Bucure\u0219ti.\nA new place meant new beginnings: new tables to gather around, new stories to tell, and new memories to build. But the spirit remained the same, the generosity and hospitality our grandfather had brought to Bucharest in 1993.\nA new home, for the same small world.' },
+        { year: '2008', title: 'Every Chapter Became Part of Us', text: 'By 2008, Piccolo Mondo had lived through many chapters. The interiors changed more than once, some we loved, and some\u2026 well, they became part of the journey.\nBut what mattered most was what happened around the tables: celebrations, long evenings, familiar faces, and regular guests who became old friends.\nPiccolo Mondo was never only a restaurant. It was our grandfather\u2019s small world, built around people, generosity, and the joy of gathering together.\nOur legacy is still being written, and every chapter is filled with your love.' }
+      ],
+      legacyTimeline: [
+        { year: '2012', text: 'Small text describing what happened in 2012.' },
+        { year: '2019', text: 'Small text describing what happened in 2019.' },
+        { year: '2026', text: 'Small text describing the most recent chapter.' }
+      ]
+    },
+    menu: {
+      eyebrow: 'Menu',
+      title: 'Flavors of Lebanon',
+      tabs: { mezze: 'Mezze', mains: 'Mains', desserts: 'Desserts', drinks: 'Drinks' },
+      note: 'Prices in RON, subject to change.'
+    },
+    reservation: {
+      eyebrow: 'Reservation',
+      title: 'Book Your Table',
+      blurb: 'Tell us when you\u2019d like to join us, and we\u2019ll confirm by phone shortly after.',
+      labels: { name: 'Full name', phone: 'Phone number', email: 'Email (optional)', date: 'Date', time: 'Time', guests: 'Number of guests', notes: 'Special requests (optional)' },
+      submit: 'Request Reservation',
+      confirmTitle: 'Thank you!',
+      confirmBody: 'We\u2019ve received your request and will confirm your reservation by phone shortly.',
+      stampThanks: 'Thank you.',
+      stampBody: 'We will contact you shortly to confirm your reservation.',
+      backBtn: 'Make another request',
+      callCta: 'Call to Reserve',
+      emailCta: 'or email hello@piccolomondo.ro'
+    },
+    contact: {
+      eyebrow: 'Contact',
+      title: 'Find Us',
+      addressLabel: 'Address', addressValue: 'Bucharest, Romania \u2014 full address to be added',
+      phoneLabel: 'Phone', phoneValue: '0722 205 020',
+      emailLabel: 'Email', emailValue: 'restaurant@piccolomondo.ro',
+      hoursLabel: 'Hours', hoursValue: 'Every day \u00b7 12:00 \u2013 23:00'
+    },
+    footer: { locationLabel: 'Location', tagline: 'Generations at the table. Lebanese at heart.', rights: '\u00a9 2026 Piccolo Mondo', pagesLabel: 'Pages', contactLabel: 'Contact', hoursLabel: 'Hours', hoursDays: 'Monday \u2014 Sunday', hoursTime: '11:30 \u2014 00:30', mapCta: 'Open Map' },
+    chat: {
+      title: 'Ask Piccolo Mondo', subtitle: 'Hours, story, reservations & more',
+      greeting: 'Hi! I\u2019m here to help with hours, location, reservations, or our story. Ask me anything.',
+      placeholder: 'Type a question\u2026', send: 'Send',
+      quick: [
+        { key: 'hours', label: 'Hours?' },
+        { key: 'address', label: 'Location' },
+        { key: 'reservation', label: 'Book a table' },
+        { key: 'story', label: 'Our story' },
+        { key: 'review', label: 'Loved your visit?' }
+      ],
+      faq: {
+        hours: 'We\u2019re open every day from 11:30 to 00:30.',
+        address: 'You can find us at Str. Clucerului 9, Sector 1, Bucharest.',
+        reservation: 'You can book instantly online, or call us at 0722 20 50 20 / 021 222 57 55.',
+        menu: 'Our menu celebrates Lebanese cuisine: mezze, grilled mains, and desserts like baklava and knafeh. Check the Menu section above.',
+        story: 'Piccolo Mondo began at a small table with our grandfather in 1993. Rooted in Lebanese culture, he believed cooking was a way to bring people together and share generosity without words \u2014 every recipe carried a memory, every dish a sense of home. As the restaurant passed to the next generations, his values stayed at the heart of everything we do: authentic flavors, time-honored techniques, and warm hospitality. Today his chair has become our symbol \u2014 him, with his back to us, quietly watching the small world he created keep growing. This is our legacy. Served at the table.',
+        contact: 'Email us at restaurant@piccolomondo.ro, or call 0722 20 50 20 / 021 222 57 55.',
+        greetingReply: 'Hello! Ask me about our hours, location, menu, reservations, or our story.',
+        fallback: 'I\u2019m still learning! For anything specific, reach us at restaurant@piccolomondo.ro or check the Contact section.',
+        issue: 'I\u2019m sorry to hear that. You can call us at 0722 20 50 20 / 021 222 57 55, email restaurant@piccolomondo.ro, or just type your message here and I\u2019ll prepare an email to send it straight to the restaurant.',
+        askForMessage: 'Go ahead and type your message \u2014 I\u2019ll open an email to the restaurant with it ready to send.',
+        messagePrepared: 'I\u2019ve prepared an email with your message \u2014 just hit send in the window that opened. We\u2019ll get back to you soon.',
+        reviewLink: 'That means so much to us. If you have a moment, we\u2019d love for you to share it with others:',
+        reviewLinkLabel: 'Leave a Google review \u2192',
+        reservationLinkLabel: 'Reserve a table \u2192'
+      }
+    }
+  },
+  ro: {
+    nav: { home: 'Acasă', story: 'Povestea Noastră', jiddo: 'Jiddo-ul Nostru', menu: 'Meniu', reservation: 'Rezervare', contact: 'Contact', reserveBtn: 'Rezervă o Masă' },
+    jiddo: { title: 'Jiddo-ul Nostru', subtitle: 'Omul din spatele micii noastre lumi.', fragments: {
+      c1993: 'București, 1993', cGather: 'O seară dintre multele în jurul mesei', c2000: 'Construind noul cămin',
+      c2008: 'Fiecare capitol, o nouă scenă',
+      t1: 'A venit cu o idee despre casă.',
+      t2: 'Ospitalitatea nu a fost învățată. Așa a trăit mereu.',
+      t3: 'Înainte să existe un restaurant, a existat o masă.',
+      tChair: 'Scaunul lui rămâne în centrul poveștii noastre.',
+      finalLine1: 'Micuța lui lume a devenit a noastră.',
+      finalLine2: 'Și încă o ducem mai departe.'
+    } },
+    hero: {
+      eyebrow: 'Rădăcini în Bucătăria Libaneză \u00b7 Din 1993',
+      titleLine1: 'Generații la aceeași masă.',
+      titleLine2: 'Libanezi la suflet.',
+      blurb: 'O poveste de familie servită proaspăt în fiecare zi \u2014 bucătărie libaneză autentică, împărtășită așa cum trebuie.',
+      ctaReserve: 'Rezervă o Masă',
+      ctaMenu: 'Vezi Meniul'
+    },
+    storyTeaser: {
+      eyebrow: 'Povestea Noastră',
+      excerpt: 'Ceea ce a început la o masă mică alături de bunicul nostru a devenit un loc unde generațiile se adună.',
+      cta: 'Citește povestea \u2192',
+      caption: 'Din 1993'
+    },
+    story: {
+      eyebrow: 'Povestea Brandului',
+      title: 'O poveste de familie. O moștenire vie.',
+      paragraphs: [
+        'Cu rădăcini în cultura libaneză, povestea noastră este despre familie, răbdare și dragoste pentru mâncarea onestă. Bunicul nostru credea că gătitul este mai mult decât o meserie \u2014 era o modalitate de a aduce oamenii împreună, de a păstra tradiția și de a împărtăși generozitate fără cuvinte. Fiecare rețetă purta o amintire, fiecare fel de mâncare un sentiment de acasă.',
+        'Pe măsură ce restaurantul a trecut de la o generație la alta, valorile sale au rămas în centrul a tot ceea ce facem. Îi onorăm moștenirea rămânând fideli rădăcinilor noastre, folosind arome autentice, tehnici tradiționale și o ospitalitate caldă și sinceră.',
+        'Astăzi, continuăm să creștem \u2014 moderni în spirit, dar înrădăcinați în tradiție. Un loc unde bucătăria libaneză este trăită așa cum a fost menită: împărtășită, sinceră și plină de suflet.',
+        'Aceasta este moștenirea noastră. Servită la masă.'
+      ],
+      timelineTitle: 'Albumul de Amintiri',
+      timelineNote: 'Date și povești provizorii \u2014 vor fi finalizate cu istoricul real de familie și fotografii.',
+      readMore: 'Citește povestea noastră',
+      reserveCta: 'Rezervă o masă',
+      legacyTitle: 'Astăzi, Ducem Mai Departe<br>Lumea Lui Mică',
+      legacyParagraph: 'Astăzi, Piccolo Mondo continuă prin generațiile care au urmat bunicului nostru, copiii și nepoții lui, crescând în timp, dar rămânând înrădăcinat în valorile pe care le-a lăsat în urmă.\nNoua noastră identitate readuce prezența lui în centrul poveștii. Scaunul lui devine simbolul nostru: bunicul nostru, cu spatele la noi, veghind lin lumea mică pe care a creat-o și care continuă să crească.\nMâncarea, generozitatea, chipurile familiare și sentimentul de a te aduna la o masă rămân neschimbate.\nMergem înainte, dar mereu cu bunicul nostru alături.\nAceasta este moștenirea noastră. Servită la masă.',
+      timeline: [
+        { year: '1993', title: 'Unde a Început Lumea Lui Mică', text: 'În 1993, bunicul nostru a adus Piccolo Mondo la București, propria lui lume mică, construită în jurul mâncării, familiei și generozității care îl definea.\nÎntr-o vreme când bucătăria libaneză era încă necunoscută în oraș, el a deschis primul restaurant libanez din București, aducând nu doar aromele, ci și cultura ospitalității din spatele lor. Prin masa lui, a împărtășit căldura, generozitatea și tradițiile pe care le-a adus de acasă.\nPiccolo Mondo a început atunci într-o altă locație, un început modest pentru ceva ce avea să crească mult peste ce își imaginase el la început.\nAici a început totul.' },
+        { year: '2000\u20132002', title: 'O Nouă Casă, Construită Împreună', text: 'A început un nou capitol. Piccolo Mondo a găsit o nouă casă, cea în care vă întâmpinăm și astăzi.\nA fost construită piatră cu piatră, modelată nu doar de bunicul nostru, ci și de oamenii care au stat alături de el. Mulți dintre acei angajați de la început au devenit familie, iar unii sunt încă alături de noi astăzi, purtând propriile amintiri din acei ani și povești despre cum au lucrat cot la cot cu el.\nÎn 2002, s-au deschis porțile pe Strada Clucerului 9, București.\nUn loc nou a însemnat noi începuturi: mese noi în jurul cărora să te aduni, povești noi de spus și amintiri noi de construit. Dar spiritul a rămas același, generozitatea și ospitalitatea pe care bunicul nostru le-a adus la București în 1993.\nO casă nouă, pentru aceeași lume mică.' },
+        { year: '2008', title: 'Fiecare Capitol A Devenit Parte Din Noi', text: 'Până în 2008, Piccolo Mondo trăise deja multe capitole. Interioarele s-au schimbat de mai multe ori, unele ne-au plăcut, altele\u2026 să spunem doar că au fost parte din călătorie. Fiecare versiune a lăsat ceva în urmă și a devenit o altă scenă în povestea care ne-a modelat.\nAu fost nenumărate sărbători, seri lungi și chipuri familiare. Clienții fideli au devenit prieteni, iar echipa care a stat alături de bunicul nostru din primii ani a devenit familie, mulți dintre ei fiind și astăzi parte din Piccolo Mondo.\nPentru că Piccolo Mondo nu a fost niciodată doar un restaurant. A fost lumea mică a bunicului nostru, construită în jurul oamenilor, generozității și bucuriei de a te aduna la o masă.\nMoștenirea noastră încă se scrie, și fiecare capitol este plin de dragostea voastră.' }
+      ],
+      legacyTimeline: [
+        { year: '2012', text: 'Text scurt care descrie ce s-a întâmplat în 2012.' },
+        { year: '2019', text: 'Text scurt care descrie ce s-a întâmplat în 2019.' },
+        { year: '2026', text: 'Text scurt care descrie cel mai recent capitol.' }
+      ]
+    },
+    menu: {
+      eyebrow: 'Meniu',
+      title: 'Arome din Liban',
+      tabs: { mezze: 'Mezze', mains: 'Feluri Principale', desserts: 'Deserturi', drinks: 'Băuturi' },
+      note: 'Preturile sunt in lei si pot suferi modificari.'
+    },
+    reservation: {
+      eyebrow: 'Rezervare',
+      title: 'Rezervă o Masă',
+      blurb: 'Spune-ne când vrei să ni te alături și îți vom confirma telefonic rezervarea.',
+      labels: { name: 'Nume complet', phone: 'Număr de telefon', email: 'Email (opțional)', date: 'Data', time: 'Ora', guests: 'Număr de persoane', notes: 'Cerințe speciale (opțional)' },
+      submit: 'Trimite Cererea',
+      confirmTitle: 'Mulțumim!',
+      confirmBody: 'Am primit cererea ta și îți vom confirma rezervarea telefonic în curând.',
+      stampThanks: 'Mulțumim.',
+      stampBody: 'Te vom contacta în curând pentru a confirma rezervarea.',
+      backBtn: 'Trimite altă cerere',
+      callCta: 'Sună pentru Rezervare',
+      emailCta: 'sau scrie la hello@piccolomondo.ro'
+    },
+    contact: {
+      eyebrow: 'Contact',
+      title: 'Găsește-ne',
+      addressLabel: 'Adresă', addressValue: 'Str. Clucerului 9, Sector 1, București',
+      phoneLabel: 'Telefon', phoneValue: '0722 20 50 20 \u00b7 021 222 57 55',
+      emailLabel: 'Email', emailValue: 'restaurant@piccolomondo.ro',
+      hoursLabel: 'Program', hoursValue: 'Luni \u2014 Duminică \u00b7 11:30 \u2013 00:30'
+    },
+    footer: { locationLabel: 'Locație', tagline: 'Generații la aceeași masă. Libanezi la suflet.', rights: '\u00a9 2026 Piccolo Mondo', pagesLabel: 'Pagini', contactLabel: 'Contact', hoursLabel: 'Program', hoursDays: 'Luni \u2014 Duminic\u0103', hoursTime: '11:30 \u2014 00:30', mapCta: 'Deschide harta' },
+    chat: {
+      title: 'Întreabă Piccolo Mondo', subtitle: 'Program, poveste, rezervări și altele',
+      greeting: 'Bună! Sunt aici să te ajut cu programul, locația, rezervările sau povestea noastră. Întreabă-mă orice.',
+      placeholder: 'Scrie o întrebare\u2026', send: 'Trimite',
+      quick: [
+        { key: 'hours', label: 'Program?' },
+        { key: 'address', label: 'Unde sunteți?' },
+        { key: 'reservation', label: 'Rezervă o masă' },
+        { key: 'story', label: 'Povestea noastră' },
+        { key: 'review', label: 'Ai fost la noi?' }
+      ],
+      faq: {
+        hours: 'Suntem deschiși în fiecare zi de la 11:30 la 00:30.',
+        address: 'Ne găsești pe Str. Clucerului 9, Sector 1, București.',
+        reservation: 'Poți rezerva instant online, sau ne poți suna la 0722 20 50 20 / 021 222 57 55.',
+        menu: 'Meniul nostru celebrează bucătăria libaneză: mezze, feluri principale la grătar și deserturi precum baclava și knafeh.',
+        story: 'Piccolo Mondo a început la o masă mică alături de bunicul nostru, în 1993. Cu rădăcini în cultura libaneză, el credea că gătitul aduce oamenii împreună și exprimă generozitate fără cuvinte \u2014 fiecare rețetă purta o amintire, fiecare fel un sentiment de acasă. Pe măsură ce restaurantul a trecut la generațiile următoare, valorile lui au rămas în centrul a tot ceea ce facem: arome autentice, tehnici tradiționale și ospitalitate caldă. Astăzi, scaunul lui a devenit simbolul nostru \u2014 el, cu spatele la noi, veghind lin asupra lumii mici pe care a creat-o. Aceasta este moștenirea noastră. Servită la masă.',
+        contact: 'Scrie-ne la restaurant@piccolomondo.ro, sau sună la 0722 20 50 20 / 021 222 57 55.',
+        greetingReply: 'Bună! Întreabă-mă despre program, locație, meniu, rezervări sau povestea noastră.',
+        fallback: 'Încă învăț! Pentru orice întrebare specifică, scrie-ne la restaurant@piccolomondo.ro sau vezi secțiunea Contact.',
+        issue: 'Îmi pare rău să aud asta. Ne poți suna la 0722 20 50 20 / 021 222 57 55, ne poți scrie la restaurant@piccolomondo.ro, sau poți scrie mesajul aici și îl pregătesc într-un email trimis direct restaurantului.',
+        askForMessage: 'Scrie mesajul tău \u2014 voi pregăti un email către restaurant, gata de trimis.',
+        messagePrepared: 'Am pregătit un email cu mesajul tău \u2014 apasă trimite în fereastra care s-a deschis. Îți vom răspunde cât mai rapid.',
+        reviewLink: 'Înseamnă foarte mult pentru noi. Dacă ai un moment, ne-ar plăcea să îl împarți și cu alții:',
+        reviewLinkLabel: 'Lasă o recenzie pe Google \u2192',
+        reservationLinkLabel: 'Rezervă o masă \u2192'
+      }
+    }
+  }
+};
+
+class Component extends DCLogic {
+  state = {
+    lang: this.props.defaultLanguage === 'ro' ? 'ro' : 'en',
+    menuGroup: 'food',
+    menuTab: 'aperitive-reci',
+    drinkTab: 'lichioruri',
+    navOpen: false,
+    chatOpen: false,
+    chatInput: '',
+    chatMessages: [],
+    chatAwaitingMessage: false,
+    isMobile: false,
+    reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' },
+    reservationSubmitted: false,
+    stampPhase: null,
+    stampGrid: null,
+    stampOverlayOpacity: 1,
+    stampGridOpacity: 1,
+    stampMessageVisible: false,
+    stampMessageOpacity: 0,
+    photoStackOpen: false,
+    photoStackIndex: -1,
+    hoverPreviewOpen: false,
+    hoverPreviewIndex: 0,
+    sigHoverKey: null,
+    sectionHovered: false,
+    handwriteChars: 0,
+    handwriteStarted: false,
+    rowHoverKey: null,
+    rowCursorX: 0.5,
+    rowCursorY: 0.5,
+    loading: true,
+    stampIndex: 0,
+    menuStampFlip: false,
+    page: 'home'
+  };
+
+  goTo(page) {
+    return e => {
+      if (e && e.preventDefault) e.preventDefault();
+      this.setState({ page, navOpen: false });
+      window.scrollTo(0, 0);
+    };
+  }
+
+  componentDidMount() {
+    this.updateSize();
+    this.setupCategorySpy();
+    this.startStoryCycle();
+    this.startLegacyStampCycle();
+    this._onResize = () => this.updateSize();
+    window.addEventListener('resize', this._onResize);
+
+    this._menuScrollHandler = () => {
+      const sentinel = this._menuTabsSentinel, wrapper = this._menuTabsWrapper;
+      if (!sentinel || !wrapper) return;
+      const shouldFix = sentinel.getBoundingClientRect().top <= (this.state.isMobile ? 104 : 128);
+      if (shouldFix !== this.state.menuTabsFixed) {
+        if (shouldFix) this._menuTabsSpacerHeight = wrapper.getBoundingClientRect().height;
+        this.setState({ menuTabsFixed: shouldFix });
+      }
+    };
+    document.addEventListener('scroll', this._menuScrollHandler, true);
+
+    this._headerScriptImgs = [
+      './assets/menu-header-arabic.png',
+      './assets/menu-header-arabic-1.png',
+      './assets/menu-header-arabic-2.png',
+      './assets/menu-header-arabic-3.png',
+      './assets/menu-header-arabic-5.png',
+      './assets/menu-header-arabic-6.png'
+    ];
+    this._headerScriptIdx = 0;
+    this._headerScriptInterval = setInterval(() => {
+      this._headerScriptIdx = (this._headerScriptIdx + 1) % this._headerScriptImgs.length;
+      this.setState({ headerScriptIdx: this._headerScriptIdx });
+    }, 3000);
+
+    this._handwriteText = 'What began at a small table with our grandfather has grown into a place where generations gather, shaped by family, tradition and the warmth of Lebanese hospitality.';
+    this._handwriteEl = null;
+    this._handwriteObserver = null;
+    this._handwriteRefCb = el => {
+      if (!el || this._handwriteObserver) return;
+      this._handwriteEl = el;
+      this._handwriteObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.3 && !this.state.handwriteStarted) {
+            this.setState({ handwriteStarted: true });
+            this.runHandwriteAnimation();
+          }
+        });
+      }, { threshold: [0, 0.3, 0.35, 0.4, 1] });
+      this._handwriteObserver.observe(el);
+    };
+
+    this._chairTilt = { rx: 0, ry: 0 };
+    this._onPointerMove = e => {
+      const nx = (e.clientX / window.innerWidth) * 2 - 1;
+      const ny = (e.clientY / window.innerHeight) * 2 - 1;
+      this._chairTilt = { rx: -ny * 6, ry: nx * 10 };
+      this.forceUpdate();
+    };
+    window.addEventListener('pointermove', this._onPointerMove);
+
+    this.setState({ stampIndex: 0 });
+    this._loadInterval = setInterval(() => {
+      this.setState(s => {
+        const next = s.stampIndex + 1;
+        if (next >= STAMPS.length - 1) {
+          clearInterval(this._loadInterval);
+          setTimeout(() => this.setState({ loading: false }), 1500);
+        }
+        return { stampIndex: Math.min(next, STAMPS.length - 1) };
+      });
+    }, 1500);
+
+    this._stampInterval = setInterval(() => {
+      this.setState(s => ({ menuStampFlip: !s.menuStampFlip }));
+    }, 2200);
+  }
+  componentDidUpdate() {
+    const closedNow = (this.state.storyActiveYear === undefined ? 0 : this.state.storyActiveYear) === -1;
+    if (closedNow !== this._wasStoryClosed) {
+      this._wasStoryClosed = closedNow;
+      if (closedNow) this.startStoryClosedCycle(); else this.stopStoryClosedCycle();
+    }
+    if (this._lastSpyGroup !== this.state.menuGroup || this._lastSpyPage !== this.state.page) {
+      this._lastSpyGroup = this.state.menuGroup;
+      this._lastSpyPage = this.state.page;
+      this.setupCategorySpy();
+    }
+    if (this.state.page !== 'jiddo') {
+      this.teardownJiddoParallax();
+    }
+  }
+  setupCategorySpy() {
+    if (this._catObserver) { this._catObserver.disconnect(); this._catObserver = null; }
+    requestAnimationFrame(() => {
+      const group = this.state.menuGroup === 'food' ? 'food' : 'drinks';
+      const els = Array.from(document.querySelectorAll('[data-cat-group="' + group + '"]'));
+      if (!els.length) return;
+      this._catObserver = new IntersectionObserver((entries) => {
+        if (Date.now() < (this._suppressSpyUntil || 0)) return;
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const key = entry.target.getAttribute('data-cat-key');
+          if (group === 'food' && key !== this.state.menuTab) this.setState({ menuTab: key });
+          if (group === 'drinks' && key !== this.state.drinkTab) this.setState({ drinkTab: key });
+          this.scrollActiveCatTabIntoView(key);
+        });
+      }, { rootMargin: '-200px 0px -60% 0px', threshold: 0 });
+      els.forEach(el => this._catObserver.observe(el));
+    });
+  }
+  scrollToMenuTop() {
+    const el = document.getElementById('menu');
+    if (!el) return;
+    this._suppressSpyUntil = Date.now() + 900;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+  }
+  scrollToCategoryAnchor(anchorId) {
+    const el = document.getElementById(anchorId);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 200;
+    this._suppressSpyUntil = Date.now() + 900;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  componentWillUnmount() {
+    clearTimeout(this._chatHintTimeout);
+    if (this._catObserver) this._catObserver.disconnect();
+    document.removeEventListener('scroll', this._menuScrollHandler, true);
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('pointermove', this._onPointerMove);
+    if (this._headerScriptInterval) clearInterval(this._headerScriptInterval);
+    clearInterval(this._loadInterval);
+    clearInterval(this._stampInterval);
+    clearInterval(this._photoStackInterval);
+    clearInterval(this._hoverInterval);
+    clearTimeout(this._handwriteTimeout);
+    if (this._handwriteObserver) this._handwriteObserver.disconnect();
+    this._clearStampTimers();
+  }
+  setGalleryScrollRef(el) {
+    this._galleryScrollEl = el;
+    this._startAutoScroll('_galleryScrollEl', '_galleryAutoTimer');
+  }
+  scrollGallery(dir) {
+    this._pauseAutoScroll('_galleryAutoTimer');
+    const el = this._galleryScrollEl;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const next = el.scrollLeft + dir * 220;
+    if (next >= max - 4 && dir > 0) {
+      el.scrollTo({ left: 0, behavior: 'auto' });
+    } else if (next <= 4 && dir < 0) {
+      el.scrollTo({ left: max, behavior: 'auto' });
+    } else {
+      el.scrollTo({ left: Math.max(0, Math.min(max, next)), behavior: 'smooth' });
+    }
+  }
+  _startAutoScroll(elKey, timerKey) {
+    if (this[timerKey]) clearInterval(this[timerKey]);
+    this[timerKey] = setInterval(() => {
+      const el = this[elKey];
+      if (!el) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      const next = el.scrollLeft + 1.8;
+      el.scrollLeft = next >= max ? 0 : next;
+    }, 20);
+  }
+  _pauseAutoScroll(timerKey) {
+    if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
+    if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
+    this[timerKey + 'Resume'] = setTimeout(() => {
+      const elKey = timerKey === '_galleryAutoTimer' ? '_galleryScrollEl' : '_storyGalleryScrollEl';
+      this._startAutoScroll(elKey, timerKey);
+    }, 4000);
+  }
+  setStoryGalleryScrollRef(el) {
+    this._storyGalleryScrollEl = el;
+    this._startAutoScroll('_storyGalleryScrollEl', '_storyGalleryAutoTimer');
+  }
+  scrollStoryGallery(dir) {
+    this._pauseAutoScroll('_storyGalleryAutoTimer');
+    const el = this._storyGalleryScrollEl;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const next = el.scrollLeft + dir * 220;
+    if (next >= max - 4 && dir > 0) {
+      el.scrollTo({ left: 0, behavior: 'auto' });
+    } else if (next <= 4 && dir < 0) {
+      el.scrollTo({ left: max, behavior: 'auto' });
+    } else {
+      el.scrollTo({ left: Math.max(0, Math.min(max, next)), behavior: 'smooth' });
+    }
+  }
+  setCatTabsScrollRef(el) { this._catTabsScrollEl = el; }
+  scrollActiveCatTabIntoView(key) {
+    requestAnimationFrame(() => {
+      const el = this._catTabsScrollEl;
+      if (!el) return;
+      const btn = el.querySelector('[data-tab-key="' + key + '"]');
+      if (!btn) return;
+      const target = btn.offsetLeft - (el.clientWidth - btn.clientWidth) / 2;
+      el.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    });
+  }
+  scrollCatTabs(dir) {
+    if (this._catTabsScrollEl) this._catTabsScrollEl.scrollBy({ left: dir * 160, behavior: 'smooth' });
+  }
+  jiddoImagePool() {
+    return Array.from({ length: 17 }, (_, i) => './assets/jiddo-photo-' + (i + 1) + '.png').filter(src => src !== './assets/jiddo-photo-2.png' && src !== './assets/jiddo-photo-15.png');
+  }
+  teardownJiddoParallax() {
+    if (this._jiddoTimer) { clearInterval(this._jiddoTimer); this._jiddoTimer = null; }
+    this.teardownJiddoVideos();
+  }
+  setMutedVideoRef(el) {
+    if (!el) return;
+    el.muted = true;
+    el.volume = 0;
+    if (!this._jiddoVideoObserver) {
+      this._jiddoVideoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        });
+      }, { threshold: 0.15 });
+    }
+    this._jiddoVideoObserver.observe(el);
+  }
+  teardownJiddoVideos() {
+    if (this._jiddoVideoObserver) { this._jiddoVideoObserver.disconnect(); this._jiddoVideoObserver = null; }
+  }
+  jiddoBuildColumns() {
+    const pool = this.jiddoImagePool();
+    const videos = ['./assets/jiddo-video-1.mp4', './assets/jiddo-video-2.mp4', './assets/jiddo-video-3.mp4', './assets/jiddo-video-4.mp4'];
+    const isMobile = this.state.isMobile;
+    const numCols = isMobile ? 3 : 6;
+    const durations = [36, 44, 30, 46, 38, 42];
+    const colWidthPx = window.innerWidth / numCols;
+    const imgHeightPx = colWidthPx * 4 / 3;
+    const neededCount = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / imgHeightPx)));
+    return Array.from({ length: numCols }, (_, c) => {
+      const start = c * 5;
+      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false }));
+      const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
+      const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
+      const doubled = single.concat(single);
+      const dir = c % 2 === 0 ? 'jiddoScrollDown' : 'jiddoScrollUp';
+      const duration = durations[c % durations.length];
+      return {
+        items: doubled,
+        trackStyle: 'position:absolute;top:0;left:0;width:100%;animation:' + dir + ' ' + duration + 's linear infinite'
+      };
+    });
+  }
+  storyTimelineData() {
+    const lang = this.state.lang;
+    const localized = T[lang].story.timeline;
+    const images = [
+      ['./assets/story-1993-1.png', './assets/story-1993-2.png', './assets/story-1993-3.png'],
+      ['./assets/story-2000-1.png', './assets/story-2000-2.png', './assets/story-2000-3.png'],
+      ['./assets/story-2008-2.png', './assets/story-2008-1.png']
+    ];
+    return this._storyTimelineData || localized.map((d, i) => ({ year: d.year, title: d.title, text: d.text, images: images[i] }));
+  }
+  startStoryCycle() {}
+  
+  legacyTimelineData() {
+    const lang = this.state.lang;
+    const localized = T[lang].story.legacyTimeline;
+    return this._legacyTimelineData || localized.map(d => ({ year: d.year, text: d.text, image: './assets/story-collage-opt.webp' }));
+  }
+  buildLegacyTimeline() {
+    const data = this.legacyTimelineData();
+    const active = this.state.legacyActiveYear ?? 0;
+    return data.map((d, i) => ({
+      year: d.year,
+      text: d.text,
+      image: d.image,
+      onClick: () => this.setState({ legacyActiveYear: i }),
+      imageStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease',
+      lineStyle: 'height:' + (i === active ? '2px' : '1px') + ';background:' + (i === active ? '#2A1002' : 'rgba(64,20,19,0.25)') + ';transition:all 0.3s ease',
+      dateColor: i === active ? '#2A1002' : 'rgba(64,20,19,0.55)',
+      infoWrapStyle: 'position:absolute;inset:0;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none')
+    }));
+  }
+  legacyStampList() {
+    return [
+      { src: './assets/story-legacy-stamp-1.png' },
+      { src: './assets/story-legacy-stamp-3.png' },
+      { src: './assets/story-legacy-stamp-4.png' },
+      { src: './assets/story-legacy-stamp-6.png' }
+    ];
+  }
+  startLegacyStampCycle() {
+    if (this._legacyStampTimer) clearInterval(this._legacyStampTimer);
+    this._legacyStampTimer = setInterval(() => {
+      const cur = this.state.legacyStampIndex || 0;
+      this.setState({ legacyStampIndex: (cur + 1) % this.legacyStampList().length });
+    }, 1400);
+  }
+  storyImageClick() {
+    const active = this.state.storyActiveYear ?? 0;
+    const data = this.storyTimelineData();
+    const count = (data[active] && data[active].images.length) || 1;
+    if (count < 2) return;
+    const cur = this.state.storySubIndex || 0;
+    this.setState({ storySubIndex: (cur + 1) % count });
+  }
+  storySwipeStart(e) { this._swipeX = e.touches[0].clientX; }
+  storySwipeEnd(e) {
+    if (this._swipeX == null) return;
+    const dx = e.changedTouches[0].clientX - this._swipeX;
+    this._swipeX = null;
+    if (Math.abs(dx) < 40) return;
+    const active = this.state.storyActiveYear ?? 0;
+    const data = this.storyTimelineData();
+    const count = (data[active] && data[active].images.length) || 1;
+    const cur = this.state.storySubIndex || 0;
+    const next = dx < 0 ? (cur + 1) % count : (cur - 1 + count) % count;
+    this.setState({ storySubIndex: next });
+  }
+  toggleLegacyOpen() {
+    const open = this.state.legacyOpen === undefined ? true : this.state.legacyOpen;
+    this.setState({ legacyOpen: !open });
+  }
+  storyFlatImages() {
+    const data = this.storyTimelineData();
+    const flat = [];
+    data.forEach((d, i) => d.images.forEach((src, j) => flat.push({ i, j, src })));
+    return flat;
+  }
+  startStoryClosedCycle() {
+    if (this._storyClosedCycleTimer) return;
+    const flat = this.storyFlatImages();
+    if (!flat.length) return;
+    this._storyClosedCycleTimer = setInterval(() => {
+      const cur = this.state.storyCycleIndex || 0;
+      this.setState({ storyCycleIndex: (cur + 1) % flat.length });
+    }, 2500);
+  }
+  stopStoryClosedCycle() {
+    if (this._storyClosedCycleTimer) { clearInterval(this._storyClosedCycleTimer); this._storyClosedCycleTimer = null; }
+  }
+  buildStoryTimeline() {
+    const data = this.storyTimelineData();
+    const active = this.state.storyActiveYear === undefined ? 0 : this.state.storyActiveYear;
+    const subIndex = this.state.storySubIndex || 0;
+    const closed = active === -1;
+    const flat = closed ? this.storyFlatImages() : null;
+    const cycleIndex = flat && flat.length ? (this.state.storyCycleIndex || 0) % flat.length : 0;
+    const activeFlat = flat ? flat[cycleIndex] : null;
+    return data.map((d, i) => ({
+      year: d.year,
+      title: d.title || '',
+      text: d.text,
+      onClick: () => this.setState({ storyActiveYear: i === active ? -1 : i, storySubIndex: 0 }),
+      images: d.images.map((src, j) => {
+        const on = closed ? (activeFlat && activeFlat.i === i && activeFlat.j === j) : (i === active && j === subIndex);
+        return { src, style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:' + (on ? 1 : 0) + ';transition:opacity 1.2s ease;z-index:' + (on ? 1 : 0) };
+      }),
+      isActive: i === active,
+      hasMultipleImages: d.images.length > 1,
+      onPrev: (e) => { e.stopPropagation(); const count = d.images.length; this.setState({ storySubIndex: (subIndex - 1 + count) % count }); },
+      onNext: (e) => { e.stopPropagation(); const count = d.images.length; this.setState({ storySubIndex: (subIndex + 1) % count }); },
+      dots: d.images.map((_, j) => ({
+        onClick: (e) => { e.stopPropagation(); this.setState({ storySubIndex: j }); },
+        style: 'width:8px;height:8px;borderRadius:50%;border:1px solid #F4EEE8;padding:0;cursor:pointer;background:' + (i === active && j === subIndex ? '#F4EEE8' : 'rgba(244,238,232,0.25)') + ';transition:background 0.3s ease'
+      })),
+      lineStyle: 'height:' + (i === active ? '2px' : '1px') + ';background:' + (i === active ? '#2A1002' : 'rgba(64,20,19,0.25)') + ';transition:all 0.3s ease',
+      dateColor: i === active ? '#2A1002' : 'rgba(64,20,19,0.55)',
+      infoWrapStyle: 'position:absolute;inset:0;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none'),
+      plusRotate: i === active ? 'rotate(45deg)' : 'rotate(0deg)',
+      panelMaxHeight: i === active ? '600px' : '0px'
+    }));
+  }
+  onStoryScroll(e) {
+    const el = e.currentTarget;
+    const max = el.scrollWidth - el.clientWidth;
+    const pct = max > 0 ? el.scrollLeft / max : 0;
+    this.setState({ storyScrollPct: pct });
+  }
+  mobileNavStyle(key) {
+    const active = this.state.page === key;
+    return 'text-decoration:none;color:#FED0CF;font-family:\'Instrument Serif\',serif;font-style:' + (active ? 'italic' : 'normal') +
+      ';font-size:32px;letter-spacing:normal;border-bottom:1px solid ' + (active ? '#FED0CF' : 'transparent') + ';padding-bottom:4px';
+  }
+  updateSize() {
+    this.setState({ isMobile: window.innerWidth < 860 });
+  }
+  _startChatHintCycle() {
+    const cycle = (visible) => {
+      this.setState({ chatHintOpacity: visible ? 1 : 0 });
+      this._chatHintTimeout = setTimeout(() => cycle(!visible), visible ? 3000 : 2000);
+    };
+    cycle(true);
+  }
+
+  _clearStampTimers() {
+    (this._stampTimeouts || []).forEach(id => clearTimeout(id));
+    this._stampTimeouts = [];
+  }
+
+  startStampSequence() {
+    this._clearStampTimers();
+    document.body.style.overflow = 'hidden';
+    const w = window.innerWidth, h = window.innerHeight;
+    const cols = w < 640 ? 3 : w < 1024 ? 5 : 8;
+    const cellW = Math.ceil((w * 1.04) / cols);
+    const cellH = Math.ceil(cellW / 0.68);
+    const rows = Math.ceil((h * 1.04) / cellH);
+    const total = cols * rows;
+    const revealMs = 350, staggerMs = 130;
+    this.setState({
+      stampPhase: 'grid',
+      stampGrid: { cols, rows, total },
+      stampOverlayOpacity: 1,
+      stampGridOpacity: 1,
+      stampMessageVisible: false,
+      stampMessageOpacity: 0
+    });
+    const gridDoneAt = (total - 1) * staggerMs + revealMs;
+    const gridFadeStart = gridDoneAt + 700;
+    const gridFadeMs = 500;
+    const messageInAt = gridFadeStart + gridFadeMs;
+    this._stampTimeouts.push(setTimeout(() => {
+      this.setState({ stampGridOpacity: 0 });
+    }, gridFadeStart));
+    this._stampTimeouts.push(setTimeout(() => {
+      this.setState({ stampMessageVisible: true });
+      requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ stampMessageOpacity: 1 })));
+    }, messageInAt));
+    this._stampTimeouts.push(setTimeout(() => {
+      this.dismissStampSequence();
+    }, messageInAt + 500 + 2500));
+  }
+
+  dismissStampSequence() {
+    document.body.style.overflow = '';
+    this._clearStampTimers();
+    this.setState({
+      stampPhase: null,
+      stampGrid: null,
+      stampMessageVisible: false,
+      reservationSubmitted: false,
+      reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' }
+    });
+    this.goTo('home')({});
+  }
+
+  runHandwriteAnimation() {
+    const full = this._handwriteText;
+    let i = 0;
+    const step = () => {
+      i++;
+      this.setState({ handwriteChars: i });
+      if (i < full.length) {
+        const jitter = Math.random() * 15 - 5;
+        this._handwriteTimeout = setTimeout(step, 42 + jitter);
+      }
+    };
+    step();
+  }
+
+  faqAnswer(lang, raw) {
+    const msg = raw.toLowerCase();
+    const faq = T[lang].chat.faq;
+    if (/(hour|program|oră|deschis|inchis|închis)/.test(msg)) return faq.hours;
+    if (/(address|where|locat|adres|unde)/.test(msg)) return faq.address;
+    if (/(reserv|book|rezerv)/.test(msg)) return faq.reservation;
+    if (/(menu|food|vegan|meniu|mânca)/.test(msg)) return faq.menu;
+    if (/(story|history|legacy|tradition|founder|origin|1993|istorie|poveste|mostenire|moștenire|traditie|tradiție|grandfather|bunic)/.test(msg)) return faq.story;
+    if (/(contact|phone|email|telefon)/.test(msg)) return faq.contact;
+    if (/(leave (us )?a review|write a review|review us|google review|loved your visit|las\u0103 o recenzie|recenzie google|ai fost la noi)/.test(msg)) return faq.reviewLink;
+    if (/(complain|complaint|issue|problem|review|bad|upset|angry|disappoint|reclam|problemă|nemulțumit|nemultumit|plângere|plangere)/.test(msg)) return faq.issue;
+    if (/(leave a message|send a message|message you|mesaj|lasă un mesaj|lasa un mesaj|trimite un mesaj)/.test(msg)) return faq.askForMessage;
+    if (/(hi|hello|salut|bună|buna)/.test(msg)) return faq.greetingReply;
+    return faq.fallback;
+  }
+
+  pushExchange(userText) {
+    const lang = this.state.lang;
+    const faq = T[lang].chat.faq;
+    const userMsg = { style: 'align-self:flex-end;background:#344315;color:#F4EEE8;padding:10px 14px;borderRadius:14px 14px 2px 14px;font-size:13.5px;line-height:1.5;max-width:85%', text: userText };
+    let answer;
+    if (this.state.chatAwaitingMessage) {
+      const subject = encodeURIComponent('Message from website chat');
+      const body = encodeURIComponent(userText);
+      window.open('mailto:restaurant@piccolomondo.ro?subject=' + subject + '&body=' + body, '_blank');
+      answer = faq.messagePrepared;
+      this.setState({ chatAwaitingMessage: false });
+    } else {
+      answer = this.faqAnswer(lang, userText);
+      if (answer === faq.askForMessage) this.setState({ chatAwaitingMessage: true });
+    }
+    const isReview = answer === faq.reviewLink;
+    const isReservation = answer === faq.reservation;
+    const botMsg = {
+      style: 'align-self:flex-start;background:#FED0CF;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%;font-weight:' + (isReview ? '600' : '400'),
+      text: answer,
+      linkUrl: isReview ? 'https://www.google.com/maps?cid=4951164950577469656' : (isReservation ? 'https://piccolo-mondo.ialoc.ro?experience=focus&locale=' + lang : ''),
+      linkLabel: isReview ? faq.reviewLinkLabel : (isReservation ? faq.reservationLinkLabel : '')
+    };
+    this.setState(s => ({ chatMessages: [...s.chatMessages, userMsg, botMsg], chatInput: '' }));
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const t = T[lang];
+    const headerScriptIdx = this.state.headerScriptIdx || 0;
+    const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.png'];
+    const headerScriptImages = headerScriptImgs.map((src, i) => {
+      const isLastTwo = i >= headerScriptImgs.length - 2;
+      return {
+        src,
+        style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.8s ease;opacity:' + (i === headerScriptIdx ? 1 : 0) + ';' + (isLastTwo ? 'transform:scale(0.8);' : '')
+      };
+    });
+    const photoStack = [1,2,3,4,5,6,7,10].map((n, i) => {
+      const rot = (n % 2 === 0 ? 1 : -1) * (3 + (n % 4) * 2);
+      return {
+        src: './assets/story-photos/' + n + '.webp',
+        style: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/story-photos/' + n + '.webp\');background-size:cover;background-position:center;transform:rotate(' + rot + 'deg) scale(0.98);z-index:' + n + ';opacity:' + (i <= this.state.photoStackIndex ? 1 : 0) + ';'
+      };
+    });
+    const tilt = this._chairTilt || { rx: 0, ry: 0 };
+    const chairTiltTransform = 'perspective(900px) rotateX(' + tilt.rx.toFixed(2) + 'deg) rotateY(' + tilt.ry.toFixed(2) + 'deg)';
+    const isMobile = this.state.isMobile;
+    const isDesktop = !isMobile;
+
+    const langBase = 'background:none;border:none;cursor:pointer;color:#FED0CF;padding:4px 0;';
+    const langBtnEnStyle = langBase + (lang === 'en' ? 'border-bottom:1px solid #FED0CF' : 'border-bottom:1px solid transparent');
+    const langBtnRoStyle = langBase + (lang === 'ro' ? 'border-bottom:1px solid #FED0CF' : 'border-bottom:1px solid transparent');
+    const pillBaseMobile = 'padding:4px 0;font-size:13px;font-weight:400;background:none;border:none;cursor:pointer;white-space:nowrap;color:#FED0CF;';
+    const langBtnEnStyleMobile = pillBaseMobile + 'border-bottom:1px solid ' + (lang === 'en' ? '#FED0CF' : 'transparent');
+    const langBtnRoStyleMobile = pillBaseMobile + 'border-bottom:1px solid ' + (lang === 'ro' ? '#FED0CF' : 'transparent');
+
+    const isFood = this.state.menuGroup === 'food';
+    const groupPill = (key, label) => ({
+      key, label,
+      onClick: () => { this.setState({ menuGroup: key }); this.scrollToMenuTop(); },
+      style: 'padding:11px 26px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid #344315;' +
+        (this.state.menuGroup === key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315'),
+      rectStyle: 'flex:1;padding:13px 10px;borderRadius:8px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid #344315;' +
+        (this.state.menuGroup === key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315')
+    });
+    const menuGroupTabs = [groupPill('food', lang === 'ro' ? 'Meniu' : 'Food Menu'), groupPill('drinks', lang === 'ro' ? 'B\u0103uturi' : 'Drinks')];
+
+    const menuTabs = MENU_CATEGORIES.map(c => ({
+      key: c.key,
+      label: lang === 'ro' ? c.ro : c.en,
+      onClick: () => { this.setState({ menuTab: c.key }); this.scrollToCategoryAnchor('cat-food-' + c.key); },
+      style: 'padding:10px 22px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid #344315;' +
+        (this.state.menuTab === c.key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315'),
+      lineStyle: 'padding:8px 16px;background:none;border:none;border-right:1px solid rgba(52,67,21,0.25);font-weight:' + (this.state.menuTab === c.key ? '700' : '400') + ';font-size:14px;cursor:pointer;color:#344315;white-space:nowrap'
+    }));
+    const drinkTabs = DRINK_CATEGORIES.map(c => ({
+      key: c.key,
+      label: lang === 'ro' ? c.ro : c.en,
+      onClick: () => { this.setState({ drinkTab: c.key }); this.scrollToCategoryAnchor('cat-drink-' + c.key); },
+      style: 'padding:10px 22px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid #344315;' +
+        (this.state.drinkTab === c.key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315'),
+      lineStyle: 'padding:8px 16px;background:none;border:none;border-right:1px solid rgba(52,67,21,0.25);font-weight:' + (this.state.drinkTab === c.key ? '700' : '400') + ';font-size:14px;cursor:pointer;color:#344315;white-space:nowrap'
+    }));
+
+    const activeCategory = MENU_CATEGORIES.find(c => c.key === this.state.menuTab) || MENU_CATEGORIES[0];
+    const activeDrinkCategory = DRINK_CATEGORIES.find(c => c.key === this.state.drinkTab) || DRINK_CATEGORIES[0];
+    const menuCategoryLabel = isFood ? (lang === 'ro' ? activeCategory.ro : activeCategory.en) : (lang === 'ro' ? activeDrinkCategory.ro : activeDrinkCategory.en);
+    const menuCategoryDesc = isFood ? (lang === 'ro' ? activeCategory.descRo : activeCategory.descEn) : activeDrinkCategory.size;
+    const slugify = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const menuItemsFiltered = isFood ? activeCategory.items.map(i => ({
+      name: i.name,
+      desc: lang === 'ro' ? i.descRo : i.descEn,
+      price: (i.weight ? i.weight + ' \u00b7 ' : '') + i.price,
+      photoId: 'menu-photo-' + activeCategory.key + '-' + slugify(i.name),
+      photoSrc: i.img ? ('./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp') : '',
+      photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp\');background-size:cover;background-position:center;') : '',
+      noPhoto: !i.img
+    })) : [];
+    const drinkItemsFiltered = !isFood ? activeDrinkCategory.items.map(i => ({ name: i.name, price: i.price })) : [];
+
+    const foodSections = MENU_CATEGORIES.map(c => ({
+      key: c.key,
+      anchorId: 'cat-food-' + c.key,
+      label: lang === 'ro' ? c.ro : c.en,
+      desc: lang === 'ro' ? c.descRo : c.descEn,
+      items: c.items.map(i => ({
+        name: i.name,
+        desc: lang === 'ro' ? i.descRo : i.descEn,
+        price: (i.weight ? i.weight + ' \u00b7 ' : '') + i.price,
+        photoId: 'menu-photo-' + c.key + '-' + slugify(i.name),
+        photoSrc: i.img ? ('./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp') : '',
+        photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp\');background-size:cover;background-position:center;') : '',
+        noPhoto: !i.img
+      }))
+    }));
+    const drinkSections = DRINK_CATEGORIES.map(c => ({
+      key: c.key,
+      anchorId: 'cat-drink-' + c.key,
+      label: lang === 'ro' ? c.ro : c.en,
+      desc: c.size,
+      items: c.items.map(i => ({ name: i.name, price: i.price }))
+    }));
+
+    const timelineItems = TIMELINE.map((item, i) => {
+      const side = i % 2 === 0 ? 'left' : 'right';
+      return {
+        year: item.year,
+        title: item[lang].title,
+        caption: item[lang].caption,
+        photoId: 'timeline-photo-' + i,
+        justify: isMobile ? 'flex-start' : (side === 'left' ? 'flex-start' : 'flex-end'),
+        marginLeft: isMobile ? '48px' : (side === 'left' ? '0' : '0'),
+        marginRight: isMobile ? '0' : '0',
+        rotate: side === 'left' ? -1.5 : 1.5
+      };
+    });
+
+    const quickReplies = t.chat.quick.map(q => ({
+      label: q.label,
+      onClick: () => this.pushExchange(q.label)
+    }));
+
+    return {
+      t, isMobile, isDesktop, chairTiltTransform, headerScriptImages,
+      logoHeight: isMobile ? '72px' : '92px',
+      logoMarginLeft: isMobile ? '0px' : '28px',
+      heroCompStyle: isMobile ? 'flex-direction:column;gap:20px' : '',
+      heroTextWrap: isMobile ? 'white-space:normal;text-align:center' : 'white-space:nowrap',
+      chairSize: isMobile ? 'min(70vw,360px)' : 'min(34vw,360px)',
+      setStoryScrollRef: () => {},
+      onStoryScroll: e => this.onStoryScroll(e),
+      storyScrollBarLeft: ((this.state.storyScrollPct || 0) * 55) + '%',
+      storyBtnMarginTop: isMobile ? '32px' : '-8px',
+      galleryPadding: isMobile ? '32px 0' : '70px 0',
+      galleryMarginTop: isMobile ? '8px' : '40px',
+      galleryMarginBottom: isMobile ? '32px' : '0px',
+      reservationFormPadding: isMobile ? '24px 20px' : '36px',
+      reservationTopPadding: isMobile ? '190px' : '250px',
+      storyPageTopPadding: isMobile ? '104px' : '150px',
+      storyRibbonPadding: isMobile ? '5px 0' : '10px 0',
+      storyRibbonImgHeight: isMobile ? '32px' : '48px',
+      storyRibbonImgHeightOriginal: isMobile ? '24px' : '36px',
+      legacyImgMaxWidth: isMobile ? '900px' : '480px',
+      legacyAlign: isMobile ? 'flex-start' : 'center',
+      legacyTopPadding: isMobile ? '4px' : '60px',
+      legacyTextMarginTop: isMobile ? '-24px' : '0',
+      legacyImgOffset: isMobile ? '90px' : 'auto',
+      contactPaddingLeft: isMobile ? '0' : '120px',
+      contactTopPadding: isMobile ? '170px' : '220px',
+      contactBottomPadding: isMobile ? '70px' : '100px',
+      contactCenterStyle: isMobile ? 'min-height:calc(100vh - 104px - 320px);display:flex;flex-direction:column;justify-content:center' : '',
+      contactMapMaxWidth: isMobile ? '520px' : 'none',
+      contactMapMarginTop: isMobile ? '24px' : '0',
+      contactJustify: isMobile ? 'center' : 'flex-end',
+      reserveMarginTop: isMobile ? '20px' : '40px',
+      ribbonMarginTop: isMobile ? '20px' : '60px',
+      setGalleryScrollRef: el => this.setGalleryScrollRef(el),
+      galleryScrollLeft: () => this.scrollGallery(-1),
+      galleryScrollRight: () => this.scrollGallery(1),
+      setStoryGalleryScrollRef: el => this.setStoryGalleryScrollRef(el),
+      storyGalleryScrollLeft: () => this.scrollStoryGallery(-1),
+      storyGalleryScrollRight: () => this.scrollStoryGallery(1),
+      storyTimeline: this.buildStoryTimeline(),
+      legacyTitleHtml: { __html: t.story.legacyTitle },
+      legacyTitleHtmlMobile: { __html: t.story.legacyTitle.replace('<br>', ' ') + ' <span style="font-size:20px;font-weight:700;font-style:normal;color:#401413;display:inline-block;transform:' + ((this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? 'rotate(45deg)' : 'rotate(0deg)') + ';transition:transform 0.3s ease">+</span>' },
+      toggleLegacyOpen: () => this.toggleLegacyOpen(),
+      legacyPlusRotate: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? 'rotate(45deg)' : 'rotate(0deg)',
+      legacyPanelMaxHeight: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? '600px' : '0px',
+      storyRibbonItems: Array.from({length: 12}),
+      storyRibbonItemsOriginal: Array.from({length: 50}),
+      legacyStamps: this.legacyStampList().map((s, i) => ({
+        src: s.src,
+        style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:' + (i === (this.state.legacyStampIndex || 0) ? 1 : 0) + ';transition:opacity 0.6s ease;transform:rotate(' + ((i % 2 === 0 ? -1 : 1) * (6 + (i * 2) % 5)) + 'deg)'
+      })),
+      legacyTimeline: this.buildLegacyTimeline(),
+      legacyImageClick: () => {},
+      storySwipeStart: e => this.storySwipeStart(e),
+      storySwipeEnd: e => this.storySwipeEnd(e),
+      storyImageClick: () => this.storyImageClick(),
+      stopBubble: e => e.stopPropagation(),
+      isHome: this.state.page === 'home',
+      isStory: this.state.page === 'story',
+      isJiddo: this.state.page === 'jiddo',
+      jiddoColGap: this.state.isMobile ? '6px' : '10px',
+      jiddoTitleSize: this.state.isMobile ? 'clamp(36px,11vw,60px)' : 'clamp(64px,7vw,130px)',
+      jiddoMemories: [],
+      jiddoColumns: this.state.page === 'jiddo' ? this.jiddoBuildColumns() : [],
+      setMutedVideoRef: el => this.setMutedVideoRef(el),
+      isMenu: this.state.page === 'menu',
+      isReservation: this.state.page === 'reservation',
+      isContact: this.state.page === 'contact',
+      goHome: this.goTo('home'),
+      goStory: this.goTo('story'),
+      goJiddo: this.goTo('jiddo'),
+      goMenu: this.goTo('menu'),
+      goReservation: this.goTo('reservation'),
+      goContact: this.goTo('contact'),
+      goStoryMobile: e => { this.goTo('story')(e); },
+      goJiddoMobile: e => { this.goTo('jiddo')(e); },
+      goHomeMobile: e => { this.goTo('home')(e); },
+      goMenuMobile: e => { this.goTo('menu')(e); },
+      goReservationMobile: e => { this.goTo('reservation')(e); },
+      goContactMobile: e => { this.goTo('contact')(e); },
+      navLinkHomeStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'home' ? '#FED0CF' : 'transparent'),
+      navLinkStoryStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'story' ? '#FED0CF' : 'transparent'),
+      navLinkJiddoStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'jiddo' ? '#FED0CF' : 'transparent'),
+      navLinkMenuStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'menu' ? '#FED0CF' : 'transparent'),
+      navLinkReservationStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'reservation' ? '#FED0CF' : 'transparent'),
+      navLinkContactStyle: 'text-decoration:none;color:#FED0CF;font-size:14px;font-weight:300;letter-spacing:0.8px;padding-bottom:6px;border-bottom:1px solid ' + (this.state.page === 'contact' ? '#FED0CF' : 'transparent'),
+      mobileNavHomeStyle: this.mobileNavStyle('home'),
+      mobileNavStoryStyle: this.mobileNavStyle('story'),
+      mobileNavJiddoStyle: this.mobileNavStyle('jiddo'),
+      mobileNavMenuStyle: this.mobileNavStyle('menu'),
+      mobileNavReservationStyle: this.mobileNavStyle('reservation'),
+      mobileNavContactStyle: this.mobileNavStyle('contact'),
+      loaderOpacity: this.state.loading ? 1 : 0,
+      loaderVisibility: this.state.loading ? 'visible' : 'hidden',
+      loaderPointerEvents: this.state.loading ? 'auto' : 'none',
+      stampProgress: Math.round(((this.state.stampIndex + 1) / STAMPS.length) * 100),
+      stamps: STAMPS.map((s, i) => {
+        const visible = i <= this.state.stampIndex;
+        const isTop = i === this.state.stampIndex;
+        return {
+          wrapStyle: 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;' +
+            'background-image:url(' + s.src + ');background-size:180px auto;background-position:center;background-repeat:no-repeat;' +
+            'transform:rotate(' + s.rotate + 'deg);' +
+            'opacity:' + (visible ? 1 : 0) + ';' +
+            'transition:opacity 0.5s ease;' +
+            'z-index:' + i + ';' +
+            (isTop ? 'animation:stampPop 1.4s ease both;' : '')
+        };
+      }),
+      navPadding: isMobile ? '16px 18px' : '18px 48px',
+      navJustify: isMobile ? 'space-between' : 'space-between',
+      navGroupGap: isMobile ? '20px' : '44px',
+      hamburgerMarginLeft: isMobile ? '0px' : '6px',
+      navOpen: this.state.navOpen,
+      toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      setLangEn: () => this.setState({ lang: 'en' }),
+      setLangRo: () => this.setState({ lang: 'ro' }),
+      langBtnEnStyle, langBtnRoStyle, langBtnEnStyleMobile, langBtnRoStyleMobile,
+
+      cardWidth: isMobile ? 'calc(100% - 48px)' : '44%',
+      timelineLinePos: isMobile ? '20px' : '50%',
+      timelineItems,
+
+      illusDisplay: isMobile ? 'none' : 'block',
+      menuStampFrontStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.6s ease,transform 0.6s ease;' +
+        (this.state.menuStampFlip ? 'opacity:0;transform:rotate(-4deg) scale(0.96);z-index:1' : 'opacity:1;transform:rotate(-4deg) scale(1);z-index:2'),
+      menuStampBackStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.6s ease,transform 0.6s ease;' +
+        (this.state.menuStampFlip ? 'opacity:1;transform:rotate(4deg) scale(1);z-index:2' : 'opacity:0;transform:rotate(4deg) scale(0.96);z-index:1'),
+      menuGroupTabs, isFood, isDrinks: !isFood,
+      setCatTabsScrollRef: el => this.setCatTabsScrollRef(el),
+      catTabsScrollLeftFn: () => this.scrollCatTabs(-1),
+      catTabsScrollRightFn: () => this.scrollCatTabs(1),
+      setMenuTabsSentinel: el => { this._menuTabsSentinel = el; },
+      setMenuTabsWrapper: el => { this._menuTabsWrapper = el; },
+      menuTabsFixed: !!this.state.menuTabsFixed,
+      menuTabsSpacerHeight: this._menuTabsSpacerHeight || 0,
+      menuTabsWrapperStyle: this.state.menuTabsFixed
+        ? 'position:fixed;top:' + (isMobile ? '104px' : '128px') + ';left:0;right:0;z-index:40;background:#F4EEE8;padding:20px 24px 0'
+        : 'position:relative;z-index:40;background:#F4EEE8;padding-top:8px',
+      activeCategoryKey: isFood ? activeCategory.key : activeDrinkCategory.key,
+      chairVisible: !this.state.photoStackOpen,
+      scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
+      ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
+      galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
+      storyGalleryItems: Array.from({ length: 20 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 10) + 1) + '.webp\')' })),
+      handwriteRef: this._handwriteRefCb,
+      handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
+      excerptLine: {
+        onEnter: e => { if (!isMobile) this.setState({ rowHoverKey: 'excerpt' }); },
+        onMove: e => {
+          if (isMobile) return;
+          const r = e.currentTarget.getBoundingClientRect();
+          this.setState({ rowHoverKey: 'excerpt', rowCursorX: (e.clientX - r.left) / r.width, rowCursorY: (e.clientY - r.top) / r.height });
+        },
+        onLeave: () => this.setState(s => s.rowHoverKey === 'excerpt' ? { rowHoverKey: null } : null)
+      },
+      signatureLines: [
+        { key: 'authentic', label: 'Authentic Flavours', img: './assets/story-icons/1.jpg' },
+        { key: 'tradition', label: 'Generations of Tradition', img: './assets/story-icons/5.jpg' },
+        { key: 'soul', label: 'A Table Full of Soul', img: './assets/story-icons/7.jpg' }
+      ].map(l => ({
+        ...l,
+        onEnter: e => { if (!isMobile) this.setState({ rowHoverKey: l.key }); },
+        onMove: e => {
+          if (isMobile) return;
+          const r = e.currentTarget.getBoundingClientRect();
+          this.setState({ rowHoverKey: l.key, rowCursorX: (e.clientX - r.left) / r.width, rowCursorY: (e.clientY - r.top) / r.height });
+        },
+        onLeave: () => this.setState(s => s.rowHoverKey === l.key ? { rowHoverKey: null } : null)
+      })),
+      rowPreviewImg: (() => {
+        const line = this.state.rowHoverKey && [
+          { key: 'excerpt', img: './assets/story-icons/2.jpg' },
+          { key: 'authentic', img: './assets/story-icons/1.jpg' },
+          { key: 'tradition', img: './assets/story-icons/5.jpg' },
+          { key: 'soul', img: './assets/story-icons/7.jpg' }
+        ].find(l => l.key === this.state.rowHoverKey);
+        return line ? line.img : '';
+      })(),
+      rowPreviewStyle: 'position:absolute;left:' + (this.state.rowCursorX * 100) + '%;top:' + (this.state.rowCursorY * 100) + '%;transform:translate(-50%,-50%) scale(' + (this.state.rowHoverKey ? 1 : 0.96) + ');width:min(16vw,200px);height:min(20vw,250px);z-index:20;pointer-events:none;opacity:' + (this.state.rowHoverKey ? 1 : 0) + ';transition:opacity 0.35s ease,transform 0.35s ease,left 0.15s ease-out,top 0.15s ease-out;overflow:hidden;borderRadius:4px',
+      rowPreviewImgStyle: 'width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center;background-image:url(\'' + ((() => {
+        const line = this.state.rowHoverKey && [
+          { key: 'excerpt', img: './assets/story-icons/2.jpg' },
+          { key: 'authentic', img: './assets/story-icons/1.jpg' },
+          { key: 'tradition', img: './assets/story-icons/5.jpg' },
+          { key: 'soul', img: './assets/story-icons/7.jpg' }
+        ].find(l => l.key === this.state.rowHoverKey);
+        return line ? line.img : '';
+      })()) + '\')',
+      hoverPreviewSrc: (this.state.hoverPreviewOpen && !this.state.photoStackOpen && photoStack[this.state.hoverPreviewIndex % photoStack.length]) ? photoStack[this.state.hoverPreviewIndex % photoStack.length].src : '',
+      hoverPreviewStyle: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(\'' + ((photoStack[this.state.hoverPreviewIndex % photoStack.length] || {}).src || '') + '\');background-size:cover;background-position:center;opacity:0.55;transition:opacity 0.2s ease',
+      onChairHoverStart: () => {
+        if (isMobile || this.state.photoStackOpen) return;
+        this.setState({ hoverPreviewOpen: true, hoverPreviewIndex: 0 });
+        clearInterval(this._hoverInterval);
+        this._hoverInterval = setInterval(() => {
+          this.setState(s => ({ hoverPreviewIndex: s.hoverPreviewIndex + 1 }));
+        }, 450);
+      },
+      onChairHoverEnd: () => {
+        clearInterval(this._hoverInterval);
+        this.setState({ hoverPreviewOpen: false });
+      },
+      photoStackOpen: this.state.photoStackOpen,
+      photoStack,
+      openPhotoStack: () => {
+        if (this.state.photoStackOpen) return;
+        this.setState({ photoStackOpen: true, photoStackIndex: 0 });
+        clearInterval(this._photoStackInterval);
+        this._photoStackInterval = setInterval(() => {
+          this.setState(s => {
+            const next = s.photoStackIndex + 1;
+            if (next >= 7) {
+              clearInterval(this._photoStackInterval);
+              return { photoStackIndex: 7, photoStackOpen: false };
+            }
+            return { photoStackIndex: next };
+          });
+        }, 1100);
+      },
+      stopPropagation: e => e.stopPropagation(),
+      menuTabs, menuItemsFiltered, drinkTabs, drinkItemsFiltered, menuCategoryLabel, menuCategoryDesc, foodSections, drinkSections,
+
+      showReservationForm: (this.props.reservationMode ?? 'form') === 'form',
+      showReservationCta: (this.props.reservationMode ?? 'form') !== 'form',
+      reservation: this.state.reservation,
+      reservationSubmitted: this.state.reservationSubmitted,
+      reservationNotSubmitted: !this.state.reservationSubmitted,
+      onNameChange: e => this.setState(s => ({ reservation: { ...s.reservation, name: e.target.value } })),
+      onPhoneChange: e => this.setState(s => ({ reservation: { ...s.reservation, phone: e.target.value } })),
+      onEmailChange: e => this.setState(s => ({ reservation: { ...s.reservation, email: e.target.value } })),
+      onDateChange: e => this.setState(s => ({ reservation: { ...s.reservation, date: e.target.value } })),
+      onTimeChange: e => this.setState(s => ({ reservation: { ...s.reservation, time: e.target.value } })),
+      onGuestsChange: e => this.setState(s => ({ reservation: { ...s.reservation, guests: e.target.value } })),
+      onNotesChange: e => this.setState(s => ({ reservation: { ...s.reservation, notes: e.target.value } })),
+      submitReservation: e => { e.preventDefault(); this.setState({ reservationSubmitted: true }); this.startStampSequence(); },
+      resetReservation: () => this.setState({ reservationSubmitted: false, reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' } }),
+      dismissStampSequence: () => this.dismissStampSequence(),
+      stampSequenceActive: !!this.state.stampPhase,
+      stampOverlayOpacity: this.state.stampOverlayOpacity,
+      stampGridOpacity: this.state.stampGridOpacity,
+      stampMessageVisible: this.state.stampMessageVisible,
+      stampMessageOpacity: this.state.stampMessageOpacity,
+      stampGridTemplateColumns: this.state.stampGrid ? 'repeat(' + this.state.stampGrid.cols + ', 1fr)' : '',
+      stampGridTemplateRows: this.state.stampGrid ? 'repeat(' + this.state.stampGrid.rows + ', 1fr)' : '',
+      stampCells: this.state.stampGrid ? Array.from({ length: this.state.stampGrid.total }, (_, i) => ({
+        src: CONFIRM_STAMPS[i % CONFIRM_STAMPS.length].src,
+        style: 'padding:2px;opacity:0;animation:stampReveal 350ms ease-out ' + (i * 130) + 'ms forwards'
+      })) : [],
+
+      showChat: this.props.showChatWidget ?? true,
+      chatOpen: this.state.chatOpen,
+      chatIcon: this.state.chatOpen ? '×' : '\u2022\u2022\u2022',
+      showChatHint: !this.state.chatOpen && !this.state.chatHintDismissed,
+      chatHintOpacity: this.state.chatHintOpacity ?? 1,
+      toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen, chatHintDismissed: true })),
+      chatMessages: this.state.chatMessages,
+      chatInput: this.state.chatInput,
+      onChatInputChange: e => this.setState({ chatInput: e.target.value }),
+      onChatKeyDown: e => { if (e.key === 'Enter' && this.state.chatInput.trim()) this.pushExchange(this.state.chatInput.trim()); },
+      sendChatMessage: () => { if (this.state.chatInput.trim()) this.pushExchange(this.state.chatInput.trim()); },
+      quickReplies
+    };
+  }
+}
+
+</script>
+</body>
+</html>

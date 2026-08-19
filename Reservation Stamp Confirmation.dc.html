@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: Calibre Light, sans-serif; }
+    @keyframes stampReveal { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:#F4EEE8;display:flex;align-items:center;justify-content:center">
+  <button onClick="{{ startStampSequence }}" style="background:#344315;color:#F4EEE8;border:none;padding:16px 36px;borderRadius:999px;font-family:'Calibre Light',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer">Simulate Reservation Confirmation</button>
+</div>
+
+<sc-if value="{{ stampSequenceActive }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:200;overflow:hidden;background:#344315;opacity:{{ stampOverlayOpacity }};transition:opacity 700ms ease">
+    <div style="position:absolute;inset:-2%;width:104%;height:104%;display:grid;grid-template-columns:{{ stampGridTemplateColumns }};grid-template-rows:{{ stampGridTemplateRows }};opacity:{{ stampGridOpacity }};transition:opacity 500ms ease">
+      <sc-for list="{{ stampCells }}" as="cell" hint-placeholder-count="0">
+        <div style="{{ cell.style }}"><img src="{{ cell.src }}" alt="" style="width:100%;height:100%;object-fit:contain;display:block"></div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ stampMessageVisible }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+        <div style="opacity:{{ stampMessageOpacity }};transition:opacity 500ms ease;text-align:center;padding:28px 40px">
+          <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(26px,3.2vw,34px);color:#F4EEE8;margin-bottom:8px">Thank you.</div>
+          <div style="font-family:Calibre Light,sans-serif;font-size:15px;color:#F4EEE8;line-height:1.6">We will contact you shortly to confirm your reservation.</div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CONFIRM_STAMPS = [
+  { src: './assets/stamp-2.png' },
+  { src: './assets/stamp-3.png' },
+  { src: './assets/stamp-5.png' },
+  { src: './assets/stamp-1.png' },
+  { src: './assets/stamp-6.png' },
+  { src: './assets/stamp-4.png' }
+];
+
+class Component extends DCLogic {
+  state = {
+    stampPhase: null,
+    stampGrid: null,
+    stampOverlayOpacity: 1,
+    stampGridOpacity: 1,
+    stampMessageVisible: false,
+    stampMessageOpacity: 0
+  };
+
+  componentWillUnmount() {
+    this._clearStampTimers();
+  }
+
+  _clearStampTimers() {
+    (this._stampTimeouts || []).forEach(id => clearTimeout(id));
+    this._stampTimeouts = [];
+  }
+
+  startStampSequence() {
+    this._clearStampTimers();
+    document.body.style.overflow = 'hidden';
+    const w = window.innerWidth, h = window.innerHeight;
+    const cols = w < 640 ? 3 : w < 1024 ? 5 : 8;
+    const cellW = Math.ceil((w * 1.04) / cols);
+    const cellH = Math.ceil(cellW / 0.68);
+    const rows = Math.ceil((h * 1.04) / cellH);
+    const total = cols * rows;
+    const revealMs = 350, staggerMs = 130;
+    this.setState({
+      stampPhase: 'grid',
+      stampGrid: { cols, rows, total },
+      stampOverlayOpacity: 1,
+      stampGridOpacity: 1,
+      stampMessageVisible: false,
+      stampMessageOpacity: 0
+    });
+    const gridDoneAt = (total - 1) * staggerMs + revealMs;
+    const gridFadeStart = gridDoneAt + 700;
+    const gridFadeMs = 500;
+    const messageInAt = gridFadeStart + gridFadeMs;
+    this._stampTimeouts.push(setTimeout(() => {
+      this.setState({ stampGridOpacity: 0 });
+    }, gridFadeStart));
+    this._stampTimeouts.push(setTimeout(() => {
+      this.setState({ stampMessageVisible: true });
+      requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ stampMessageOpacity: 1 })));
+    }, messageInAt));
+    this._stampTimeouts.push(setTimeout(() => {
+      this.dismissStampSequence();
+    }, messageInAt + 500 + 2500));
+  }
+
+  dismissStampSequence() {
+    document.body.style.overflow = '';
+    this._clearStampTimers();
+    this.setState({
+      stampPhase: null,
+      stampGrid: null,
+      stampMessageVisible: false
+    });
+  }
+
+  renderVals() {
+    return {
+      startStampSequence: () => this.startStampSequence(),
+      stampSequenceActive: !!this.state.stampPhase,
+      stampOverlayOpacity: this.state.stampOverlayOpacity,
+      stampGridOpacity: this.state.stampGridOpacity,
+      stampMessageVisible: this.state.stampMessageVisible,
+      stampMessageOpacity: this.state.stampMessageOpacity,
+      stampGridTemplateColumns: this.state.stampGrid ? 'repeat(' + this.state.stampGrid.cols + ', 1fr)' : '',
+      stampGridTemplateRows: this.state.stampGrid ? 'repeat(' + this.state.stampGrid.rows + ', 1fr)' : '',
+      stampCells: this.state.stampGrid ? Array.from({ length: this.state.stampGrid.total }, (_, i) => ({
+        src: CONFIRM_STAMPS[i % CONFIRM_STAMPS.length].src,
+        style: 'padding:2px;opacity:0;animation:stampReveal 350ms ease-out ' + (i * 130) + 'ms forwards'
+      })) : []
+    };
+  }
+}
+</script>
+</body>
+</html>
