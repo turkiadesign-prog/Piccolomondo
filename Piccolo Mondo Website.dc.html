@@ -257,7 +257,7 @@
           </sc-if>
         </sc-for>
       </div>
-      <div style="width:40%;position:relative;min-height:340px">
+      <div style="width:40%;display:grid;min-height:340px">
         <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
           <div style="{{ item.infoWrapStyle }}">
             <div style="font-family:'Instrument Serif',serif;font-size:32px;color:#2A1002;margin-bottom:4px">{{ item.year }}</div>
@@ -757,6 +757,35 @@
             </div>
             <button onClick="{{ toggleChat }}" style="background:none;border:none;color:#F4EEE8;font-size:22px;cursor:pointer;line-height:1">×</button>
           </div>
+          <sc-if value="{{ feedbackOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;background:#F4EEE8">
+              <sc-if value="{{ feedbackNotSent }}" hint-placeholder-val="{{ true }}">
+                <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:78px;width:auto;display:block;margin:0 auto 14px;filter:brightness(0) saturate(100%) invert(9%) sepia(38%) saturate(2472%) hue-rotate(333deg) brightness(93%) contrast(97%)">
+                <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#401413;text-align:center;line-height:1.2">{{ t.chat.feedback.title }}</div>
+                <div style="font-family:'Calibre Light',sans-serif;font-size:13px;line-height:1.6;color:#401413;text-align:center;margin:8px 0 20px;text-wrap:pretty">{{ t.chat.feedback.intro }}</div>
+                <div style="font-family:'Calibre Light',sans-serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#401413;margin-bottom:8px">{{ t.chat.feedback.ratingLabel }}</div>
+                <div style="display:flex;gap:8px;margin-bottom:18px">
+                  <sc-for list="{{ feedbackStars }}" as="star" hint-placeholder-count="5">
+                    <button onClick="{{ star.onClick }}" aria-label="Rate" style="{{ star.style }}">★</button>
+                  </sc-for>
+                </div>
+                <input value="{{ feedbackName }}" onChange="{{ onFeedbackNameChange }}" placeholder="{{ t.chat.feedback.namePlaceholder }}" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;margin-bottom:10px">
+                <textarea value="{{ feedbackText }}" onChange="{{ onFeedbackTextChange }}" placeholder="{{ t.chat.feedback.messagePlaceholder }}" rows="4" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;resize:vertical;margin-bottom:16px"></textarea>
+                <button onClick="{{ submitFeedback }}" style="width:100%;background:#401413;color:#FED0CF;border:none;padding:13px;borderRadius:999px;font-family:'Calibre Light',sans-serif;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer" style-hover="background:#344315">{{ t.chat.feedback.submit }}</button>
+                <button onClick="{{ closeFeedback }}" style="background:none;border:none;color:#401413;font-family:'Calibre Light',sans-serif;font-size:12px;cursor:pointer;margin-top:14px;align-self:center">{{ t.chat.feedback.back }}</button>
+              </sc-if>
+              <sc-if value="{{ feedbackSent }}" hint-placeholder-val="{{ false }}">
+                <div style="margin:auto 0;text-align:center;padding:20px 0">
+                  <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:28px;color:#401413;margin-bottom:10px">{{ t.chat.feedback.thanksTitle }}</div>
+                  <div style="font-family:'Calibre Light',sans-serif;font-size:13.5px;line-height:1.7;color:#401413;margin-bottom:24px;text-wrap:pretty">{{ t.chat.feedback.thanksBody }}</div>
+                  <div style="font-family:'Calibre Light',sans-serif;font-size:12px;color:#401413;margin-bottom:10px">{{ t.chat.feedback.googlePrompt }}</div>
+                  <a href="https://www.google.com/maps?cid=4951164950577469656" target="_blank" rel="noopener" style="display:inline-block;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;border-bottom:1px solid #401413;text-decoration:none;padding-bottom:2px">{{ t.chat.feedback.googleLabel }}</a>
+                  <div><button onClick="{{ closeFeedback }}" style="background:none;border:none;color:#401413;font-family:'Calibre Light',sans-serif;font-size:12px;cursor:pointer;margin-top:26px">{{ t.chat.feedback.back }}</button></div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ feedbackClosed }}" hint-placeholder-val="{{ true }}">
           <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px">
             <div style="align-self:flex-start;background:#ffffff;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%">{{ t.chat.greeting }}</div>
             <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="0">
@@ -777,6 +806,7 @@
             <input value="{{ chatInput }}" onChange="{{ onChatInputChange }}" onKeyDown="{{ onChatKeyDown }}" placeholder="{{ t.chat.placeholder }}" style="flex:1;padding:10px 14px;borderRadius:999px;border:1px solid rgba(52,67,21,0.25);font-size:13px;font-family:inherit">
             <button onClick="{{ sendChatMessage }}" style="background:#344315;color:#F4EEE8;border:none;width:38px;height:38px;borderRadius:50%;cursor:pointer;font-size:16px">→</button>
           </div>
+          </sc-if>
         </div>
       </sc-if>
       <button onClick="{{ toggleChat }}" style="width:58px;height:58px;borderRadius:50%;background:#344315;border:none;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center" style-hover="animation:gentlePulse 0.6s ease">
@@ -1099,8 +1129,8 @@ const T = {
       legacyParagraph: 'Today, Piccolo Mondo continues through the generations that came after our grandfather, his children and grandchildren, growing with time while staying rooted in the values he left behind.\nOur new identity brings his presence back to the heart of the story. His chair becomes our symbol: our grandfather, with his back to us, quietly watching the small world he created continue to grow.\nThe food, the generosity, the familiar faces and the feeling of gathering around one table remain unchanged.\nWe move forward, but always with our grandfather beside us.\nThis is our legacy. Served at the table.',
       timeline: [
         { year: '1993', title: 'Where His Small World Began', text: 'In 1993, our grandfather brought Piccolo Mondo to Bucharest, his own small world, built around food, family, and the generosity that defined him.\nAt a time when Lebanese cuisine was still unfamiliar to the city, he opened the first Lebanese restaurant in Bucharest, introducing not only its flavors, but the culture of hospitality behind them. Through his table, he shared the warmth, generosity, and traditions he had brought with him from home.\nPiccolo Mondo began in a different location then, a humble beginning for something that would grow far beyond what he first imagined.\nThis is where it all started.' },
-        { year: '2000\u20132002', title: 'A New Home, Built Together', text: 'A new chapter began. Piccolo Mondo found a new home, the home we still welcome you into today.\nIt was built stone by stone, shaped not only by our grandfather, but by the people who stood beside him. Many of those early employees became family, and some are still with us today, carrying their own memories of those years and stories of working side by side with him.\nIn 2002, the doors opened at Strada Clucerului 9, Bucure\u0219ti.\nA new place meant new beginnings: new tables to gather around, new stories to tell, and new memories to build. But the spirit remained the same, the generosity and hospitality our grandfather had brought to Bucharest in 1993.\nA new home, for the same small world.' },
-        { year: '2008', title: 'Every Chapter Became Part of Us', text: 'By 2008, Piccolo Mondo had lived through many chapters. The interiors changed more than once, some we loved, and some\u2026 well, they became part of the journey.\nBut what mattered most was what happened around the tables: celebrations, long evenings, familiar faces, and regular guests who became old friends.\nPiccolo Mondo was never only a restaurant. It was our grandfather\u2019s small world, built around people, generosity, and the joy of gathering together.\nOur legacy is still being written, and every chapter is filled with your love.' }
+        { year: '2002', title: 'A New Home, Built Together', text: 'A new chapter began. Piccolo Mondo found a new home, the home we still welcome you into today.\nIt was built stone by stone, shaped not only by our grandfather, but by the people who stood beside him. Many of those early employees became family, and some are still with us today, carrying their own memories of those years and stories of working side by side with him.\nIn 2002, the doors opened at Strada Clucerului 9, Bucure\u0219ti.\nA new place meant new beginnings: new tables to gather around, new stories to tell, and new memories to build. But the spirit remained the same, the generosity and hospitality our grandfather had brought to Bucharest in 1993.\nA new home, for the same small world.' },
+        { year: '2010', title: 'Every Chapter Became Part of Us', text: 'By 2010, Piccolo Mondo had lived through many chapters. The interiors changed more than once, some we loved, and some\u2026 well, they became part of the journey.\nBut what mattered most was what happened around the tables: celebrations, long evenings, familiar faces, and regular guests who became old friends.\nPiccolo Mondo was never only a restaurant. It was our grandfather\u2019s small world, built around people, generosity, and the joy of gathering together.\nOur legacy is still being written, and every chapter is filled with your love.' }
       ],
       legacyTimeline: [
         { year: '2012', text: 'Small text describing what happened in 2012.' },
@@ -1146,8 +1176,21 @@ const T = {
         { key: 'address', label: 'Location' },
         { key: 'reservation', label: 'Book a table' },
         { key: 'story', label: 'Our story' },
-        { key: 'review', label: 'Loved your visit?' }
+        { key: 'feedback', label: 'Leave feedback' }
       ],
+      feedback: {
+        title: 'Leave us your feedback',
+        intro: 'Your words help our small world grow. Tell us how your visit felt.',
+        ratingLabel: 'How was your experience?',
+        namePlaceholder: 'Your name',
+        messagePlaceholder: 'Tell us about your visit…',
+        submit: 'Send feedback',
+        back: '← Back to chat',
+        thanksTitle: 'Thank you.',
+        thanksBody: 'Your feedback is on its way to us. It means the world.',
+        googlePrompt: 'Would you share it publicly too?',
+        googleLabel: 'Leave a Google review →'
+      },
       faq: {
         hours: 'We\u2019re open every day from 11:30 to 00:30.',
         address: 'You can find us at Str. Clucerului 9, Sector 1, Bucharest.',
@@ -1209,8 +1252,8 @@ const T = {
       legacyParagraph: 'Astăzi, Piccolo Mondo continuă prin generațiile care au urmat bunicului nostru, copiii și nepoții lui, crescând în timp, dar rămânând înrădăcinat în valorile pe care le-a lăsat în urmă.\nNoua noastră identitate readuce prezența lui în centrul poveștii. Scaunul lui devine simbolul nostru: bunicul nostru, cu spatele la noi, veghind lin lumea mică pe care a creat-o și care continuă să crească.\nMâncarea, generozitatea, chipurile familiare și sentimentul de a te aduna la o masă rămân neschimbate.\nMergem înainte, dar mereu cu bunicul nostru alături.\nAceasta este moștenirea noastră. Servită la masă.',
       timeline: [
         { year: '1993', title: 'Unde a Început Lumea Lui Mică', text: 'În 1993, bunicul nostru a adus Piccolo Mondo la București, propria lui lume mică, construită în jurul mâncării, familiei și generozității care îl definea.\nÎntr-o vreme când bucătăria libaneză era încă necunoscută în oraș, el a deschis primul restaurant libanez din București, aducând nu doar aromele, ci și cultura ospitalității din spatele lor. Prin masa lui, a împărtășit căldura, generozitatea și tradițiile pe care le-a adus de acasă.\nPiccolo Mondo a început atunci într-o altă locație, un început modest pentru ceva ce avea să crească mult peste ce își imaginase el la început.\nAici a început totul.' },
-        { year: '2000\u20132002', title: 'O Nouă Casă, Construită Împreună', text: 'A început un nou capitol. Piccolo Mondo a găsit o nouă casă, cea în care vă întâmpinăm și astăzi.\nA fost construită piatră cu piatră, modelată nu doar de bunicul nostru, ci și de oamenii care au stat alături de el. Mulți dintre acei angajați de la început au devenit familie, iar unii sunt încă alături de noi astăzi, purtând propriile amintiri din acei ani și povești despre cum au lucrat cot la cot cu el.\nÎn 2002, s-au deschis porțile pe Strada Clucerului 9, București.\nUn loc nou a însemnat noi începuturi: mese noi în jurul cărora să te aduni, povești noi de spus și amintiri noi de construit. Dar spiritul a rămas același, generozitatea și ospitalitatea pe care bunicul nostru le-a adus la București în 1993.\nO casă nouă, pentru aceeași lume mică.' },
-        { year: '2008', title: 'Fiecare Capitol A Devenit Parte Din Noi', text: 'Până în 2008, Piccolo Mondo trăise deja multe capitole. Interioarele s-au schimbat de mai multe ori, unele ne-au plăcut, altele\u2026 să spunem doar că au fost parte din călătorie. Fiecare versiune a lăsat ceva în urmă și a devenit o altă scenă în povestea care ne-a modelat.\nAu fost nenumărate sărbători, seri lungi și chipuri familiare. Clienții fideli au devenit prieteni, iar echipa care a stat alături de bunicul nostru din primii ani a devenit familie, mulți dintre ei fiind și astăzi parte din Piccolo Mondo.\nPentru că Piccolo Mondo nu a fost niciodată doar un restaurant. A fost lumea mică a bunicului nostru, construită în jurul oamenilor, generozității și bucuriei de a te aduna la o masă.\nMoștenirea noastră încă se scrie, și fiecare capitol este plin de dragostea voastră.' }
+        { year: '2002', title: 'O Nouă Casă, Construită Împreună', text: 'A început un nou capitol. Piccolo Mondo a găsit o nouă casă, cea în care vă întâmpinăm și astăzi.\nA fost construită piatră cu piatră, modelată nu doar de bunicul nostru, ci și de oamenii care au stat alături de el. Mulți dintre acei angajați de la început au devenit familie, iar unii sunt încă alături de noi astăzi, purtând propriile amintiri din acei ani și povești despre cum au lucrat cot la cot cu el.\nÎn 2002, s-au deschis porțile pe Strada Clucerului 9, București.\nUn loc nou a însemnat noi începuturi: mese noi în jurul cărora să te aduni, povești noi de spus și amintiri noi de construit. Dar spiritul a rămas același, generozitatea și ospitalitatea pe care bunicul nostru le-a adus la București în 1993.\nO casă nouă, pentru aceeași lume mică.' },
+        { year: '2010', title: 'Fiecare Capitol A Devenit Parte Din Noi', text: 'Până în 2010, Piccolo Mondo trăise deja multe capitole. Interioarele s-au schimbat de mai multe ori, unele ne-au plăcut, altele\u2026 să spunem doar că au fost parte din călătorie. Fiecare versiune a lăsat ceva în urmă și a devenit o altă scenă în povestea care ne-a modelat.\nAu fost nenumărate sărbători, seri lungi și chipuri familiare. Clienții fideli au devenit prieteni, iar echipa care a stat alături de bunicul nostru din primii ani a devenit familie, mulți dintre ei fiind și astăzi parte din Piccolo Mondo.\nPentru că Piccolo Mondo nu a fost niciodată doar un restaurant. A fost lumea mică a bunicului nostru, construită în jurul oamenilor, generozității și bucuriei de a te aduna la o masă.\nMoștenirea noastră încă se scrie, și fiecare capitol este plin de dragostea voastră.' }
       ],
       legacyTimeline: [
         { year: '2012', text: 'Text scurt care descrie ce s-a întâmplat în 2012.' },
@@ -1256,8 +1299,21 @@ const T = {
         { key: 'address', label: 'Unde sunteți?' },
         { key: 'reservation', label: 'Rezervă o masă' },
         { key: 'story', label: 'Povestea noastră' },
-        { key: 'review', label: 'Ai fost la noi?' }
+        { key: 'feedback', label: 'Lasă un feedback' }
       ],
+      feedback: {
+        title: 'Lasă-ne părerea ta',
+        intro: 'Cuvintele tale ajută mica noastră lume să crească. Spune-ne cum a fost vizita ta.',
+        ratingLabel: 'Cum a fost experiența?',
+        namePlaceholder: 'Numele tău',
+        messagePlaceholder: 'Spune-ne despre vizita ta…',
+        submit: 'Trimite feedback',
+        back: '← Înapoi la chat',
+        thanksTitle: 'Mulțumim.',
+        thanksBody: 'Feedback-ul tău este pe drum spre noi. Înseamnă enorm.',
+        googlePrompt: 'Vrei să îl împarți și public?',
+        googleLabel: 'Lasă o recenzie pe Google →'
+      },
       faq: {
         hours: 'Suntem deschiși în fiecare zi de la 11:30 la 00:30.',
         address: 'Ne găsești pe Str. Clucerului 9, Sector 1, București.',
@@ -1530,7 +1586,7 @@ class Component extends DCLogic {
     if (this._catTabsScrollEl) this._catTabsScrollEl.scrollBy({ left: dir * 160, behavior: 'smooth' });
   }
   jiddoImagePool() {
-    return Array.from({ length: 17 }, (_, i) => './assets/jiddo-photo-' + (i + 1) + '.png').filter(src => src !== './assets/jiddo-photo-2.png' && src !== './assets/jiddo-photo-15.png');
+    return Array.from({ length: 20 }, (_, i) => './assets/jiddo-photo-' + (i + 1) + '.png').filter(src => src !== './assets/jiddo-photo-2.png' && src !== './assets/jiddo-photo-15.png');
   }
   teardownJiddoParallax() {
     if (this._jiddoTimer) { clearInterval(this._jiddoTimer); this._jiddoTimer = null; }
@@ -1581,9 +1637,9 @@ class Component extends DCLogic {
     const lang = this.state.lang;
     const localized = T[lang].story.timeline;
     const images = [
-      ['./assets/story-1993-1.png', './assets/story-1993-2.png', './assets/story-1993-3.png'],
-      ['./assets/story-2000-1.png', './assets/story-2000-2.png', './assets/story-2000-3.png'],
-      ['./assets/story-2008-2.png', './assets/story-2008-1.png']
+      ['./assets/story-1993-1.png', './assets/story-1993-2.png', './assets/story-1993-3.png', './assets/story-1993-4.webp', './assets/story-1993-5.webp', './assets/story-1993-6.webp'],
+      ['./assets/story-2000-1.png', './assets/story-2000-2.png', './assets/story-2000-3.png', './assets/story-2008-2.png', './assets/story-2008-1.png'],
+      ['./assets/story-2010-1.webp', './assets/story-2010-2.webp', './assets/story-2010-3.webp', './assets/story-2010-4.webp', './assets/story-2010-6.webp', './assets/story-2010-7b.webp', './assets/story-2010-8.webp', './assets/story-2010-9.webp']
     ];
     return this._storyTimelineData || localized.map((d, i) => ({ year: d.year, title: d.title, text: d.text, images: images[i] }));
   }
@@ -1605,7 +1661,7 @@ class Component extends DCLogic {
       imageStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease',
       lineStyle: 'height:' + (i === active ? '2px' : '1px') + ';background:' + (i === active ? '#2A1002' : 'rgba(64,20,19,0.25)') + ';transition:all 0.3s ease',
       dateColor: i === active ? '#2A1002' : 'rgba(64,20,19,0.55)',
-      infoWrapStyle: 'position:absolute;inset:0;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none')
+      infoWrapStyle: 'grid-area:1/1;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none')
     }));
   }
   legacyStampList() {
@@ -1693,7 +1749,7 @@ class Component extends DCLogic {
       })),
       lineStyle: 'height:' + (i === active ? '2px' : '1px') + ';background:' + (i === active ? '#2A1002' : 'rgba(64,20,19,0.25)') + ';transition:all 0.3s ease',
       dateColor: i === active ? '#2A1002' : 'rgba(64,20,19,0.55)',
-      infoWrapStyle: 'position:absolute;inset:0;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none'),
+      infoWrapStyle: 'grid-area:1/1;opacity:' + (i === active ? 1 : 0) + ';transition:opacity 0.5s ease;pointer-events:' + (i === active ? 'auto' : 'none'),
       plusRotate: i === active ? 'rotate(45deg)' : 'rotate(0deg)',
       panelMaxHeight: i === active ? '600px' : '0px'
     }));
@@ -1942,7 +1998,9 @@ class Component extends DCLogic {
 
     const quickReplies = t.chat.quick.map(q => ({
       label: q.label,
-      onClick: () => this.pushExchange(q.label)
+      onClick: q.key === 'feedback'
+        ? () => this.setState({ feedbackOpen: true, feedbackSent: false, feedbackRating: 0 })
+        : () => this.pushExchange(q.label)
     }));
 
     return {
@@ -2090,7 +2148,7 @@ class Component extends DCLogic {
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
       galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
-      storyGalleryItems: Array.from({ length: 20 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/story-gallery-' + ((i % 10) + 1) + '.webp\')' })),
+      storyGalleryItems: Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
       handwriteRef: this._handwriteRefCb,
       handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
       excerptLine: {
@@ -2207,7 +2265,36 @@ class Component extends DCLogic {
       onChatInputChange: e => this.setState({ chatInput: e.target.value }),
       onChatKeyDown: e => { if (e.key === 'Enter' && this.state.chatInput.trim()) this.pushExchange(this.state.chatInput.trim()); },
       sendChatMessage: () => { if (this.state.chatInput.trim()) this.pushExchange(this.state.chatInput.trim()); },
-      quickReplies
+      quickReplies,
+      feedbackOpen: !!this.state.feedbackOpen,
+      feedbackClosed: !this.state.feedbackOpen,
+      feedbackSent: !!this.state.feedbackSent,
+      feedbackNotSent: !this.state.feedbackSent,
+      feedbackName: this.state.feedbackName || '',
+      feedbackText: this.state.feedbackText || '',
+      onFeedbackNameChange: e => this.setState({ feedbackName: e.target.value }),
+      onFeedbackTextChange: e => this.setState({ feedbackText: e.target.value }),
+      closeFeedback: () => this.setState({ feedbackOpen: false, feedbackSent: false, feedbackRating: 0, feedbackName: '', feedbackText: '' }),
+      submitFeedback: () => {
+        const rating = this.state.feedbackRating || 0;
+        const name = (this.state.feedbackName || '').trim();
+        const text = (this.state.feedbackText || '').trim();
+        const subject = 'Website feedback' + (rating ? ' \u2014 ' + rating + '/5' : '');
+        const body = (name ? 'From: ' + name + '\n' : '') + (rating ? 'Rating: ' + rating + '/5\n\n' : '') + text;
+        window.location.href = 'mailto:restaurant@piccolomondo.ro?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        this.setState({ feedbackSent: true });
+      },
+      feedbackStars: [1, 2, 3, 4, 5].map(n => ({
+        onClick: () => {
+          this.setState({ feedbackRating: n });
+          clearTimeout(this._feedbackJumpTimer);
+          this._feedbackJumpTimer = setTimeout(() => {
+            window.open('https://www.google.com/maps?cid=4951164950577469656', '_blank', 'noopener');
+            this.setState({ feedbackOpen: false, feedbackRating: 0 });
+          }, 900);
+        },
+        style: 'background:none;border:none;cursor:pointer;font-size:26px;line-height:1;padding:0;color:' + (n <= (this.state.feedbackRating || 0) ? '#401413' : 'rgba(64,20,19,0.25)') + ';transition:color 0.2s ease'
+      }))
     };
   }
 }
