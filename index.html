@@ -1369,6 +1369,7 @@ class Component extends DCLogic {
     stampIndex: 0,
     menuStampFlip: false,
     sanityStoryGallery: [],
+    sanityJiddoGallery: [],
     page: 'home'
   };
 
@@ -1411,8 +1412,42 @@ fetchSanityGallery() {
       console.error('Could not load Story Gallery from Sanity:', error);
     });
 }
+fetchSanityJiddoGallery() {
+  const query = encodeURIComponent(
+   '*[_type == "jiddoPage"][0]{"jiddoGallery": media[]{mediaType, "imageUrl": image.asset->url, "videoUrl": video.asset->url}}'
+  );
+
+  const url =
+    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
+    query;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Sanity request failed: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('JIDDO SANITY DATA:', data);
+      const images =
+        data &&
+        data.result &&
+        data.result.jiddoGallery
+          ? data.result.jiddoGallery
+          : [];
+
+      if (images.length) {
+        this.setState({ sanityJiddoGallery: images });
+      }
+    })
+    .catch(error => {
+      console.error('Could not load Jiddo Gallery from Sanity:', error);
+    });
+}
 componentDidMount() {
     this.fetchSanityGallery();
+    this.fetchSanityJiddoGallery();
       
     this.updateSize();
     this.setupCategorySpy();
@@ -1619,9 +1654,20 @@ componentDidMount() {
   scrollCatTabs(dir) {
     if (this._catTabsScrollEl) this._catTabsScrollEl.scrollBy({ left: dir * 160, behavior: 'smooth' });
   }
-  jiddoImagePool() {
-    return Array.from({ length: 20 }, (_, i) => './assets/jiddo-photo-' + (i + 1) + '.png').filter(src => src !== './assets/jiddo-photo-2.png' && src !== './assets/jiddo-photo-15.png');
-  }
+ jiddoImagePool() {
+if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
+  return this.state.sanityJiddoGallery
+    .filter(item => item.mediaType === 'image' && item.imageUrl)
+    .map(item => item.imageUrl);
+}
+
+  return Array.from({ length: 20 }, (_, i) =>
+    './assets/jiddo-photo-' + (i + 1) + '.png'
+  ).filter(src =>
+    src !== './assets/jiddo-photo-2.png' &&
+    src !== './assets/jiddo-photo-15.png'
+  );
+}
   teardownJiddoParallax() {
     if (this._jiddoTimer) { clearInterval(this._jiddoTimer); this._jiddoTimer = null; }
     this.teardownJiddoVideos();
@@ -1646,7 +1692,13 @@ componentDidMount() {
   }
   jiddoBuildColumns() {
     const pool = this.jiddoImagePool();
-    const videos = ['./assets/jiddo-video-1.mp4', './assets/jiddo-video-2.mp4', './assets/jiddo-video-3.mp4', './assets/jiddo-video-4.mp4'];
+    const sanityVideos = (this.state.sanityJiddoGallery || [])
+  .filter(item => item.mediaType === 'video' && item.videoUrl)
+  .map(item => item.videoUrl);
+
+const videos = sanityVideos.length
+  ? sanityVideos
+  : ['./assets/jiddo-video-1.mp4', './assets/jiddo-video-2.mp4', './assets/jiddo-video-3.mp4', './assets/jiddo-video-4.mp4'];
     const isMobile = this.state.isMobile;
     const numCols = isMobile ? 3 : 6;
     const durations = [36, 44, 30, 46, 38, 42];
