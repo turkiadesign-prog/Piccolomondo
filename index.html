@@ -613,9 +613,9 @@
 
         <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:'Calibre Light',sans-serif">
-          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">restaurant@piccolomondo.ro</a>
-          <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
-          <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
+          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
+          <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue }}</a>
+          <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue2 }}</a>
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:4px" style-hover="border-bottom-color:#401413">Instagram</a>
           <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
 
@@ -634,9 +634,9 @@
         <div style="display:flex;gap:32px;font-family:'Calibre Light',sans-serif;justify-content:center;text-align:left">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.eyebrow }}</div>
-            <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">restaurant@piccolomondo.ro</a>
-            <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">0722 20 50 20</a>
-            <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">021 222 57 55</a>
+            <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
+            <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue }}</a>
+            <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue2 }}</a>
             <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Instagram</a>
             <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
           </div>
@@ -1370,6 +1370,7 @@ class Component extends DCLogic {
     menuStampFlip: false,
     sanityStoryGallery: [],
     sanityJiddoGallery: [],
+    sanityContact: null,
     page: 'home'
   };
 
@@ -1479,9 +1480,37 @@ fetchSanityJiddoGallery() {
       console.error('Could not load Jiddo Gallery from Sanity:', error);
     });
 }
+fetchSanityContact() {
+  const query = encodeURIComponent(
+    '*[_type == "contactPage"][0]{eyebrow,title,addressLabel,addressValue,phoneLabel,phoneValue,phoneValue2,emailLabel,emailValue,instagramLabel,instagramUrl,facebookLabel,facebookUrl,hoursLabel,hoursValue,mapLabel,mapUrl,"mapImageUrl": mapImage.asset->url}'
+  );
+
+  const url =
+    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
+    query;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Sanity request failed: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('CONTACT SANITY DATA:', data);
+
+      if (data && data.result) {
+        this.setState({ sanityContact: data.result });
+      }
+    })
+    .catch(error => {
+      console.error('Could not load Contact from Sanity:', error);
+    });
+}
 componentDidMount() {
     this.fetchSanityGallery();
     this.fetchSanityJiddoGallery();
+    this.fetchSanityContact();
       
     this.updateSize();
     this.setupCategorySpy();
@@ -2026,7 +2055,59 @@ return this._storyTimelineData || localized.map((d, i) => {
 
   renderVals() {
     const lang = this.state.lang;
-    const t = T[lang];
+const baseT = T[lang];
+const sanityContact = this.state.sanityContact;
+
+const t = {
+  ...baseT,
+  contact: {
+    ...baseT.contact,
+
+    eyebrow:
+      (sanityContact && sanityContact.eyebrow && sanityContact.eyebrow[lang]) ||
+      baseT.contact.eyebrow,
+
+    title:
+      (sanityContact && sanityContact.title && sanityContact.title[lang]) ||
+      baseT.contact.title,
+
+    addressLabel:
+      (sanityContact && sanityContact.addressLabel && sanityContact.addressLabel[lang]) ||
+      baseT.contact.addressLabel,
+
+    addressValue:
+      (sanityContact && sanityContact.addressValue && sanityContact.addressValue[lang]) ||
+      baseT.contact.addressValue,
+
+    phoneLabel:
+      (sanityContact && sanityContact.phoneLabel && sanityContact.phoneLabel[lang]) ||
+      baseT.contact.phoneLabel,
+
+    phoneValue:
+      (sanityContact && sanityContact.phoneValue && sanityContact.phoneValue[lang]) ||
+      baseT.contact.phoneValue,
+
+    phoneValue2:
+      (sanityContact && sanityContact.phoneValue2 && sanityContact.phoneValue2[lang]) ||
+      baseT.contact.phoneValue2,
+
+    emailLabel:
+      (sanityContact && sanityContact.emailLabel && sanityContact.emailLabel[lang]) ||
+      baseT.contact.emailLabel,
+
+    emailValue:
+      (sanityContact && sanityContact.emailValue && sanityContact.emailValue[lang]) ||
+      baseT.contact.emailValue,
+
+    hoursLabel:
+      (sanityContact && sanityContact.hoursLabel && sanityContact.hoursLabel[lang]) ||
+      baseT.contact.hoursLabel,
+
+    hoursValue:
+      (sanityContact && sanityContact.hoursValue && sanityContact.hoursValue[lang]) ||
+      baseT.contact.hoursValue
+  }
+};
     const headerScriptIdx = this.state.headerScriptIdx || 0;
     const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.png'];
     const headerScriptImages = headerScriptImgs.map((src, i) => {
