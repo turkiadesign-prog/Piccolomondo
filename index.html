@@ -366,7 +366,7 @@
         </div>
       </div>
       <div style="max-height:{{ legacyPanelMaxHeight }};overflow:hidden;transition:max-height 0.4s ease">
-        <div style="padding:18px 0 4px;font-size:15px;line-height:1.8;color:#401413;font-family:'Calibre Light',sans-serif;white-space:pre-line;text-wrap:pretty">{{ t.story.legacyParagraph }}</div>
+        <div style="padding:18px 0 4px;font-size:15px;line-height:1.8;color:#401413;font-family:'Calibre Light',sans-serif;white-space:pre-line;text-wrap:pretty">{{ (this.state.sanityLegacyParagraph && this.state.sanityLegacyParagraph[this.state.lang]) || t.story.legacyParagraph }}</div>
       </div>
     </div>
     </sc-if>
@@ -1382,7 +1382,7 @@ class Component extends DCLogic {
   }
 fetchSanityGallery() {
   const query = encodeURIComponent(
-    '*[_type == "storyPage"][0]{"storyGallery": storyGallery[].asset->url}'
+   '*[_type == "storyPage"][0]{legacyTitle, legacyParagraph, "storyGallery": storyGallery[].asset->url, "timeline": timeline[]{year, title, text, "images": images[].asset->url}}'
   );
 
   const url =
@@ -1407,10 +1407,42 @@ fetchSanityGallery() {
       if (images.length) {
         this.setState({ sanityStoryGallery: images });
       }
+const timeline =
+  data &&
+  data.result &&
+  data.result.timeline
+    ? data.result.timeline
+    : [];
+
+if (timeline.length) {
+  this.setState({ sanityStoryTimeline: timeline });
+}
+const legacyTitle =
+  data &&
+  data.result &&
+  data.result.legacyTitle
+    ? data.result.legacyTitle
+    : null;
+
+const legacyParagraph =
+  data &&
+  data.result &&
+  data.result.legacyParagraph
+    ? data.result.legacyParagraph
+    : null;
+
+if (legacyTitle || legacyParagraph) {
+  this.setState({
+    sanityLegacyTitle: legacyTitle,
+    sanityLegacyParagraph: legacyParagraph
+  });
+  
+}
+console.log('STORY SANITY DATA:', data);
     })
     .catch(error => {
       console.error('Could not load Story Gallery from Sanity:', error);
-    });
+   }); 
 }
 fetchSanityJiddoGallery() {
   const query = encodeURIComponent(
@@ -1437,9 +1469,11 @@ fetchSanityJiddoGallery() {
           ? data.result.jiddoGallery
           : [];
 
-      if (images.length) {
-        this.setState({ sanityJiddoGallery: images });
-      }
+  if (images.length) {
+  this.setState({ sanityJiddoGallery: images });
+}
+
+
     })
     .catch(error => {
       console.error('Could not load Jiddo Gallery from Sanity:', error);
@@ -1727,7 +1761,27 @@ const videos = sanityVideos.length
       ['./assets/story-2000-1.png', './assets/story-2000-2.png', './assets/story-2000-3.png', './assets/story-2008-2.png', './assets/story-2008-1.png'],
       ['./assets/story-2010-1.webp', './assets/story-2010-2.webp', './assets/story-2010-3.webp', './assets/story-2010-4.webp', './assets/story-2010-6.webp', './assets/story-2010-7b.webp', './assets/story-2010-8.webp', './assets/story-2010-9.webp']
     ];
-    return this._storyTimelineData || localized.map((d, i) => ({ year: d.year, title: d.title, text: d.text, images: images[i] }));
+   const sanityTimeline = this.state.sanityStoryTimeline || [];
+
+return this._storyTimelineData || localized.map((d, i) => {
+  const sanityItem =
+    sanityTimeline.find(item => item.year === d.year) ||
+    sanityTimeline[i];
+
+  const timelineImages =
+    sanityItem &&
+    sanityItem.images &&
+    sanityItem.images.length
+      ? sanityItem.images
+      : images[i];
+
+ return {
+  year: sanityItem?.year || d.year,
+  title: sanityItem?.title?.[lang] || d.title,
+  text: sanityItem?.text?.[lang] || d.text,
+  images: timelineImages
+};
+});
   }
   startStoryCycle() {}
   
@@ -2130,8 +2184,9 @@ const videos = sanityVideos.length
       storyGalleryScrollLeft: () => this.scrollStoryGallery(-1),
       storyGalleryScrollRight: () => this.scrollStoryGallery(1),
       storyTimeline: this.buildStoryTimeline(),
-      legacyTitleHtml: { __html: t.story.legacyTitle },
-      legacyTitleHtmlMobile: { __html: t.story.legacyTitle.replace('<br>', ' ') + ' <span style="font-size:20px;font-weight:700;font-style:normal;color:#401413;display:inline-block;transform:' + ((this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? 'rotate(45deg)' : 'rotate(0deg)') + ';transition:transform 0.3s ease">+</span>' },
+     legacyTitleHtml: { __html: ((this.state.sanityLegacyTitle && this.state.sanityLegacyTitle[this.state.lang]) || t.story.legacyTitle) },
+
+legacyTitleHtmlMobile: { __html: ((this.state.sanityLegacyTitle && this.state.sanityLegacyTitle[this.state.lang]) || t.story.legacyTitle).replace('<br>', ' ') + '<span style="font-size:20px;font-weight:700;font-style:normal;color:#401413;">+</span>' },
       toggleLegacyOpen: () => this.toggleLegacyOpen(),
       legacyPlusRotate: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? 'rotate(45deg)' : 'rotate(0deg)',
       legacyPanelMaxHeight: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? '600px' : '0px',
