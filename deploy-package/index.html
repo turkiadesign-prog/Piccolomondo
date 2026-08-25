@@ -1368,6 +1368,7 @@ class Component extends DCLogic {
     loading: true,
     stampIndex: 0,
     menuStampFlip: false,
+    sanityStoryGallery: [],
     page: 'home'
   };
 
@@ -1378,8 +1379,41 @@ class Component extends DCLogic {
       window.scrollTo(0, 0);
     };
   }
+fetchSanityGallery() {
+  const query = encodeURIComponent(
+    '*[_type == "storyPage"][0]{"storyGallery": storyGallery[].asset->url}'
+  );
 
-  componentDidMount() {
+  const url =
+    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
+    query;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Sanity request failed: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const images =
+        data &&
+        data.result &&
+        data.result.storyGallery
+          ? data.result.storyGallery
+          : [];
+
+      if (images.length) {
+        this.setState({ sanityStoryGallery: images });
+      }
+    })
+    .catch(error => {
+      console.error('Could not load Story Gallery from Sanity:', error);
+    });
+}
+componentDidMount() {
+    this.fetchSanityGallery();
+      
     this.updateSize();
     this.setupCategorySpy();
     this.startStoryCycle();
@@ -2129,7 +2163,7 @@ class Component extends DCLogic {
 
       illusDisplay: isMobile ? 'none' : 'block',
       menuStampFrontStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.6s ease,transform 0.6s ease;' +
-        (this.state.menuStampFlip ? 'opacity:0;transform:rotate(-4deg) scale(0.96);z-index:1' : 'opacity:1;transform:rotate(-4deg) scale(1);z-index:2'),
+    (this.state.menuStampFlip ? 'opacity:0;transform:rotate(-4deg) scale(0.96);z-index:1' : 'opacity:1;transform:rotate(-4deg) scale(1);z-index:2'),
       menuStampBackStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.6s ease,transform 0.6s ease;' +
         (this.state.menuStampFlip ? 'opacity:1;transform:rotate(4deg) scale(1);z-index:2' : 'opacity:0;transform:rotate(4deg) scale(0.96);z-index:1'),
       menuGroupTabs, isFood, isDrinks: !isFood,
@@ -2148,18 +2182,28 @@ class Component extends DCLogic {
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
       galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
-      storyGalleryItems: Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
-      handwriteRef: this._handwriteRefCb,
-      handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
-      excerptLine: {
-        onEnter: e => { if (!isMobile) this.setState({ rowHoverKey: 'excerpt' }); },
-        onMove: e => {
-          if (isMobile) return;
-          const r = e.currentTarget.getBoundingClientRect();
-          this.setState({ rowHoverKey: 'excerpt', rowCursorX: (e.clientX - r.left) / r.width, rowCursorY: (e.clientY - r.top) / r.height });
-        },
-        onLeave: () => this.setState(s => s.rowHoverKey === 'excerpt' ? { rowHoverKey: null } : null)
-      },
+     storyGalleryItems: (this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: 42 }, (_, i) => ({ bgStyle: 'background-image:url(\'' + this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length] + '\')' })) : Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
+
+handwriteRef: this._handwriteRefCb,
+handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
+
+excerptLine: {
+  onEnter: e => { if (!isMobile) this.setState({ rowHoverKey: 'excerpt' }); },
+  onMove: e => {
+    if (isMobile) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    this.setState({
+      rowHoverKey: 'excerpt',
+      rowCursorX: (e.clientX - r.left) / r.width,
+      rowCursorY: (e.clientY - r.top) / r.height
+    });
+  },
+  onLeave: () => this.setState(s =>
+    s.rowHoverKey === 'excerpt'
+      ? { rowHoverKey: null }
+      : null
+  )
+},
       signatureLines: [
         { key: 'authentic', label: 'Authentic Flavours', img: './assets/story-icons/1.jpg' },
         { key: 'tradition', label: 'Generations of Tradition', img: './assets/story-icons/5.jpg' },
