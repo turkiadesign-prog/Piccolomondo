@@ -154,24 +154,24 @@
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
-      <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
     </div>
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="lazy" decoding="async" src="./assets/story-collage-opt.webp" alt="" style="width:100%;height:auto;display:block">
-          <img loading="lazy" decoding="async" src="./assets/story-photo-1-color.jpg" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" src="./assets/story-photo-2-color.jpg" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" src="./assets/story-photo-3-color.jpg" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" src="./assets/story-photo-4-color.jpg" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" src="./assets/story-photo-5-color.jpg" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
@@ -1531,7 +1531,46 @@ fetchSanityContact() {
       }
     })
     .catch(error => {
-      console.error('Could not load Contact from Sanity:', error);
+  console.error('Could not load Contact from Sanity:', error);
+});
+
+}
+
+fetchSanityHome() {
+  const query = encodeURIComponent(
+  '*[_type == "homePage"][0]{' +
+    '"hero": {' +
+      '"topImages": hero.topImages[].asset->url,' +
+      '"chair": hero.chair.asset->url' +
+    '},' +
+  '"storyTeaser": {' +
+  '"collageBase": storyTeaser.collageBase.asset->url,' +
+  '"revealImages": storyTeaser.revealImages[].asset->url' +
+'},' +
+'"galleryItems": galleryItems[].asset->url' +
+'}'
+);
+
+  const url =
+    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
+    query;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Sanity request failed: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('HOME SANITY DATA:', data);
+
+      if (data && data.result) {
+        this.setState({ sanityHome: data.result });
+      }
+    })
+    .catch(error => {
+      console.error('Could not load Home Page from Sanity:', error);
     });
 }
 componentDidMount() {
@@ -1539,6 +1578,7 @@ componentDidMount() {
     this.fetchSanityJiddoGallery();
     this.fetchSanityContact();
     this.fetchSanityReservation();
+    this.fetchSanityHome();
       
     this.updateSize();
     this.setupCategorySpy();
@@ -2087,8 +2127,31 @@ const baseT = T[lang];
 const sanityContact = this.state.sanityContact;
 const reservationUrl = this.state.reservationUrl;
 
+const storyCollageBase =
+  this.state.sanityHome &&
+  this.state.sanityHome.storyTeaser &&
+  this.state.sanityHome.storyTeaser.collageBase
+    ? this.state.sanityHome.storyTeaser.collageBase
+    : './assets/story-collage-opt.webp';
+
+const storyRevealImages =
+  this.state.sanityHome &&
+  this.state.sanityHome.storyTeaser &&
+  Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
+    ? this.state.sanityHome.storyTeaser.revealImages
+    : [
+        './assets/story-photo-1-color.jpg',
+        './assets/story-photo-2-color.jpg',
+        './assets/story-photo-3-color.jpg',
+        './assets/story-photo-4-color.jpg',
+        './assets/story-photo-5-color.jpg'
+      ];
+
 const t = {
-  ...baseT,
+storyCollageBase: storyCollageBase,
+storyRevealImages: storyRevealImages,
+  
+...baseT,
 reservationUrl: reservationUrl,
   contact: {
     ...baseT.contact,
@@ -2159,13 +2222,25 @@ facebookUrl:
         style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 0.8s ease;opacity:' + (i === headerScriptIdx ? 1 : 0) + ';' + (isLastTwo ? 'transform:scale(0.8);' : '')
       };
     });
-    const photoStack = [1,2,3,4,5,6,7,10].map((n, i) => {
-      const rot = (n % 2 === 0 ? 1 : -1) * (3 + (n % 4) * 2);
-      return {
-        src: './assets/story-photos/' + n + '.webp',
-        style: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/story-photos/' + n + '.webp\');background-size:cover;background-position:center;transform:rotate(' + rot + 'deg) scale(0.98);z-index:' + n + ';opacity:' + (i <= this.state.photoStackIndex ? 1 : 0) + ';'
-      };
-    });
+    const cmsTopImages =
+  this.state.sanityHome &&
+  this.state.sanityHome.hero &&
+  Array.isArray(this.state.sanityHome.hero.topImages)
+    ? this.state.sanityHome.hero.topImages
+    : [];
+
+const topImageSources = cmsTopImages.length
+  ? cmsTopImages
+  : [1,2,3,4,5,6,7,10].map(n => './assets/story-photos/' + n + '.webp');
+
+const photoStack = topImageSources.map((src, i) => {
+  const n = i + 1;
+  const rot = (n % 2 === 0 ? 1 : -1) * (3 + (n % 4) * 2);
+  return {
+  src: src,
+  style: 'position:absolute;inset:0;width:100%;height:100%;background-image:url(' + src + ');background-size:cover;background-position:center;transform:rotate(' + rot + 'deg) scale(0.98);z-index:' + (i + 1) + ';opacity:' + (i <= this.state.photoStackIndex ? 1 : 0) + ';'
+};
+});
     const tilt = this._chairTilt || { rx: 0, ry: 0 };
     const chairTiltTransform = 'perspective(900px) rotateX(' + tilt.rx.toFixed(2) + 'deg) rotateY(' + tilt.ry.toFixed(2) + 'deg)';
     const isMobile = this.state.isMobile;
@@ -2411,7 +2486,16 @@ legacyTitleHtmlMobile: { __html: ((this.state.sanityLegacyTitle && this.state.sa
       chairVisible: !this.state.photoStackOpen,
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
-      galleryItems: Array.from({ length: 15 }, (_, i) => ({ bgStyle: 'background-image:url(\'./assets/gallery/g' + (i + 1) + '-opt.jpg\')' })),
+      galleryItems:
+      this.state.sanityHome &&
+      Array.isArray(this.state.sanityHome.galleryItems) &&
+      this.state.sanityHome.galleryItems.length
+      ? this.state.sanityHome.galleryItems.map(src => ({
+       bgStyle: 'background-image:url(' + src + ')'
+      }))
+    : Array.from({ length: 15 }, (_, i) => ({
+        bgStyle: 'background-image:url(./assets/gallery/g' + (i + 1) + '-opt.jpg)'
+      })),
      storyGalleryItems: (this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: 42 }, (_, i) => ({ bgStyle: 'background-image:url(\'' + this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length] + '\')' })) : Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
 
 handwriteRef: this._handwriteRefCb,
@@ -2490,9 +2574,9 @@ excerptLine: {
         this._photoStackInterval = setInterval(() => {
           this.setState(s => {
             const next = s.photoStackIndex + 1;
-            if (next >= 7) {
+            if (next >= photoStack.length) {
               clearInterval(this._photoStackInterval);
-              return { photoStackIndex: 7, photoStackOpen: false };
+              return { photoStackIndex: photoStack.length - 1, photoStackOpen: false };
             }
             return { photoStackIndex: next };
           });
