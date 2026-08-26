@@ -613,7 +613,7 @@
 
         <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:'Calibre Light',sans-serif">
-          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
+          <a href="{{ t.contact.emailValue }}" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
           <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue }}</a>
           <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue2 }}</a>
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:4px" style-hover="border-bottom-color:#401413">Instagram</a>
@@ -635,7 +635,7 @@
         <div style="display:flex;gap:32px;font-family:'Calibre Light',sans-serif;justify-content:center;text-align:left">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.eyebrow }}</div>
-            <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
+            <a href="{{ t.contact.emailValue }}" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.emailValue }}</a>
             <a href="tel:+40722205020" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue }}</a>
             <a href="tel:+40212225755" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">{{ t.contact.phoneValue2 }}</a>
             <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Instagram</a>
@@ -681,21 +681,19 @@
 
       <div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
         <div style="font-size: 14px; font-weight: 300; letter-spacing: 2.4px; text-transform: uppercase; color: #FED0CF; margin-bottom: 4px; font-family: Calibre Light">{{ t.footer.contactLabel }}</div>
-        <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
-        <a href="tel:+40722205020" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">0722 20 50 20</a>
-        <a href="tel:+40212225755" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
+        <a href="{{ t.contact.emailValue }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
+        <a href="tel:{{ t.contact.phoneValue }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;align-self:flex-start" style-hover="border-bottom-color:#FED0CF">{{ t.contact.phoneValue }}</a>
+        <a href="tel:{{ t.contact.phoneValue2 }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;align-self:flex-start" style-hover="border-bottom-color:#FED0CF">{{ t.contact.phoneValue2 }}</a>
         <div style="display:flex;gap:14px;margin-top:8px">
-          <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Instagram</a>
-          <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Facebook</a>
+          <a href="{{ t.contact.instagramUrl }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Instagram</a>
+          <a href="{{ t.contact.facebookUrl }}" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">Facebook</a>
         </div>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
         <div style="font-size: 14px; font-weight: 300; letter-spacing: 2.4px; text-transform: uppercase; color: #FED0CF; margin-bottom: 4px; font-family: Calibre Light">{{ t.footer.hoursLabel }}</div>
-        <div style="color: #FED0CF; font-size: 15px; font-weight: 300; font-family: Calibre Light">{{ t.footer.hoursDays }}</div>
-        <div style="color: #FED0CF; font-size: 15px; font-weight: 300; font-family: Calibre Light">{{ t.footer.hoursTime }}</div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; margin-top: 8px; padding-bottom: 2px; border-bottom: 1px solid transparent; width: fit-content; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">
-          Str. Clucerului 9, Sector 1<br>București
+        <div style="color:#FED0CF;font-size:15px;font-weight:300;white-space:pre-line">{{ t.contact.hoursValue }}</div>
+        <a href="{{ t.contact.mapUrl }}" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;align-self:flex-start;white-space:pre-line" style-hover="border-bottom-color:#FED0CF">{{ t.contact.addressValue }}</a>
         </a>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration: none; color: #FED0CF; font-weight: 300; font-size: 15px; border-bottom: 1px solid #FED0CF; width: fit-content; padding-bottom: 2px; margin-top: 4px; font-family: Calibre Light" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
       </div>
@@ -709,7 +707,7 @@
       <div style="display:grid;grid-template-columns:auto auto;justify-content:center;column-gap:40px;row-gap:28px;width:100%">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
           <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.contactLabel }}</div>
-          <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
+          <a href="{{ t.contact.emailValue }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">restaurant@piccolomondo.ro</a>
           <a href="tel:+40722205020" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">0722 20 50 20</a>
           <a href="tel:+40212225755" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">021 222 57 55</a>
           <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;margin-top:8px" style-hover="border-bottom-color:#FED0CF">Instagram</a>
@@ -730,13 +728,12 @@
           <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#FED0CF">
             Str. Clucerului 9, Sector 1<br>București
           </a>
-          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-weight:300;font-size:15px;border-bottom:1px solid #FED0CF;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
+          <a href="{{ t.contact.mapUrl }}" target="_blank" rel="noopener" style="text-decoration:none;color:#FED0CF;font-weight:300;font-size:15px;border-bottom:1px solid #FED0CF;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
           <div style="font-size:13px;font-weight:300;letter-spacing:2.4px;text-transform:uppercase;color:#FED0CF;margin-bottom:4px">{{ t.footer.hoursLabel }}</div>
-          <div style="color:#FED0CF;font-size:15px;font-weight:300">{{ t.footer.hoursDays }}</div>
-          <div style="color:#FED0CF;font-size:15px;font-weight:300">{{ t.footer.hoursTime }}</div>
+          <div style="color:#FED0CF;font-size:15px;font-weight:300;white-space:pre-line">{{ t.contact.hoursValue }}</div>
         </div>
       </div>
     </div>
@@ -2140,10 +2137,18 @@ reservationUrl: reservationUrl,
       (sanityContact && sanityContact.hoursLabel && sanityContact.hoursLabel[lang]) ||
       baseT.contact.hoursLabel,
 
-    hoursValue:
-      (sanityContact && sanityContact.hoursValue && sanityContact.hoursValue[lang]) ||
-      baseT.contact.hoursValue
-  }
+   hoursValue:
+  (sanityContact && sanityContact.hoursValue && sanityContact.hoursValue[lang]) ||
+  baseT.contact.hoursValue,
+
+instagramUrl:
+  (sanityContact && sanityContact.instagramUrl) ||
+  baseT.contact.instagramUrl,
+
+facebookUrl:
+  (sanityContact && sanityContact.facebookUrl) ||
+  baseT.contact.facebookUrl
+}
 };
     const headerScriptIdx = this.state.headerScriptIdx || 0;
     const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.png'];
