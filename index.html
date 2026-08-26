@@ -620,11 +620,12 @@
           <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
 
           <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-top:20px;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
-          <div style="color:#401413;font-size:16px;font-weight:300">{{ t.footer.hoursDays }}</div>
-          <div style="color:#401413;font-size:16px;font-weight:300">{{ t.footer.hoursTime }}</div>
+          <div style="color:#401413;font-size:16px;font-weight:300;line-height:1.6;white-space:pre-line">{{ t.contact.hoursValue }}</div>
 
-          <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;margin-top:20px;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">
-            Str. Clucerului 9, Sector 1<br>București
+          <a href="{{ t.contact.mapUrl }}" target="_blank" rel="noopener"
+          style="text-decoration:none;color:#401413;font-size:16px;font-weight:300;line-height:1.6;white-space:pre-line;width:fit-content;border-bottom:1px solid transparent;display:block;transform:translateY(-6px);"
+          style-hover="border-bottom-color:#401413">
+          {{ t.contact.addressValue }}
           </a>
           <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-weight:300;font-size:16px;border-bottom:1px solid #401413;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
         </div>
@@ -640,12 +641,11 @@
             <a href="https://www.instagram.com/piccolomondo.restaurant/" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Instagram</a>
             <a href="https://web.facebook.com/piccolomondobucuresti" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">Facebook</a>
           </div>
-          <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;flex-direction:column;gap:2px">
             <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#401413;margin-bottom:4px">{{ t.contact.hoursLabel }}</div>
-            <div style="color:#401413;font-size:15px;font-weight:300">{{ t.footer.hoursDays }}</div>
-            <div style="color:#401413;font-size:15px;font-weight:300">{{ t.footer.hoursTime }}</div>
-            <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;margin-top:10px;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content" style-hover="border-bottom-color:#401413">
-              Str. Clucerului 9, Sector 1<br>București
+            <div style="color:#401413;font-size:15px;font-weight:300;line-height:1.6;white-space:pre-line">{{ t.contact.hoursValue }}</div>
+           <a href="{{ t.contact.mapUrl }}" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-size:15px;font-weight:300;margin-top:0px;padding-bottom:2px;border-bottom:1px solid transparent;width:fit-content;line-height:1.6;white-space:pre-line; "style-hover="border-bottom-color:#401413">
+           {{ t.contact.addressValue }}
             </a>
             <a href="https://www.google.com/maps/search/?api=1&amp;query=Str.+Clucerului+9+Sector+1+Bucuresti" target="_blank" rel="noopener" style="text-decoration:none;color:#401413;font-weight:300;font-size:15px;border-bottom:1px solid #401413;width:fit-content;padding-bottom:2px;margin-top:4px" style-hover="opacity:0.7">{{ t.footer.mapCta }}</a>
           </div>
@@ -2078,6 +2078,10 @@ const t = {
     addressValue:
       (sanityContact && sanityContact.addressValue && sanityContact.addressValue[lang]) ||
       baseT.contact.addressValue,
+   
+    mapUrl:
+      (sanityContact && sanityContact.mapUrl) ||
+      baseT.contact.mapUrl,
 
     phoneLabel:
       (sanityContact && sanityContact.phoneLabel && sanityContact.phoneLabel[lang]) ||
