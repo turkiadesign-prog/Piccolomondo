@@ -40,7 +40,7 @@
     @keyframes jiddoRibbonDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
   </style>
 </helmet>
-
+MENU_CATEGORIES
 <div style="font-family:'Calibre',sans-serif;color:#2A1002;background:#F4EEE8;overflow-x:hidden">
 
   <!-- LOADER -->
@@ -1573,12 +1573,77 @@ fetchSanityHome() {
       console.error('Could not load Home Page from Sanity:', error);
     });
 }
+fetchSanityMenu() {
+  const query = encodeURIComponent(
+    '*[_type == "menuPage"][0]{' +
+      '"eyebrow": eyebrow,' +
+      '"title": title,' +
+      '"tabs": tabs,' +
+      '"note": note,' +
+
+      '"foodCategories": foodCategories[]{' +
+        'key,' +
+        '"label": label,' +
+        '"description": description,' +
+        '"items": items[]{' +
+          '"name": name,' +
+          '"description": description,' +
+          'weight,' +
+          'price,' +
+          '"imageUrl": image.asset->url' +
+        '}' +
+      '},' +
+
+      '"drinkCategories": drinkCategories[]{' +
+        'key,' +
+        '"label": label,' +
+        '"description": description,' +
+        'defaultSize,' +
+        '"items": items[]{' +
+          '"name": name,' +
+          '"description": description,' +
+          'size,' +
+          'price' +
+        '}' +
+      '}' +
+    '}'
+  );
+
+  const url =
+    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
+    query;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Sanity request failed: ' + response.status);
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      console.log('MENU SANITY DATA:', data);
+
+      if (data && data.result) {
+        this.setState({
+          sanityMenu: data.result
+        });
+      }
+    })
+    .catch(error => {
+      console.error(
+        'Could not load Menu from Sanity:',
+        error
+      );
+    });
+}
 componentDidMount() {
     this.fetchSanityGallery();
     this.fetchSanityJiddoGallery();
     this.fetchSanityContact();
     this.fetchSanityReservation();
     this.fetchSanityHome();
+    this.fetchSanityMenu();
       
     this.updateSize();
     this.setupCategorySpy();
@@ -2126,6 +2191,7 @@ return this._storyTimelineData || localized.map((d, i) => {
 const baseT = T[lang];
 const sanityContact = this.state.sanityContact;
 const reservationUrl = this.state.reservationUrl;
+const sanityMenu = this.state.sanityMenu;
 
 const storyCollageBase =
   this.state.sanityHome &&
@@ -2253,6 +2319,92 @@ const photoStack = topImageSources.map((src, i) => {
     const langBtnEnStyleMobile = pillBaseMobile + 'border-bottom:1px solid ' + (lang === 'en' ? '#FED0CF' : 'transparent');
     const langBtnRoStyleMobile = pillBaseMobile + 'border-bottom:1px solid ' + (lang === 'ro' ? '#FED0CF' : 'transparent');
 
+   const menuCategories =
+  sanityMenu &&
+  Array.isArray(sanityMenu.foodCategories) &&
+  sanityMenu.foodCategories.length
+    ? sanityMenu.foodCategories.map(c => ({
+        key: c.key,
+
+        ro:
+          (c.label && c.label.ro) || '',
+
+        en:
+          (c.label && c.label.en) || '',
+
+        descRo:
+          (c.description && c.description.ro) || '',
+
+        descEn:
+          (c.description && c.description.en) || '',
+
+        items: Array.isArray(c.items)
+          ? c.items.map(item => ({
+              img: item.imageUrl || '',
+
+              weight:
+                item.weight || '',
+
+              price:
+                item.price || '',
+
+              name:
+                (item.name &&
+                  (item.name[lang] ||
+                    item.name.en ||
+                    item.name.ro)) ||
+                '',
+
+              descRo:
+                (item.description &&
+                  item.description.ro) ||
+                '',
+
+              descEn:
+                (item.description &&
+                  item.description.en) ||
+                '',
+            }))
+          : [],
+      }))
+    : MENU_CATEGORIES;
+
+
+const drinkCategories =
+  sanityMenu &&
+  Array.isArray(sanityMenu.drinkCategories) &&
+  sanityMenu.drinkCategories.length
+    ? sanityMenu.drinkCategories.map(c => ({
+        key: c.key,
+
+        ro:
+          (c.label && c.label.ro) || '',
+
+        en:
+          (c.label && c.label.en) || '',
+
+        size:
+          c.defaultSize || '',
+
+        items: Array.isArray(c.items)
+          ? c.items.map(item => ({
+              name:
+                (item.name &&
+                  (item.name[lang] ||
+                    item.name.en ||
+                    item.name.ro)) ||
+                '',
+
+              price:
+                (item.size
+                  ? item.size + ' · '
+                  : '') +
+                (item.price || ''),
+            }))
+          : [],
+      }))
+    : DRINK_CATEGORIES; 
+
     const isFood = this.state.menuGroup === 'food';
     const groupPill = (key, label) => ({
       key, label,
@@ -2264,7 +2416,7 @@ const photoStack = topImageSources.map((src, i) => {
     });
     const menuGroupTabs = [groupPill('food', lang === 'ro' ? 'Meniu' : 'Food Menu'), groupPill('drinks', lang === 'ro' ? 'B\u0103uturi' : 'Drinks')];
 
-    const menuTabs = MENU_CATEGORIES.map(c => ({
+    const menuTabs = menuCategories.map(c => ({
       key: c.key,
       label: lang === 'ro' ? c.ro : c.en,
       onClick: () => { this.setState({ menuTab: c.key }); this.scrollToCategoryAnchor('cat-food-' + c.key); },
@@ -2272,7 +2424,7 @@ const photoStack = topImageSources.map((src, i) => {
         (this.state.menuTab === c.key ? 'background:#344315;color:#F4EEE8' : 'background:none;color:#344315'),
       lineStyle: 'padding:8px 16px;background:none;border:none;border-right:1px solid rgba(52,67,21,0.25);font-weight:' + (this.state.menuTab === c.key ? '700' : '400') + ';font-size:14px;cursor:pointer;color:#344315;white-space:nowrap'
     }));
-    const drinkTabs = DRINK_CATEGORIES.map(c => ({
+    const drinkTabs = drinkCategories.map(c => ({
       key: c.key,
       label: lang === 'ro' ? c.ro : c.en,
       onClick: () => { this.setState({ drinkTab: c.key }); this.scrollToCategoryAnchor('cat-drink-' + c.key); },
@@ -2281,8 +2433,8 @@ const photoStack = topImageSources.map((src, i) => {
       lineStyle: 'padding:8px 16px;background:none;border:none;border-right:1px solid rgba(52,67,21,0.25);font-weight:' + (this.state.drinkTab === c.key ? '700' : '400') + ';font-size:14px;cursor:pointer;color:#344315;white-space:nowrap'
     }));
 
-    const activeCategory = MENU_CATEGORIES.find(c => c.key === this.state.menuTab) || MENU_CATEGORIES[0];
-    const activeDrinkCategory = DRINK_CATEGORIES.find(c => c.key === this.state.drinkTab) || DRINK_CATEGORIES[0];
+    const activeCategory = menuCategories.find(c => c.key === this.state.menuTab) || menuCategories[0];
+    const activeDrinkCategory = drinkCategories.find(c => c.key === this.state.drinkTab) || drinkCategories[0];
     const menuCategoryLabel = isFood ? (lang === 'ro' ? activeCategory.ro : activeCategory.en) : (lang === 'ro' ? activeDrinkCategory.ro : activeDrinkCategory.en);
     const menuCategoryDesc = isFood ? (lang === 'ro' ? activeCategory.descRo : activeCategory.descEn) : activeDrinkCategory.size;
     const slugify = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -2291,13 +2443,13 @@ const photoStack = topImageSources.map((src, i) => {
       desc: lang === 'ro' ? i.descRo : i.descEn,
       price: (i.weight ? i.weight + ' \u00b7 ' : '') + i.price,
       photoId: 'menu-photo-' + activeCategory.key + '-' + slugify(i.name),
-      photoSrc: i.img ? ('./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp') : '',
-      photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp\');background-size:cover;background-position:center;') : '',
+      photoSrc: i.img || '',
+      photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url("' + i.img + '");background-size:cover;background-position:center;') : '',
       noPhoto: !i.img
     })) : [];
     const drinkItemsFiltered = !isFood ? activeDrinkCategory.items.map(i => ({ name: i.name, price: i.price })) : [];
 
-    const foodSections = MENU_CATEGORIES.map(c => ({
+    const foodSections = menuCategories.map(c => ({
       key: c.key,
       anchorId: 'cat-food-' + c.key,
       label: lang === 'ro' ? c.ro : c.en,
@@ -2307,12 +2459,12 @@ const photoStack = topImageSources.map((src, i) => {
         desc: lang === 'ro' ? i.descRo : i.descEn,
         price: (i.weight ? i.weight + ' \u00b7 ' : '') + i.price,
         photoId: 'menu-photo-' + c.key + '-' + slugify(i.name),
-        photoSrc: i.img ? ('./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp') : '',
-        photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url(\'./assets/menu-photos/' + normImg(decodeURIComponent(i.img.split('/').pop())) + '.webp\');background-size:cover;background-position:center;') : '',
+        photoSrc: i.img || '',
+        photoBgStyle: i.img ? ('position:absolute;inset:0;width:100%;height:100%;background-image:url("' + i.img + '");background-size:cover;background-position:center;') : '',
         noPhoto: !i.img
       }))
     }));
-    const drinkSections = DRINK_CATEGORIES.map(c => ({
+    const drinkSections = drinkCategories.map(c => ({
       key: c.key,
       anchorId: 'cat-drink-' + c.key,
       label: lang === 'ro' ? c.ro : c.en,
