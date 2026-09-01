@@ -239,7 +239,7 @@ MENU_CATEGORIES
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="lazy" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+          <img loading="eager" fetchpriority="high" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
@@ -1617,7 +1617,7 @@ fetchSanityHome() {
       '"chair": hero.chair.asset->url' +
     '},' +
   '"storyTeaser": {' +
-  '"collageBase": storyTeaser.collageBase.asset->url,' +
+  '"collageBase": storyTeaser.collageBase.asset->url + "?w=2200&fit=max&auto=format",' +
   '"revealImages": storyTeaser.revealImages[].asset->url' +
 '},' +
 '"galleryItems": galleryItems[].asset->url' +
