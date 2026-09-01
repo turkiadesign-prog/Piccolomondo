@@ -81,7 +81,6 @@
     (window.vaq = window.vaq || []).push(arguments);
   };
 </script>
-<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <x-dc>
@@ -2936,6 +2935,123 @@ excerptLine: {
   }
 }
 
+</script>
+
+<style>
+#cookie-banner {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  width: 360px;
+  max-width: calc(100% - 48px);
+  background: #344315;
+  color: #fed0cf;
+  padding: 24px;
+  box-sizing: border-box;
+  z-index: 99999;
+  font-family: inherit;
+}
+
+.cookie-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cookie-text strong {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.cookie-text span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cookie-actions button {
+  flex: 1;
+  padding: 11px 16px;
+  border: 1px solid #fed0cf;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+#cookie-reject {
+  background: transparent;
+  color: #fed0cf;
+}
+
+#cookie-accept {
+  background: #fed0cf;
+  color: #344315;
+}
+
+@media (max-width: 600px) {
+  #cookie-banner {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+    max-width: none;
+    padding: 20px;
+  }
+}
+</style>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner">
+  <div class="cookie-text">
+    <strong>We use cookies</strong>
+    <span>We use cookies and similar technologies to improve your experience and understand how our website is used.</span>
+  </div>
+
+  <div class="cookie-actions">
+    <button id="cookie-reject">Reject</button>
+    <button id="cookie-accept">Accept</button>
+  </div>
+</div>
+<script>
+(function () {
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+  const rejectBtn = document.getElementById('cookie-reject');
+
+  const choice = localStorage.getItem('cookieConsent');
+
+  if (choice === 'accepted') {
+  banner.style.display = 'none';
+
+  const analyticsScript = document.createElement('script');
+  analyticsScript.src = '/_vercel/insights/script.js';
+  analyticsScript.defer = true;
+  document.body.appendChild(analyticsScript);
+}
+
+if (choice === 'rejected') {
+  banner.style.display = 'none';
+}
+
+  acceptBtn.addEventListener('click', function () {
+  localStorage.setItem('cookieConsent', 'accepted');
+
+  const analyticsScript = document.createElement('script');
+  analyticsScript.src = '/_vercel/insights/script.js';
+  analyticsScript.defer = true;
+  document.body.appendChild(analyticsScript);
+
+  banner.style.display = 'none';
+});
+  rejectBtn.addEventListener('click', function () {
+    localStorage.setItem('cookieConsent', 'rejected');
+    banner.style.display = 'none';
+  });
+})();
 </script>
 </body>
 </html>
