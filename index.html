@@ -83,7 +83,6 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
-<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2200&fit=max&auto=format" fetchpriority="high">
 </head>
 <body>
 <x-dc>
@@ -1620,7 +1619,7 @@ fetchSanityHome() {
       '"chair": hero.chair.asset->url' +
     '},' +
   '"storyTeaser": {' +
-  '"collageBase": storyTeaser.collageBase.asset->url + "?w=2200&fit=max&auto=format",' +
+  '"collageBase": storyTeaser.collageBase.asset->url,' +
   '"revealImages": storyTeaser.revealImages[].asset->url' +
 '},' +
 '"galleryItems": galleryItems[].asset->url' +
