@@ -350,7 +350,7 @@ MENU_CATEGORIES
     <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
         <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-          <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
+          <img loading="eager" fetchpriority="high" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
         </sc-for>
       </sc-for>
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
