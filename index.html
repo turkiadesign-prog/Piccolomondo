@@ -1446,13 +1446,24 @@ class Component extends DCLogic {
     page: 'home'
   };
 
-  goTo(page) {
-    return e => {
-      if (e && e.preventDefault) e.preventDefault();
-      this.setState({ page, navOpen: false });
-      window.scrollTo(0, 0);
+ goTo(page) {
+  return e => {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const paths = {
+      home: '/',
+      story: '/story',
+      jiddo: '/jiddo',
+      menu: '/menu',
+      contact: '/contact'
     };
-  }
+
+    window.history.pushState({}, '', paths[page] || '/');
+
+    this.setState({ page, navOpen: false });
+    window.scrollTo(0, 0);
+  };
+}
 fetchSanityGallery() {
   const query = encodeURIComponent(
    '*[_type == "storyPage"][0]{legacyTitle, legacyParagraph, "storyGallery": storyGallery[].asset->url, "timeline": timeline[]{year, title, text, "images": images[].asset->url}}'
@@ -1713,6 +1724,21 @@ fetchSanityMenu() {
     });
 }
 componentDidMount() {
+const path = window.location.pathname.replace(/\/+$/, '') || '/';
+
+const pageByPath = {
+  '/': 'home',
+  '/story': 'story',
+  '/jiddo': 'jiddo',
+  '/menu': 'menu',
+  '/contact': 'contact'
+};
+
+const initialPage = pageByPath[path] || 'home';
+
+if (initialPage !== this.state.page) {
+  this.setState({ page: initialPage });
+}
     this.fetchSanityGallery();
     this.fetchSanityJiddoGallery();
     this.fetchSanityContact();
