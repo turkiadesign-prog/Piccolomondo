@@ -3089,32 +3089,28 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- Official ialoc popup embed and reservation button connection -->
-<script type="text/javascript">
-!function(e,t,i,n,s,o,c,a,d,r){if(!e[n]){for(;a<c.length;)s(o,c[a++]);(d=t.createElement(i)).async=1,d.src="https://widget.ialoc.ro/embed.js",(r=t.getElementsByTagName(i)[0]).parentNode.insertBefore(d,r),e[n]=o}}(window,document,"script","ialocEmbedWidget",function(e,t){e[t]=function(){e._q.push([t,arguments])}},{_q:[]},"init show hide".split(" "),0);
-var widgetOptions = {
-    source: 'ialoc-widget-embed',
-    locale: 'ro',
-    embedMode: 'popup',
-    ialocId: '81'
-};
-ialocEmbedWidget.init(widgetOptions);
+<!-- Piccolo Mondo reservations: use the verified booking route without a page reload. -->
+<script>
+(function () {
+  document.addEventListener('click', function (event) {
+    var target = event.target;
+    if (target && target.nodeType === 3) target = target.parentElement;
+    var trigger = target && target.closest && target.closest('[data-ialoc-reservation="true"]');
+    if (!trigger) return;
 
-// Intercept the existing reservation links before the site's navigation handlers.
-window.addEventListener('click', function (event) {
-  var target = event.target;
-  if (target && target.nodeType === 3) target = target.parentElement;
-  var link = target && target.closest && target.closest('[data-ialoc-reservation="true"]');
-  if (!link) return;
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-  if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
-    window.ialocEmbedWidget.show();
-  } else {
-    console.error('ialoc widget is not available. Check whether embed.js loaded.');
-  }
-}, true);
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    // This route + popstate combination was verified to open the booking
+    // interface over the current page, without reloading the website.
+    var url = new URL(window.location.href);
+    url.searchParams.set('venueId', '81');
+    url.searchParams.set('bookNow', 'true');
+    window.history.pushState({ piccoloReservation: true }, '', url.pathname + url.search + url.hash);
+    window.dispatchEvent(new PopStateEvent('popstate', { state: window.history.state }));
+  }, true);
+})();
 </script>
 </body>
 </html>
