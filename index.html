@@ -87,6 +87,17 @@
 <link rel="preconnect" href="https://widget.ialoc.ro" crossorigin>
 <link rel="dns-prefetch" href="//widget.ialoc.ro">
 
+<script type="text/javascript">
+!function(e,t,i,n,s,o,c,a,d,r){if(!e[n]){for(;a<c.length;)s(o,c[a++]);(d=t.createElement(i)).async=1,d.src="https://widget.ialoc.ro/embed.js",(r=t.getElementsByTagName(i)[0]).parentNode.insertBefore(d,r),e[n]=o}}(window,document,"script","ialocEmbedWidget",function(e,t){e[t]=function(){e._q.push([t,arguments])}},{_q:[]},"init show hide".split(" "),0);
+
+var widgetOptions = {
+  source: 'ialoc-widget-embed',
+  locale: 'ro',
+  embedMode: 'popup',
+  venueId: '81'
+};
+ialocEmbedWidget.init(widgetOptions);
+</script>
 </head>
 <body>
 <x-dc>
@@ -148,7 +159,7 @@ MENU_CATEGORIES
           <a href="#story" onClick="{{ goStory }}" style="{{ navLinkStoryStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
           <a href="#jiddo" onClick="{{ goJiddo }}" style="{{ navLinkJiddoStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.jiddo }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="{{ navLinkMenuStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF" target="_blank" rel="noopener noreferrer">{{ t.nav.reservation }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="{{ navLinkContactStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
       </sc-if>
@@ -194,7 +205,7 @@ MENU_CATEGORIES
       <a href="#story" onClick="{{ goStoryMobile }}" style="{{ mobileNavStoryStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.story }}</a>
       <a href="#jiddo" onClick="{{ goJiddoMobile }}" style="{{ mobileNavJiddoStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.jiddo }}</a>
       <a href="#menu" onClick="{{ goMenuMobile }}" style="{{ mobileNavMenuStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.menu }}</a>
-      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic" target="_blank" rel="noopener noreferrer">{{ t.nav.reservation }}</a>
+      <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
       <a href="#contact" onClick="{{ goContactMobile }}" style="{{ mobileNavContactStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.contact }}</a>
       <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
         <button onClick="{{ setLangEn }}" style="{{ langBtnEnStyleMobile }}">EN</button>
@@ -305,7 +316,7 @@ MENU_CATEGORIES
     </div>
     </sc-if>
     <div style="text-align:center;margin-top:{{ reserveMarginTop }}">
-     <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7" target="_blank" rel="noopener noreferrer">{{ t.story.reserveCta }}</a>
+     <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
     </div>
   </div>
 
@@ -466,7 +477,7 @@ MENU_CATEGORIES
         <button onClick="{{ storyGalleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
       </div>
       <div style="text-align:center;margin-top:32px">
-        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7" target="_blank" rel="noopener noreferrer">{{ t.story.reserveCta }}</a>
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
       </div>
     </div>
   </div>
@@ -754,7 +765,7 @@ MENU_CATEGORIES
         <a href="#home" onClick="{{ goHome }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
         <a href="#story" onClick="{{ goStory }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
         <a href="#menu" onClick="{{ goMenu }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF" target="_blank" rel="noopener noreferrer">{{ t.nav.reservation }}</a>
+        <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
         <a href="#contact" onClick="{{ goContact }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
       </div>
 
@@ -798,7 +809,7 @@ MENU_CATEGORIES
           <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
           <a href="#story" onClick="{{ goStory }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF" target="_blank" rel="noopener noreferrer">{{ t.nav.reservation }}</a>
+          <a href="https://piccolo-mondo.ialoc.ro?experience=focus&amp;locale=ro" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
 
@@ -3086,6 +3097,54 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- Reservation links open ialoc directly in a new tab; no popup or fallback delay. -->
+<!-- ialoc reservation click handling with a reliable booking fallback -->
+<script type="text/javascript">
+
+
+(function () {
+  var bookingUrl = 'https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro';
+  var fallbackTimer = null;
+
+  function popupIsVisible() {
+    var container = document.getElementById('ialocWidgetIframeContainer');
+    if (!container) return false;
+    var style = window.getComputedStyle(container);
+    return style.display !== 'none' &&
+      style.visibility !== 'hidden' &&
+      Number(style.opacity) > 0.05 &&
+      style.pointerEvents !== 'none';
+  }
+
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-ialoc-reservation="true"]');
+    if (!trigger) return;
+
+    // Respect Ctrl/Cmd-click and other modified clicks to open the booking URL.
+    if (event.defaultPrevented || event.button !== 0 ||
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    event.preventDefault();
+    window.clearTimeout(fallbackTimer);
+
+    try {
+      if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
+        window.ialocEmbedWidget.show();
+      } else {
+        window.location.assign(bookingUrl);
+        return;
+      }
+    } catch (error) {
+      console.warn('ialoc popup unavailable; opening booking page.', error);
+      window.location.assign(bookingUrl);
+      return;
+    }
+
+    // If the provider never displays its overlay, keep reservations accessible.
+    fallbackTimer = window.setTimeout(function () {
+      if (!popupIsVisible()) window.location.assign(bookingUrl);
+    }, 12000);
+  }, true);
+})();
+</script>
 </body>
 </html>
