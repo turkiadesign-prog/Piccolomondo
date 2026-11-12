@@ -93,8 +93,7 @@
 var widgetOptions = {
   source: 'ialoc-widget-embed',
   locale: 'ro',
-  embedMode: 'popup',
-  venueId: '81'
+  embedMode: 'popup'
 };
 ialocEmbedWidget.init(widgetOptions);
 </script>
@@ -159,7 +158,7 @@ MENU_CATEGORIES
           <a href="#story" onClick="{{ goStory }}" style="{{ navLinkStoryStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
           <a href="#jiddo" onClick="{{ goJiddo }}" style="{{ navLinkJiddoStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.jiddo }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="{{ navLinkMenuStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="#" data-ialoc-reservation="true" style="{{ navLinkReservationStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="{{ navLinkContactStyle }}" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
       </sc-if>
@@ -205,7 +204,7 @@ MENU_CATEGORIES
       <a href="#story" onClick="{{ goStoryMobile }}" style="{{ mobileNavStoryStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.story }}</a>
       <a href="#jiddo" onClick="{{ goJiddoMobile }}" style="{{ mobileNavJiddoStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.jiddo }}</a>
       <a href="#menu" onClick="{{ goMenuMobile }}" style="{{ mobileNavMenuStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.menu }}</a>
-      <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
+      <a href="#" data-ialoc-reservation="true" style="{{ mobileNavReservationStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.reservation }}</a>
       <a href="#contact" onClick="{{ goContactMobile }}" style="{{ mobileNavContactStyle }}" style-hover="border-bottom-color:#FED0CF;font-style:italic" style-active="border-bottom-color:#FED0CF;font-style:italic">{{ t.nav.contact }}</a>
       <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
         <button onClick="{{ setLangEn }}" style="{{ langBtnEnStyleMobile }}">EN</button>
@@ -316,7 +315,7 @@ MENU_CATEGORIES
     </div>
     </sc-if>
     <div style="text-align:center;margin-top:{{ reserveMarginTop }}">
-     <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+     <a href="#" data-ialoc-reservation="true" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
     </div>
   </div>
 
@@ -477,7 +476,7 @@ MENU_CATEGORIES
         <button onClick="{{ storyGalleryScrollRight }}" aria-label="Next" style="background:none;border:none;color:#401413;font-size:22px;cursor:pointer;padding:4px">→</button>
       </div>
       <div style="text-align:center;margin-top:32px">
-        <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
+        <a href="#" data-ialoc-reservation="true" style="text-decoration:none;color:#401413;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;border-bottom:1px solid #401413;padding-bottom:4px" style-hover="opacity:0.7">{{ t.story.reserveCta }}</a>
       </div>
     </div>
   </div>
@@ -765,7 +764,7 @@ MENU_CATEGORIES
         <a href="#home" onClick="{{ goHome }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
         <a href="#story" onClick="{{ goStory }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
         <a href="#menu" onClick="{{ goMenu }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-        <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+        <a href="#" data-ialoc-reservation="true" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
         <a href="#contact" onClick="{{ goContact }}" style="text-decoration: none; color: #FED0CF; font-size: 15px; font-weight: 300; padding-bottom: 2px; border-bottom: 1px solid transparent; font-family: Calibre Light" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
       </div>
 
@@ -809,7 +808,7 @@ MENU_CATEGORIES
           <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.home }}</a>
           <a href="#story" onClick="{{ goStory }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.story }}</a>
           <a href="#menu" onClick="{{ goMenu }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.menu }}</a>
-          <a href="#" data-ialoc-reservation="true" data-venue-id="81" data-locale="ro" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
+          <a href="#" data-ialoc-reservation="true" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.reservation }}</a>
           <a href="#contact" onClick="{{ goContact }}" style="text-decoration:none;color:#FED0CF;font-size:15px;font-weight:300;padding-bottom:2px;border-bottom:1px solid transparent" style-hover="border-bottom-color:#FED0CF">{{ t.nav.contact }}</a>
         </div>
 
@@ -3105,6 +3104,8 @@ document.addEventListener('click', function (event) {
   event.preventDefault();
   if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
     window.ialocEmbedWidget.show();
+  } else {
+    console.error('ialoc widget did not initialize');
   }
 });
 </script>
