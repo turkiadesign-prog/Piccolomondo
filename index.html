@@ -3089,27 +3089,49 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- Piccolo Mondo reservations: use the verified booking route without a page reload. -->
+<!-- Piccolo Mondo: self-contained ialoc booking modal, independent of URL routing. -->
+<style>
+#piccolo-booking-modal[hidden]{display:none!important}
+#piccolo-booking-modal{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,23,13,.66)}
+#piccolo-booking-panel{position:relative;width:min(100%,510px);height:min(760px,calc(100dvh - 40px));background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 20px 75px rgba(0,0,0,.32)}
+#piccolo-booking-frame{width:100%;height:100%;border:0;background:white}
+#piccolo-booking-close{position:absolute;right:10px;top:10px;z-index:2;width:36px;height:36px;border:0;border-radius:50%;background:#fff;color:#263511;font-size:26px;cursor:pointer;box-shadow:0 1px 10px #0002}
+@media(max-width:550px){#piccolo-booking-modal{padding:8px}#piccolo-booking-panel{height:calc(100dvh - 16px);border-radius:9px}}
+</style>
+<div id="piccolo-booking-modal" role="dialog" aria-modal="true" aria-label="Table reservation" hidden>
+  <div id="piccolo-booking-panel">
+    <button type="button" id="piccolo-booking-close" aria-label="Close reservation">&times;</button>
+    <iframe id="piccolo-booking-frame" title="Piccolo Mondo table reservation" allow="payment *"></iframe>
+  </div>
+</div>
 <script>
-(function () {
-  document.addEventListener('click', function (event) {
-    var target = event.target;
-    if (target && target.nodeType === 3) target = target.parentElement;
-    var trigger = target && target.closest && target.closest('[data-ialoc-reservation="true"]');
-    if (!trigger) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    // This route + popstate combination was verified to open the booking
-    // interface over the current page, without reloading the website.
-    var url = new URL(window.location.href);
-    url.searchParams.set('venueId', '81');
-    url.searchParams.set('bookNow', 'true');
-    window.history.pushState({ piccoloReservation: true }, '', url.pathname + url.search + url.hash);
-    window.dispatchEvent(new PopStateEvent('popstate', { state: window.history.state }));
-  }, true);
+(function(){
+  var modal=document.getElementById('piccolo-booking-modal');
+  var frame=document.getElementById('piccolo-booking-frame');
+  var close=document.getElementById('piccolo-booking-close');
+  var previousFocus=null;
+  function openBooking(e){
+    if(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();}
+    previousFocus=document.activeElement;
+    var locale=(document.documentElement.lang||'ro').toLowerCase().startsWith('en')?'en':'ro';
+    frame.src='https://widget.ialoc.ro/widget-new?id=81&embedMode=popup&locale='+locale;
+    modal.hidden=false;
+    document.body.style.overflow='hidden';
+    close.focus();
+  }
+  function closeBooking(){
+    modal.hidden=true;
+    frame.removeAttribute('src');
+    document.body.style.overflow='';
+    if(previousFocus&&previousFocus.focus)previousFocus.focus();
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.nodeType===3?e.target.parentElement:e.target;
+    if(t&&t.closest&&t.closest('[data-ialoc-reservation="true"]'))openBooking(e);
+  },true);
+  close.addEventListener('click',closeBooking);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeBooking();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeBooking();});
 })();
 </script>
 </body>
