@@ -3097,21 +3097,16 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- Open ialoc as an in-page popup only; never redirect away from piccolomondo.ro. -->
-<script type="text/javascript">
-(function () {
-  document.addEventListener('click', function (event) {
-    var trigger = event.target.closest('[data-ialoc-reservation="true"]');
-    if (!trigger) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
-      window.ialocEmbedWidget.show();
-    } else {
-      console.warn('ialoc widget is not ready yet.');
-    }
-  }, true);
-})();
+<!-- Reservation buttons trigger the official ialoc popup. No redirect fallback. -->
+<script>
+document.addEventListener('click', function (event) {
+  var trigger = event.target.closest('[data-ialoc-reservation="true"]');
+  if (!trigger) return;
+  event.preventDefault();
+  if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
+    window.ialocEmbedWidget.show();
+  }
+});
 </script>
 </body>
 </html>
