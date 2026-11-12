@@ -83,6 +83,20 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<!-- Start loading the reservation widget while the page renders. -->
+<link rel="preconnect" href="https://widget.ialoc.ro" crossorigin>
+<link rel="dns-prefetch" href="//widget.ialoc.ro">
+<script type="text/javascript">
+!function(e,t,i,n,s,o,c,a,d,r){if(!e[n]){for(;a<c.length;)s(o,c[a++]);(d=t.createElement(i)).async=1,d.src="https://widget.ialoc.ro/embed.js",(r=t.getElementsByTagName(i)[0]).parentNode.insertBefore(d,r),e[n]=o}}(window,document,"script","ialocEmbedWidget",function(e,t){e[t]=function(){e._q.push([t,arguments])}},{_q:[]},"init show hide".split(" "),0);
+
+var widgetOptions = {
+  source: 'ialoc-widget-embed',
+  locale: 'ro',
+  embedMode: 'popup',
+  venueId: '81'
+};
+ialocEmbedWidget.init(widgetOptions);
+</script>
 </head>
 <body>
 <x-dc>
@@ -1776,7 +1790,7 @@ if (initialPage !== this.state.page) {
     this._headerScriptInterval = setInterval(() => {
       this._headerScriptIdx = (this._headerScriptIdx + 1) % this._headerScriptImgs.length;
       this.setState({ headerScriptIdx: this._headerScriptIdx });
-    }, 3000);
+    }, 10000);
 
     this._handwriteText = 'What began at a small table with our grandfather has grown into a place where generations gather, shaped by family, tradition and the warmth of Lebanese hospitality.';
     this._handwriteEl = null;
@@ -3082,17 +3096,9 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- ialoc reservation popup with a reliable booking fallback -->
+<!-- ialoc reservation click handling with a reliable booking fallback -->
 <script type="text/javascript">
-!function(e,t,i,n,s,o,c,a,d,r){if(!e[n]){for(;a<c.length;)s(o,c[a++]);(d=t.createElement(i)).async=1,d.src="https://widget.ialoc.ro/embed.js",(r=t.getElementsByTagName(i)[0]).parentNode.insertBefore(d,r),e[n]=o}}(window,document,"script","ialocEmbedWidget",function(e,t){e[t]=function(){e._q.push([t,arguments])}},{_q:[]},"init show hide".split(" "),0);
 
-var widgetOptions = {
-  source: 'ialoc-widget-embed',
-  locale: 'ro',
-  embedMode: 'popup',
-  venueId: '81'
-};
-ialocEmbedWidget.init(widgetOptions);
 
 (function () {
   var bookingUrl = 'https://piccolo-mondo.ialoc.ro?experience=focus&locale=ro';
@@ -3135,7 +3141,7 @@ ialocEmbedWidget.init(widgetOptions);
     // If the provider never displays its overlay, keep reservations accessible.
     fallbackTimer = window.setTimeout(function () {
       if (!popupIsVisible()) window.location.assign(bookingUrl);
-    }, 3000);
+    }, 10000);
   }, true);
 })();
 </script>
