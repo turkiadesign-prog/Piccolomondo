@@ -3089,78 +3089,31 @@ if (choice === 'rejected') {
 })();
 </script>
 
-<!-- Reservation popup: capture clicks before the site navigation framework handles them. -->
-<script>
-(function () {
-  var loadingPromise;
-  var status;
+<!-- Official ialoc popup embed and reservation button connection -->
+<script type="text/javascript">
+!function(e,t,i,n,s,o,c,a,d,r){if(!e[n]){for(;a<c.length;)s(o,c[a++]);(d=t.createElement(i)).async=1,d.src="https://widget.ialoc.ro/embed.js",(r=t.getElementsByTagName(i)[0]).parentNode.insertBefore(d,r),e[n]=o}}(window,document,"script","ialocEmbedWidget",function(e,t){e[t]=function(){e._q.push([t,arguments])}},{_q:[]},"init show hide".split(" "),0);
+var widgetOptions = {
+    source: 'ialoc-widget-embed',
+    locale: 'ro',
+    embedMode: 'popup'
+};
+ialocEmbedWidget.init(widgetOptions);
 
-  function notice(message) {
-    if (!status) {
-      status = document.createElement('div');
-      status.setAttribute('role', 'status');
-      status.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#401413;color:#fff;padding:12px 18px;border-radius:6px;font:14px Arial,sans-serif;max-width:90vw;text-align:center;box-shadow:0 4px 18px #0003';
-      document.body.appendChild(status);
-    }
-    status.textContent = message;
-    status.style.display = 'block';
+// Intercept the existing reservation links before the site's navigation handlers.
+window.addEventListener('click', function (event) {
+  var target = event.target;
+  if (target && target.nodeType === 3) target = target.parentElement;
+  var link = target && target.closest && target.closest('[data-ialoc-reservation="true"]');
+  if (!link) return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  if (window.ialocEmbedWidget && typeof window.ialocEmbedWidget.show === 'function') {
+    window.ialocEmbedWidget.show();
+  } else {
+    console.error('ialoc widget is not available. Check whether embed.js loaded.');
   }
-  function hideNotice() { if (status) status.style.display = 'none'; }
-
-  function loadWidget() {
-    if (loadingPromise) return loadingPromise;
-    loadingPromise = new Promise(function (resolve, reject) {
-      // ialoc's official queue supports calls made before its script loads.
-      if (!window.ialocEmbedWidget) {
-        var queue = {_q: []};
-        ['init', 'show', 'hide'].forEach(function (method) {
-          queue[method] = function () { queue._q.push([method, arguments]); };
-        });
-        window.ialocEmbedWidget = queue;
-      }
-      window.ialocEmbedWidget.init({source:'ialoc-widget-embed', locale:'ro', embedMode:'popup', venueId:'81'});
-      var script = document.createElement('script');
-      script.src = 'https://widget.ialoc.ro/embed.js';
-      script.async = true;
-      script.onload = function () { resolve(); };
-      script.onerror = function () { reject(new Error('ialoc script could not load')); };
-      document.head.appendChild(script);
-    });
-    return loadingPromise;
-  }
-
-  function openBooking() {
-    notice('Se încarcă rezervările…');
-    loadWidget().then(function () {
-      try {
-        if (!window.ialocEmbedWidget || typeof window.ialocEmbedWidget.show !== 'function') throw new Error('show() unavailable');
-        window.ialocEmbedWidget.show();
-        setTimeout(hideNotice, 1200);
-      } catch (error) {
-        console.error('ialoc popup error:', error);
-        notice('Rezervările nu se pot deschide momentan. Vă rugăm să încercați din nou.');
-      }
-    }).catch(function (error) {
-      console.error('ialoc loading error:', error);
-      notice('Rezervările nu se pot încărca momentan. Vă rugăm să încercați mai târziu.');
-    });
-  }
-
-  // Capture phase is important: the site's custom navigation may stop propagation.
-  window.addEventListener('click', function (event) {
-    var el = event.target;
-    if (el && el.nodeType === 3) el = el.parentElement;
-    var trigger = el && el.closest && el.closest('[data-ialoc-reservation="true"]');
-    if (!trigger) return;
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    openBooking();
-  }, true);
-
-  // Preload on page load, but never navigate away from piccolomondo.ro.
-  loadWidget().catch(function (error) { console.error('ialoc preloading failed:', error); });
-})();
+}, true);
 </script>
 </body>
 </html>
