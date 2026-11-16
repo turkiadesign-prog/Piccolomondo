@@ -160,7 +160,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
       <div style="position:relative;height:80px;width:160px;flex-shrink:0;display:flex;justify-content:center">
         <sc-for list="{{ headerScriptImages }}" as="shot" hint-placeholder-count="0">
-          <img data-piccolo-src="{{ shot.src }}" alt="" style="{{ shot.style }}">
+          <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
         </sc-for>
       </div>
       <button onClick="{{ toggleNav }}" aria-label="Menu" style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;margin-left:{{ hamburgerMarginLeft }};flex-shrink:0">
@@ -179,7 +179,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="position:relative;height:74px;width:275px;flex-shrink:0">
         <sc-for list="{{ headerScriptImages }}" as="shot" hint-placeholder-count="0">
-          <img data-piccolo-src="{{ shot.src }}" alt="" style="{{ shot.style }}">
+          <img src="{{ shot.src }}" alt="" style="{{ shot.style }}">
         </sc-for>
       </div>
       <div style="display:flex;align-items:center;gap:10px;font-family:'Calibre Light',sans-serif;font-weight:300;font-size:13px;white-space:nowrap">
@@ -236,24 +236,24 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
     </div>
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" fetchpriority="high" decoding="async" src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
@@ -322,7 +322,7 @@ MENU_CATEGORIES
       <div style="width:60%;flex-shrink:0;position:relative;aspect-ratio:16/10;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
         <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
           <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-            <img loading="lazy" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
+            <img loading="lazy" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
           </sc-for>
         </sc-for>
         <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -357,7 +357,7 @@ MENU_CATEGORIES
     <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
         <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
+          <img loading="eager" fetchpriority="high" decoding="async" src="{{ img.src }}" alt="" style="{{ img.style }}">
         </sc-for>
       </sc-for>
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -430,7 +430,7 @@ MENU_CATEGORIES
         <div style="font-family:'Instrument Serif',serif;font-size:28px;color:#344315" dangerouslySetInnerHTML="{{ legacyTitleHtml }}"></div>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
-            <img loading="lazy" decoding="async" data-piccolo-src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
           </sc-for>
         </div>
       </div>
@@ -443,7 +443,7 @@ MENU_CATEGORIES
         <div style="font-family:'Instrument Serif',serif;font-size:24px;font-style:italic;color:#344315;line-height:1.25;letter-spacing:0.5px" dangerouslySetInnerHTML="{{ legacyTitleHtmlMobile }}"></div>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
-            <img loading="lazy" decoding="async" data-piccolo-src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
+            <img loading="lazy" decoding="async" src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
           </sc-for>
         </div>
       </div>
@@ -485,12 +485,12 @@ MENU_CATEGORIES
           <div style="{{ col.trackStyle }}">
             <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
-                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
+                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
               </sc-if>
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
               </sc-if>
               <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
-                <img loading="lazy" decoding="async" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
+                <img loading="lazy" decoding="async" src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
               </sc-if>
             </sc-for>
           </div>
@@ -648,41 +648,7 @@ MENU_CATEGORIES
       <p style="color: rgba(244,238,232,0.75); font-size: 15px; line-height: 1.7; margin: 0 0 44px; font-family: Calibre Light; text-wrap: balance">{{ t.reservation.blurb }}</p>
     </div>
 
-    <sc-if value="{{ showReservationForm }}" hint-placeholder-val="{{ true }}">
-      <sc-if value="{{ reservationSubmitted }}" hint-placeholder-val="{{ false }}">
-        <div style="max-width:480px;margin:0 auto;background:#F4EEE8;borderRadius:12px;padding:40px 32px;text-align:center;animation:popIn 0.5s ease both">
-          <div style="font-family:'Instrument Serif',serif;font-size:26px;color:#344315;margin-bottom:10px">{{ t.reservation.confirmTitle }}</div>
-          <p style="font-size:14px;color:#401413;line-height:1.7;margin:0 0 24px">{{ t.reservation.confirmBody }}</p>
-          <button onClick="{{ resetReservation }}" style="background:none;border:1px solid #344315;color:#344315;padding:10px 22px;borderRadius:999px;font-weight:700;font-size:13px;cursor:pointer">{{ t.reservation.backBtn }}</button>
-        </div>
-      </sc-if>
-      <sc-if value="{{ reservationNotSubmitted }}" hint-placeholder-val="{{ true }}">
-        <form onSubmit="{{ submitReservation }}" style="max-width:560px;width:100%;margin:0 auto;background:#F4EEE8;borderRadius:12px;padding:{{ reservationFormPadding }};display:grid;grid-template-columns:1fr 1fr;gap:16px;box-sizing:border-box">
-          <input required="{{ true }}" value="{{ reservation.name }}" onChange="{{ onNameChange }}" placeholder="{{ t.reservation.labels.name }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <input required="{{ true }}" value="{{ reservation.phone }}" onChange="{{ onPhoneChange }}" placeholder="{{ t.reservation.labels.phone }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <input value="{{ reservation.email }}" onChange="{{ onEmailChange }}" placeholder="{{ t.reservation.labels.email }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.date }}</label>
-            <input required="{{ true }}" type="date" value="{{ reservation.date }}" onChange="{{ onDateChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:12px;color:#344315;font-family:inherit;padding-left:2px">{{ t.reservation.labels.time }}</label>
-            <input required="{{ true }}" type="time" value="{{ reservation.time }}" onChange="{{ onTimeChange }}" style="width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;color:#401413;-webkit-text-fill-color:#401413;color-scheme:light;background:#fff;opacity:1;line-height:1.3;min-height:44px">
-          </div>
-          <input type="number" min="1" max="20" value="{{ reservation.guests }}" onChange="{{ onGuestsChange }}" placeholder="{{ t.reservation.labels.guests }}" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit">
-          <textarea value="{{ reservation.notes }}" onChange="{{ onNotesChange }}" placeholder="{{ t.reservation.labels.notes }}" rows="3" style="grid-column:span 2;width:100%;box-sizing:border-box;padding:13px 16px;borderRadius:8px;border:1px solid rgba(52,67,21,0.25);font-size:14px;font-family:inherit;resize:vertical"></textarea>
-          <button type="submit" style="grid-column:span 2;width:100%;box-sizing:border-box;background:#344315;color:#F4EEE8;border:none;padding:15px;borderRadius:999px;font-weight:300;font-family:'Calibre Light',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer" style-hover="background:#401413">{{ t.reservation.submit }}</button>
-        </form>
-      </sc-if>
-    </sc-if>
-    <sc-if value="{{ showReservationCta }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:480px;margin:0 auto;text-align:center;background:#F4EEE8;borderRadius:12px;padding:40px 32px">
-        <a href="tel:0722205020" style="text-decoration:none;display:block;background:#344315;color:#F4EEE8;padding:15px;borderRadius:999px;font-weight:700;font-size:15px;margin-bottom:14px">{{ t.reservation.callCta }}</a>
-        <a href="mailto:restaurant@piccolomondo.ro" style="text-decoration:none;color:#344315;font-weight:700;font-size:14px">{{ t.reservation.emailCta }}</a>
-      </div>
-    </sc-if>
   </div>
-
   </sc-if>
 
   <!-- CONTACT PAGE -->
@@ -899,7 +865,7 @@ MENU_CATEGORIES
     <div style="position:fixed;inset:0;z-index:200;overflow:hidden;background:#344315;opacity:{{ stampOverlayOpacity }};transition:opacity 700ms ease">
       <div style="position:absolute;inset:-2%;width:104%;height:104%;display:grid;grid-template-columns:{{ stampGridTemplateColumns }};grid-template-rows:{{ stampGridTemplateRows }};opacity:{{ stampGridOpacity }};transition:opacity 500ms ease">
         <sc-for list="{{ stampCells }}" as="cell" hint-placeholder-count="0">
-          <div style="{{ cell.style }}"><img data-piccolo-src="{{ cell.src }}" alt="" style="width:100%;height:100%;object-fit:contain;display:block"></div>
+          <div style="{{ cell.style }}"><img src="{{ cell.src }}" alt="" style="width:100%;height:100%;object-fit:contain;display:block"></div>
         </sc-for>
       </div>
       <sc-if value="{{ stampMessageVisible }}" hint-placeholder-val="{{ false }}">
@@ -920,7 +886,6 @@ MENU_CATEGORIES
   &quot;$preview&quot;: {},
   &quot;defaultLanguage&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;en&quot;, &quot;options&quot;: [&quot;en&quot;, &quot;ro&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot; },
   &quot;showChatWidget&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; },
-  &quot;reservationMode&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;form&quot;, &quot;options&quot;: [&quot;form&quot;, &quot;cta&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot; }
 }">
 const STAMPS = [
   { src: './assets/stamp-6.png', rotate: -7 },
@@ -1425,8 +1390,6 @@ class Component extends DCLogic {
     chatMessages: [],
     chatAwaitingMessage: false,
     isMobile: false,
-    reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' },
-    reservationSubmitted: false,
     stampPhase: null,
     stampGrid: null,
     stampOverlayOpacity: 1,
@@ -1962,19 +1925,14 @@ if (initialPage !== this.state.page) {
 if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
   return this.state.sanityJiddoGallery
     .filter(item => item.mediaType === 'image' && item.imageUrl)
-    .map(item => {
-      const url = item.imageUrl;
-      if (!/^https:\/\/cdn\.sanity\.io\/images\//.test(url)) return url;
-      const separator = url.includes('?') ? '&' : '?';
-      return url + separator + 'w=800&auto=format&q=85';
-    });
+    .map(item => item.imageUrl);
 }
 
   return Array.from({ length: 20 }, (_, i) =>
-    './assets/jiddo-photo-' + (i + 1) + '.webp'
+    './assets/jiddo-photo-' + (i + 1) + '.png'
   ).filter(src =>
-    src !== './assets/jiddo-photo-2.webp' &&
-    src !== './assets/jiddo-photo-15.webp'
+    src !== './assets/jiddo-photo-2.png' &&
+    src !== './assets/jiddo-photo-15.png'
   );
 }
   teardownJiddoParallax() {
@@ -2283,9 +2241,7 @@ const videos = sanityVideos.length
     this.setState({
       stampPhase: null,
       stampGrid: null,
-      stampMessageVisible: false,
-      reservationSubmitted: false,
-      reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' }
+      stampMessageVisible: false
     });
     this.goTo('home')({});
   }
@@ -2357,18 +2313,7 @@ const storyCollageBase =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   this.state.sanityHome.storyTeaser.collageBase
-    ? (function (source) {
-        // Ask Sanity's image CDN for a browser-sized, compressed collage.
-        // Preserve the original image in Sanity and the client's ability to edit it.
-        if (typeof source !== 'string' || !/^https:\/\/cdn\.sanity\.io\/images\//.test(source)) return source;
-        try {
-          const url = new URL(source);
-          url.searchParams.set('w', '2560');
-          url.searchParams.set('q', '80');
-          url.searchParams.set('auto', 'format');
-          return url.toString();
-        } catch (e) { return source; }
-      })(this.state.sanityHome.storyTeaser.collageBase)
+    ? this.state.sanityHome.storyTeaser.collageBase
     : './assets/story-collage-opt.webp';
 
 const storyRevealImages =
@@ -2914,20 +2859,6 @@ excerptLine: {
       stopPropagation: e => e.stopPropagation(),
       menuTabs, menuItemsFiltered, drinkTabs, drinkItemsFiltered, menuCategoryLabel, menuCategoryDesc, foodSections, drinkSections,
 
-      showReservationForm: (this.props.reservationMode ?? 'form') === 'form',
-      showReservationCta: (this.props.reservationMode ?? 'form') !== 'form',
-      reservation: this.state.reservation,
-      reservationSubmitted: this.state.reservationSubmitted,
-      reservationNotSubmitted: !this.state.reservationSubmitted,
-      onNameChange: e => this.setState(s => ({ reservation: { ...s.reservation, name: e.target.value } })),
-      onPhoneChange: e => this.setState(s => ({ reservation: { ...s.reservation, phone: e.target.value } })),
-      onEmailChange: e => this.setState(s => ({ reservation: { ...s.reservation, email: e.target.value } })),
-      onDateChange: e => this.setState(s => ({ reservation: { ...s.reservation, date: e.target.value } })),
-      onTimeChange: e => this.setState(s => ({ reservation: { ...s.reservation, time: e.target.value } })),
-      onGuestsChange: e => this.setState(s => ({ reservation: { ...s.reservation, guests: e.target.value } })),
-      onNotesChange: e => this.setState(s => ({ reservation: { ...s.reservation, notes: e.target.value } })),
-      submitReservation: e => { e.preventDefault(); this.setState({ reservationSubmitted: true }); this.startStampSequence(); },
-      resetReservation: () => this.setState({ reservationSubmitted: false, reservation: { name: '', phone: '', email: '', date: '', time: '', guests: '2', notes: '' } }),
       dismissStampSequence: () => this.dismissStampSequence(),
       stampSequenceActive: !!this.state.stampPhase,
       stampOverlayOpacity: this.state.stampOverlayOpacity,
@@ -3150,44 +3081,5 @@ if (choice === 'rejected') {
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeBooking();});
 })();
 </script>
-
-<script id="piccolo-template-media-hydration">
-/* Avoid premature 404 requests for unrendered {{ template }} media URLs.
-   The existing template engine still resolves the original expressions
-   inside data-piccolo-src. Transfer them to src once they are real URLs. */
-(function () {
-  function validUrl(value) {
-    if (!value || /\{\{|\}\}/.test(value)) return false;
-    var v = value.trim();
-    if (!v || /^(undefined|null)$/i.test(v)) return false;
-    return /^(https?:\/\/|\/(?!\/)|\.\/|\.\.\/|data:image\/|blob:)/i.test(v);
-  }
-  function hydrate(root) {
-    if (!root || !root.querySelectorAll) return;
-    var nodes = [];
-    if (root.matches && root.matches('img[data-piccolo-src],video[data-piccolo-src]')) nodes.push(root);
-    root.querySelectorAll('img[data-piccolo-src],video[data-piccolo-src]').forEach(function (n) { nodes.push(n); });
-    nodes.forEach(function (node) {
-      var value = node.getAttribute('data-piccolo-src');
-      if (!validUrl(value)) return;
-      if (node.getAttribute('src') !== value) node.setAttribute('src', value);
-    });
-  }
-  hydrate(document);
-  var observer = new MutationObserver(function (changes) {
-    changes.forEach(function (change) {
-      if (change.type === 'attributes') hydrate(change.target);
-      else change.addedNodes.forEach(function (node) {
-        if (node.nodeType === 1) hydrate(node);
-      });
-    });
-  });
-  observer.observe(document.documentElement, {
-    subtree: true, childList: true, attributes: true,
-    attributeFilter: ['data-piccolo-src']
-  });
-})();
-</script>
-
 </body>
 </html>
