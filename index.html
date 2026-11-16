@@ -1962,7 +1962,12 @@ if (initialPage !== this.state.page) {
 if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
   return this.state.sanityJiddoGallery
     .filter(item => item.mediaType === 'image' && item.imageUrl)
-    .map(item => item.imageUrl);
+    .map(item => {
+      const url = item.imageUrl;
+      if (!/^https:\/\/cdn\.sanity\.io\/images\//.test(url)) return url;
+      const separator = url.includes('?') ? '&' : '?';
+      return url + separator + 'w=800&auto=format&q=85';
+    });
 }
 
   return Array.from({ length: 20 }, (_, i) =>
