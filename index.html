@@ -1492,7 +1492,6 @@ if (legacyTitle || legacyParagraph) {
   });
   
 }
-console.log('STORY SANITY DATA:', data);
     })
     .catch(error => {
       console.error('Could not load Story Gallery from Sanity:', error);
@@ -1515,7 +1514,6 @@ fetchSanityJiddoGallery() {
       return response.json();
     })
     .then(data => {
-      console.log('JIDDO SANITY DATA:', data);
       const images =
         data &&
         data.result &&
@@ -1550,7 +1548,6 @@ fetchSanityReservation() {
       return response.json();
     })
     .then(data => {
-      console.log('RESERVATION SANITY DATA:', data);
 
       if (data && data.result && data.result.reservationUrl) {
         this.setState({
@@ -1580,7 +1577,6 @@ fetchSanityContact() {
       return response.json();
     })
     .then(data => {
-      console.log('CONTACT SANITY DATA:', data);
 
       if (data && data.result) {
         this.setState({ sanityContact: data.result });
@@ -1619,7 +1615,6 @@ fetchSanityHome() {
       return response.json();
     })
     .then(data => {
-      console.log('HOME SANITY DATA:', data);
 
       if (data && data.result) {
         this.setState({ sanityHome: data.result });
@@ -1678,7 +1673,6 @@ fetchSanityMenu() {
       return response.json();
     })
     .then(data => {
-      console.log('MENU SANITY DATA:', data);
 
       if (data && data.result) {
         this.setState({
