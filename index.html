@@ -1738,6 +1738,7 @@ if (initialPage !== this.state.page) {
     ];
     this._headerScriptIdx = 0;
     this._headerScriptInterval = setInterval(() => {
+      if (document.hidden || this.state.page !== 'menu') return;
       this._headerScriptIdx = (this._headerScriptIdx + 1) % this._headerScriptImgs.length;
       this.setState({ headerScriptIdx: this._headerScriptIdx });
     }, 10000);
@@ -1781,6 +1782,7 @@ if (initialPage !== this.state.page) {
     }, 1500);
 
     this._stampInterval = setInterval(() => {
+      if (document.hidden || this.state.page !== 'menu') return;
       this.setState(s => ({ menuStampFlip: !s.menuStampFlip }));
     }, 2200);
   }
@@ -1838,6 +1840,8 @@ if (initialPage !== this.state.page) {
     window.removeEventListener('resize', this._onResize);
     window.removeEventListener('pointermove', this._onPointerMove);
     if (this._headerScriptInterval) clearInterval(this._headerScriptInterval);
+    if (this._legacyStampTimer) clearInterval(this._legacyStampTimer);
+    if (this._storyClosedCycleTimer) clearInterval(this._storyClosedCycleTimer);
     clearInterval(this._loadInterval);
     clearInterval(this._stampInterval);
     clearInterval(this._photoStackInterval);
@@ -2107,6 +2111,7 @@ const videos = sanityVideos.length
   startLegacyStampCycle() {
     if (this._legacyStampTimer) clearInterval(this._legacyStampTimer);
     this._legacyStampTimer = setInterval(() => {
+      if (document.hidden || this.state.page !== 'story') return;
       const cur = this.state.legacyStampIndex || 0;
       this.setState({ legacyStampIndex: (cur + 1) % this.legacyStampList().length });
     }, 1400);
@@ -2147,6 +2152,7 @@ const videos = sanityVideos.length
     const flat = this.storyFlatImages();
     if (!flat.length) return;
     this._storyClosedCycleTimer = setInterval(() => {
+      if (document.hidden || this.state.page !== 'story') return;
       const cur = this.state.storyCycleIndex || 0;
       this.setState({ storyCycleIndex: (cur + 1) % flat.length });
     }, 2500);
