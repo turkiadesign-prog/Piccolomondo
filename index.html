@@ -2352,7 +2352,18 @@ const storyCollageBase =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   this.state.sanityHome.storyTeaser.collageBase
-    ? this.state.sanityHome.storyTeaser.collageBase
+    ? (function (source) {
+        // Ask Sanity's image CDN for a browser-sized, compressed collage.
+        // Preserve the original image in Sanity and the client's ability to edit it.
+        if (typeof source !== 'string' || !/^https:\/\/cdn\.sanity\.io\/images\//.test(source)) return source;
+        try {
+          const url = new URL(source);
+          url.searchParams.set('w', '2560');
+          url.searchParams.set('q', '80');
+          url.searchParams.set('auto', 'format');
+          return url.toString();
+        } catch (e) { return source; }
+      })(this.state.sanityHome.storyTeaser.collageBase)
     : './assets/story-collage-opt.webp';
 
 const storyRevealImages =
