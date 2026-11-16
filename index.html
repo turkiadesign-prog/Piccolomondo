@@ -1845,6 +1845,12 @@ if (initialPage !== this.state.page) {
     clearTimeout(this._handwriteTimeout);
     if (this._handwriteObserver) this._handwriteObserver.disconnect();
     this._clearStampTimers();
+    ['_galleryAutoTimer', '_storyGalleryAutoTimer'].forEach(timerKey => {
+      if (this[timerKey] != null) cancelAnimationFrame(this[timerKey]);
+      this[timerKey] = null;
+      if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
+      this[timerKey + 'Resume'] = null;
+    });
   }
   setGalleryScrollRef(el) {
     this._galleryScrollEl = el;
@@ -1865,20 +1871,32 @@ if (initialPage !== this.state.page) {
     }
   }
   _startAutoScroll(elKey, timerKey) {
-    if (this[timerKey]) clearInterval(this[timerKey]);
-    this[timerKey] = setInterval(() => {
+    if (this[timerKey] != null) cancelAnimationFrame(this[timerKey]);
+    this[timerKey] = null;
+    const speed = 90; // pixels/second: matches the former 1.8px every 20ms
+    let lastFrame = null;
+    const tick = (now) => {
       const el = this[elKey];
-      if (!el) return;
-      const max = el.scrollWidth - el.clientWidth;
-      if (max <= 0) return;
-      const next = el.scrollLeft + 1.8;
-      el.scrollLeft = next >= max ? 0 : next;
-    }, 20);
+      if (!el || !el.isConnected) { this[timerKey] = null; return; }
+      if (lastFrame === null) lastFrame = now;
+      const elapsed = Math.min(now - lastFrame, 50);
+      lastFrame = now;
+      if (!document.hidden) {
+        const max = el.scrollWidth - el.clientWidth;
+        if (max > 0) {
+          const next = el.scrollLeft + speed * elapsed / 1000;
+          el.scrollLeft = next >= max ? 0 : next;
+        }
+      }
+      this[timerKey] = requestAnimationFrame(tick);
+    };
+    if (this[elKey]) this[timerKey] = requestAnimationFrame(tick);
   }
   _pauseAutoScroll(timerKey) {
-    if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
+    if (this[timerKey] != null) { cancelAnimationFrame(this[timerKey]); this[timerKey] = null; }
     if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
     this[timerKey + 'Resume'] = setTimeout(() => {
+      this[timerKey + 'Resume'] = null;
       const elKey = timerKey === '_galleryAutoTimer' ? '_galleryScrollEl' : '_storyGalleryScrollEl';
       this._startAutoScroll(elKey, timerKey);
     }, 4000);
