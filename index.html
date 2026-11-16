@@ -837,7 +837,7 @@ MENU_CATEGORIES
               <div style="{{ msg.style }}">
                 {{ msg.text }}
                 <sc-if value="{{ msg.linkUrl }}" hint-placeholder-val="{{ false }}">
-                  <div style="margin-top:6px"><a href="{{ msg.linkUrl }}" target="_blank" rel="noopener" style="color:#401413;text-decoration:underline;font-weight:700">{{ msg.linkLabel }}</a></div>
+                  <div style="margin-top:6px"><a href="{{ msg.linkUrl }}" data-ialoc-reservation="{{ msg.isReservation }}" target="_blank" rel="noopener" style="color:#401413;text-decoration:underline;font-weight:700">{{ msg.linkLabel }}</a></div>
                 </sc-if>
               </div>
             </sc-for>
@@ -1531,35 +1531,6 @@ fetchSanityJiddoGallery() {
       console.error('Could not load Jiddo Gallery from Sanity:', error);
 });
 }
-fetchSanityReservation() {
-  const query = encodeURIComponent(
-    '*[_type == "reservationPage"][0]{reservationUrl}'
-  );
-
-  const url =
-    'https://ob9d80dz.api.sanity.io/v2023-05-03/data/query/production?query=' +
-    query;
-
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Sanity request failed: ' + response.status);
-      }
-      return response.json();
-    })
-    .then(data => {
-
-      if (data && data.result && data.result.reservationUrl) {
-        this.setState({
-          reservationUrl: data.result.reservationUrl
-        });
-      }
-    })
-    .catch(error => {
-      console.error('Could not load Reservation URL from Sanity:', error);
-    });  
-}
-
 fetchSanityContact() {
   const query = encodeURIComponent(
     '*[_type == "contactPage"][0]{eyebrow,title,addressLabel,addressValue,phoneLabel,phoneValue,phoneValue2,emailLabel,emailValue,instagramLabel,instagramUrl,facebookLabel,facebookUrl,hoursLabel,hoursValue,mapLabel,mapUrl,"mapImageUrl": mapImage.asset->url}'
@@ -1706,7 +1677,6 @@ if (initialPage !== this.state.page) {
     this.fetchSanityGallery();
     this.fetchSanityJiddoGallery();
     this.fetchSanityContact();
-    this.fetchSanityReservation();
     this.fetchSanityHome();
     this.fetchSanityMenu();
       
@@ -1738,7 +1708,6 @@ if (initialPage !== this.state.page) {
     ];
     this._headerScriptIdx = 0;
     this._headerScriptInterval = setInterval(() => {
-      if (document.hidden || this.state.page !== 'menu') return;
       this._headerScriptIdx = (this._headerScriptIdx + 1) % this._headerScriptImgs.length;
       this.setState({ headerScriptIdx: this._headerScriptIdx });
     }, 10000);
@@ -1782,7 +1751,6 @@ if (initialPage !== this.state.page) {
     }, 1500);
 
     this._stampInterval = setInterval(() => {
-      if (document.hidden || this.state.page !== 'menu') return;
       this.setState(s => ({ menuStampFlip: !s.menuStampFlip }));
     }, 2200);
   }
@@ -1840,8 +1808,6 @@ if (initialPage !== this.state.page) {
     window.removeEventListener('resize', this._onResize);
     window.removeEventListener('pointermove', this._onPointerMove);
     if (this._headerScriptInterval) clearInterval(this._headerScriptInterval);
-    if (this._legacyStampTimer) clearInterval(this._legacyStampTimer);
-    if (this._storyClosedCycleTimer) clearInterval(this._storyClosedCycleTimer);
     clearInterval(this._loadInterval);
     clearInterval(this._stampInterval);
     clearInterval(this._photoStackInterval);
@@ -1849,12 +1815,6 @@ if (initialPage !== this.state.page) {
     clearTimeout(this._handwriteTimeout);
     if (this._handwriteObserver) this._handwriteObserver.disconnect();
     this._clearStampTimers();
-    ['_galleryAutoTimer', '_storyGalleryAutoTimer'].forEach(timerKey => {
-      if (this[timerKey] != null) cancelAnimationFrame(this[timerKey]);
-      this[timerKey] = null;
-      if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
-      this[timerKey + 'Resume'] = null;
-    });
   }
   setGalleryScrollRef(el) {
     this._galleryScrollEl = el;
@@ -1875,32 +1835,20 @@ if (initialPage !== this.state.page) {
     }
   }
   _startAutoScroll(elKey, timerKey) {
-    if (this[timerKey] != null) cancelAnimationFrame(this[timerKey]);
-    this[timerKey] = null;
-    const speed = 90; // pixels/second: matches the former 1.8px every 20ms
-    let lastFrame = null;
-    const tick = (now) => {
+    if (this[timerKey]) clearInterval(this[timerKey]);
+    this[timerKey] = setInterval(() => {
       const el = this[elKey];
-      if (!el || !el.isConnected) { this[timerKey] = null; return; }
-      if (lastFrame === null) lastFrame = now;
-      const elapsed = Math.min(now - lastFrame, 50);
-      lastFrame = now;
-      if (!document.hidden) {
-        const max = el.scrollWidth - el.clientWidth;
-        if (max > 0) {
-          const next = el.scrollLeft + speed * elapsed / 1000;
-          el.scrollLeft = next >= max ? 0 : next;
-        }
-      }
-      this[timerKey] = requestAnimationFrame(tick);
-    };
-    if (this[elKey]) this[timerKey] = requestAnimationFrame(tick);
+      if (!el) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      const next = el.scrollLeft + 1.8;
+      el.scrollLeft = next >= max ? 0 : next;
+    }, 20);
   }
   _pauseAutoScroll(timerKey) {
-    if (this[timerKey] != null) { cancelAnimationFrame(this[timerKey]); this[timerKey] = null; }
+    if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
     if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
     this[timerKey + 'Resume'] = setTimeout(() => {
-      this[timerKey + 'Resume'] = null;
       const elKey = timerKey === '_galleryAutoTimer' ? '_galleryScrollEl' : '_storyGalleryScrollEl';
       this._startAutoScroll(elKey, timerKey);
     }, 4000);
@@ -2111,7 +2059,6 @@ const videos = sanityVideos.length
   startLegacyStampCycle() {
     if (this._legacyStampTimer) clearInterval(this._legacyStampTimer);
     this._legacyStampTimer = setInterval(() => {
-      if (document.hidden || this.state.page !== 'story') return;
       const cur = this.state.legacyStampIndex || 0;
       this.setState({ legacyStampIndex: (cur + 1) % this.legacyStampList().length });
     }, 1400);
@@ -2152,7 +2099,6 @@ const videos = sanityVideos.length
     const flat = this.storyFlatImages();
     if (!flat.length) return;
     this._storyClosedCycleTimer = setInterval(() => {
-      if (document.hidden || this.state.page !== 'story') return;
       const cur = this.state.storyCycleIndex || 0;
       this.setState({ storyCycleIndex: (cur + 1) % flat.length });
     }, 2500);
@@ -2314,7 +2260,8 @@ const videos = sanityVideos.length
     const botMsg = {
       style: 'align-self:flex-start;background:#FED0CF;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%;font-weight:' + (isReview ? '600' : '400'),
       text: answer,
-      linkUrl: isReview ? 'https://www.google.com/maps?cid=4951164950577469656' : (isReservation ? this.state.reservationUrl : ''),
+      linkUrl: isReview ? 'https://www.google.com/maps?cid=4951164950577469656' : (isReservation ? '#' : ''),
+      isReservation: isReservation,
       linkLabel: isReview ? faq.reviewLinkLabel : (isReservation ? faq.reservationLinkLabel : '')
     };
     this.setState(s => ({ chatMessages: [...s.chatMessages, userMsg, botMsg], chatInput: '' }));
@@ -2324,7 +2271,6 @@ const videos = sanityVideos.length
     const lang = this.state.lang;
 const baseT = T[lang];
 const sanityContact = this.state.sanityContact;
-const reservationUrl = this.state.reservationUrl;
 const sanityMenu = this.state.sanityMenu;
 
 const storyCollageBase =
@@ -2352,7 +2298,6 @@ storyCollageBase: storyCollageBase,
 storyRevealImages: storyRevealImages,
   
 ...baseT,
-reservationUrl: reservationUrl,
   contact: {
     ...baseT.contact,
 
