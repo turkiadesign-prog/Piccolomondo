@@ -87,7 +87,7 @@
 <!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
      Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
      update this preload URL to the new asset to avoid an unused preload. -->
-<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2000&amp;auto=format&amp;q=90" fetchpriority="high" media="(max-width: 767px)">
+<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2000&amp;auto=format&amp;q=82" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 
 
@@ -145,7 +145,7 @@ MENU_CATEGORIES
   <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
     <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
       <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
-        <img src="./assets/header-logo-pink.svg" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
+        <img src="./assets/header-logo-pink.svg" width="220" height="144" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
       </a>
 
       <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
@@ -2284,7 +2284,7 @@ function piccoloStoryImageUrl(value, width) {
     if (url.hostname !== 'cdn.sanity.io' || !url.pathname.startsWith('/images/ob9d80dz/')) return value;
     url.searchParams.set('w', String(width));
     url.searchParams.set('auto', 'format');
-    url.searchParams.set('q', '90');
+    url.searchParams.set('q', '82');
     return url.toString();
   } catch (_) {
     return value;
@@ -2302,13 +2302,13 @@ const storyRevealImages =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
-    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [800, 800, 640, 1000, 640] : [600, 600, 400, 800, 400])[index] || 800))
+    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [700, 700, 500, 950, 500] : [600, 600, 400, 800, 400])[index] || 800))
     : [
-        './assets/story-photo-1-color.jpg',
-        './assets/story-photo-2-color.jpg',
-        './assets/story-photo-3-color.jpg',
-        './assets/story-photo-4-color.jpg',
-        './assets/story-photo-5-color.jpg'
+        './assets/story-photo-1-color.webp',
+        './assets/story-photo-2-color.webp',
+        './assets/story-photo-3-color.webp',
+        './assets/story-photo-4-color.webp',
+        './assets/story-photo-5-color.webp'
       ];
 
 const t = {

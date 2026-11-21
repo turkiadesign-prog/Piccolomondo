@@ -1,20 +1,22 @@
-PICCOLO MONDO — PAGE SPEED PASS 4 (incremental update)
+PICCOLO MONDO — PERFORMANCE PASS 5
 
-WHAT CHANGED
-- The existing support.js and image-slot.js now load with defer, preserving order.
-- Added critical CSS to hide the raw x-dc template while deferred runtime loads.
-- Moved image-slot registration from the template helmet into the HTML head before support.js.
-- Added intrinsic dimensions to the footer logo SVG; header logo dimensions are left unchanged until its viewBox can be verified.
-- Preserved pass 3 mobile collage resolution (1200px), mobile chair, optimized ribbon, Sanity CMS, EN/RO, animations and booking.
+Replace these files in the GitHub repository root:
+- index.html
+- image-slot.js
+- support.js (unchanged; included for completeness)
+- merge the assets/ folder with the existing assets/ (do not delete other assets).
 
-HOW TO DEPLOY
-1. Make a backup / commit your current working site.
-2. Replace index.html in the repository root with this index.html.
-3. If your repo already contains support.js and image-slot.js unchanged, they need no replacement; included for completeness.
-4. Keep all existing assets, fonts, gallery, other files. Copy the two assets from this package only if they are not already deployed.
-5. Commit and push using GitHub Desktop, wait for Vercel deployment.
-6. Test mobile and desktop: home loading/loader, story collage and hover/touch, menu photo placeholders, language switch, reservations, gallery and contact.
-7. Run PageSpeed mobile at least 3 times. Compare LCP and render-blocking audit.
+Do NOT delete .image-slots.state.json, existing fonts, photos, or any other site files.
+Do NOT replace the entire assets directory: merge only the files in this ZIP.
 
-CAUTION
-This is a targeted safe change, NOT a verified 90+ score. Runtime behavior must be tested on deployed Vercel. If there is any failure, revert the index.html commit. No minification of generated support.js was attempted without its build pipeline.
+Changes:
+1. Defers the ~1.5 MB menu-image state fetch until menu image slots enter the viewport.
+2. Converts 5 fallback story JPEGs into visually faithful WebP images.
+3. Uses Sanity CDN auto=format and q=82 for story images; preserves the 2000px mobile collage base.
+4. Keeps high-DPI resolution for reveal photos, reducing oversized requests.
+5. Adds intrinsic dimensions to the header logo SVG.
+6. Preserves animations, Sanity CMS fields, languages, and booking code.
+
+Caution: This is a source-level optimization, not a browser-tested 95 score.
+After deployment, verify the menu photos appear on scroll, collage hover/tap, bilingual content, and reservation.
+Run mobile PageSpeed Insights 2-3 times and compare LCP and performance.

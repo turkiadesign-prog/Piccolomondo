@@ -725,12 +725,26 @@
       // frame's clamp range.
       this._ro = new ResizeObserver(() => this._render());
       this._ro.observe(this);
-      load();
+      // Delay the large persisted menu-image sidecar until a slot enters the viewport.
+      // Hidden menu panels do not fetch it during the home page's first paint.
+      if ('IntersectionObserver' in window) {
+        this._loadObserver = new IntersectionObserver((entries) => {
+          if (entries.some(entry => entry.isIntersecting)) {
+            this._loadObserver.disconnect();
+            this._loadObserver = null;
+            load();
+          }
+        }, {rootMargin: '250px'});
+        this._loadObserver.observe(this);
+      } else {
+        load();
+      }
       this._render();
     }
 
     disconnectedCallback() {
       subs.delete(this._subFn);
+      if (this._loadObserver) { this._loadObserver.disconnect(); this._loadObserver = null; }
       this.removeEventListener('pointerenter', this._subFn);
       this.removeEventListener('dragenter', this);
       this.removeEventListener('dragover', this);
