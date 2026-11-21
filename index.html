@@ -715,7 +715,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:56px;width:100%;max-width:1100px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
-        <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
+        <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px; min-width: 140px; font-family: Calibre Light">
@@ -750,7 +750,7 @@ MENU_CATEGORIES
 
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;align-items:center;gap:32px;width:100%;max-width:480px">
-      <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
 
       <div style="display:grid;grid-template-columns:auto auto;justify-content:center;column-gap:40px;row-gap:28px;width:100%">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
@@ -805,7 +805,7 @@ MENU_CATEGORIES
           <sc-if value="{{ feedbackOpen }}" hint-placeholder-val="{{ false }}">
             <div style="flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;background:#F4EEE8">
               <sc-if value="{{ feedbackNotSent }}" hint-placeholder-val="{{ true }}">
-                <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:78px;width:auto;display:block;margin:0 auto 14px;filter:brightness(0) saturate(100%) invert(9%) sepia(38%) saturate(2472%) hue-rotate(333deg) brightness(93%) contrast(97%)">
+                <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height:78px;width:auto;display:block;margin:0 auto 14px;filter:brightness(0) saturate(100%) invert(9%) sepia(38%) saturate(2472%) hue-rotate(333deg) brightness(93%) contrast(97%)">
                 <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#401413;text-align:center;line-height:1.2">{{ t.chat.feedback.title }}</div>
                 <div style="font-family:'Calibre Light',sans-serif;font-size:13px;line-height:1.6;color:#401413;text-align:center;margin:8px 0 20px;text-wrap:pretty">{{ t.chat.feedback.intro }}</div>
                 <div style="font-family:'Calibre Light',sans-serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#401413;margin-bottom:8px">{{ t.chat.feedback.ratingLabel }}</div>
@@ -2273,18 +2273,34 @@ const baseT = T[lang];
 const sanityContact = this.state.sanityContact;
 const sanityMenu = this.state.sanityMenu;
 
+// Optimize Sanity-hosted Story images while preserving CMS overrides and local fallbacks.
+// Sanity CDN transforms are applied only to image URLs from this project's Sanity host.
+function piccoloStoryImageUrl(value, width) {
+  if (typeof value !== 'string' || !value) return value;
+  try {
+    const url = new URL(value);
+    if (url.hostname !== 'cdn.sanity.io' || !url.pathname.startsWith('/images/ob9d80dz/')) return value;
+    url.searchParams.set('w', String(width));
+    url.searchParams.set('auto', 'format');
+    url.searchParams.set('q', '80');
+    return url.toString();
+  } catch (_) {
+    return value;
+  }
+}
+
 const storyCollageBase =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   this.state.sanityHome.storyTeaser.collageBase
-    ? this.state.sanityHome.storyTeaser.collageBase
+    ? piccoloStoryImageUrl(this.state.sanityHome.storyTeaser.collageBase, 2000)
     : './assets/story-collage-opt.webp';
 
 const storyRevealImages =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
-    ? this.state.sanityHome.storyTeaser.revealImages
+    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, [600, 600, 400, 800, 400][index] || 800))
     : [
         './assets/story-photo-1-color.jpg',
         './assets/story-photo-2-color.jpg',
