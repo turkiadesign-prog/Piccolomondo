@@ -87,7 +87,7 @@
 <!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
      Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
      update this preload URL to the new asset to avoid an unused preload. -->
-<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2000&amp;auto=format&amp;q=82" fetchpriority="high" media="(max-width: 767px)">
+<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=1600&amp;auto=format&amp;q=82" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 
 
@@ -145,7 +145,7 @@ MENU_CATEGORIES
   <div data-screen-label="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;background:#344315;backdrop-filter:blur(6px);borderBottom:1px solid rgba(244,238,232,0.15);display:flex;align-items:center;justify-content:{{ navJustify }};padding:{{ navPadding }}">
     <div style="display:flex;align-items:center;gap:{{ navGroupGap }};margin-left:{{ logoMarginLeft }}">
       <a href="#home" onClick="{{ goHome }}" style="text-decoration:none;display:flex;flex-direction:column;line-height:0.9">
-        <img src="./assets/header-logo-pink.svg" width="220" height="144" alt="Piccolo Mondo" fetchpriority="high" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
+        <img src="./assets/header-logo-pink.svg" width="220" height="144" alt="Piccolo Mondo" decoding="async" style="height:{{ logoHeight }};width:auto;display:block">
       </a>
 
       <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
@@ -360,7 +360,7 @@ MENU_CATEGORIES
     <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
         <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
         </sc-for>
       </sc-for>
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -2295,7 +2295,7 @@ const storyCollageBase =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   this.state.sanityHome.storyTeaser.collageBase
-    ? piccoloStoryImageUrl(this.state.sanityHome.storyTeaser.collageBase, typeof window !== 'undefined' && window.innerWidth <= 767 ? 2000 : 2000)
+    ? piccoloStoryImageUrl(this.state.sanityHome.storyTeaser.collageBase, typeof window !== 'undefined' && window.innerWidth <= 767 ? 1600 : 2000)
     : './assets/story-collage-opt.webp';
 
 const storyRevealImages =
@@ -2312,10 +2312,9 @@ const storyRevealImages =
       ];
 
 const t = {
-storyCollageBase: storyCollageBase,
-storyRevealImages: storyRevealImages,
-  
-...baseT,
+  ...baseT,
+  storyCollageBase: storyCollageBase,
+  storyRevealImages: storyRevealImages,
   contact: {
     ...baseT.contact,
 
@@ -3081,6 +3080,23 @@ if (choice === 'rejected') {
     nodes.forEach(function (node) {
       var value = node.getAttribute('data-piccolo-src');
       if (!validUrl(value)) return;
+      // Sanity content is CMS-editable. Request an appropriately sized version
+      // of the *selected* asset, not a hard-coded image from an earlier publish.
+      // Only story collage/reveal photos get these transforms.
+      if (node.tagName === 'IMG' && node.closest('.story-scroll-hide')) {
+        try {
+          var u = new URL(value, document.baseURI);
+          if (u.hostname === 'cdn.sanity.io' && u.pathname.indexOf('/images/ob9d80dz/') === 0) {
+            var isCollage = node.hasAttribute('width') && node.getAttribute('width') === '3841';
+            var small = window.matchMedia('(max-width: 767px)').matches;
+            var requestedWidth = isCollage ? (small ? 1600 : 2000) : (small ? 550 : 850);
+            u.searchParams.set('w', String(requestedWidth));
+            u.searchParams.set('auto', 'format');
+            u.searchParams.set('q', '82');
+            value = u.toString();
+          }
+        } catch (_) {}
+      }
       if (node.getAttribute('src') !== value) node.setAttribute('src', value);
     });
   }

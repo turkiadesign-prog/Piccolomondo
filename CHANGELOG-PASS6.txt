@@ -1,0 +1,14 @@
+Piccolo Mondo — targeted performance corrections (21 Nov 2026)
+
+Changes:
+1. Corrected object spread order so calculated CMS story images cannot be overwritten by base translations.
+2. Mobile collage now requests 1600px Sanity asset (quality 82); head preload matches default CMS collage asset.
+3. The media hydration step normalizes Sanity collage and reveal images to appropriately sized CDN transforms while respecting CMS-selected assets.
+4. Timeline photos no longer all request eager/high priority; browser can defer them.
+5. Header logo no longer competes with the hero chair for high network priority.
+
+Important: The collage is rendered by a client-side template engine. A static preload helps the current published image, but Lighthouse may still flag HTML discovery for newly edited CMS images. Avoid hard-coding an image into the visible markup because it could flash stale content and break CMS editing.
+
+Files: replace index.html only. Keep all other repo files unchanged.
+
+Not claimed fixed: the full 20 KiB JS minification diagnostic and all 551 KiB image delivery savings require a full build/asset inventory; aggressive changes could break the existing app. Run production browser smoke tests and PageSpeed after deploying.
