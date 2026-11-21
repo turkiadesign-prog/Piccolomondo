@@ -1,0 +1,1 @@
+Mobile-only collage sharpness correction. Replace only index.html. Desktop Sanity collage width and quality remain 2000px/q80; mobile uses 2000px/q85 and larger reveal images. Verify on mobile after Vercel deployment.
