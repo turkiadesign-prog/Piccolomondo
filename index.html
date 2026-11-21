@@ -69,7 +69,6 @@
 }
 </script>
 
-<link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Regular.otf" crossorigin>
 <link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Light.otf" crossorigin>
 <link rel="preload" as="font" type="font/ttf" href="./fonts/InstrumentSerif-Regular.ttf" crossorigin>
@@ -83,13 +82,13 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<link rel="preconnect" href="https://ob9d80dz.api.sanity.io" crossorigin>
 <!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
      Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
      update this preload URL to the new asset to avoid an unused preload. -->
 <link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2000&amp;auto=format&amp;q=80" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 <link rel="preconnect" href="https://widget.ialoc.ro" crossorigin>
-<link rel="dns-prefetch" href="//widget.ialoc.ro">
 
 <!-- ialoc: initialize once and attach a reliable click handler below -->
 
@@ -240,7 +239,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
@@ -252,7 +251,7 @@ MENU_CATEGORIES
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" style="width:100%;height:auto;display:block">
+          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
@@ -719,7 +718,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:56px;width:100%;max-width:1100px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
-        <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
+        <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height: 173px; width: 84px; display: block">
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px; min-width: 140px; font-family: Calibre Light">
@@ -754,7 +753,7 @@ MENU_CATEGORIES
 
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;align-items:center;gap:32px;width:100%;max-width:480px">
-      <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
+      <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height:190px;width:auto;display:block">
 
       <div style="display:grid;grid-template-columns:auto auto;justify-content:center;column-gap:40px;row-gap:28px;width:100%">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:Calibre Light">
@@ -809,7 +808,7 @@ MENU_CATEGORIES
           <sc-if value="{{ feedbackOpen }}" hint-placeholder-val="{{ false }}">
             <div style="flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;background:#F4EEE8">
               <sc-if value="{{ feedbackNotSent }}" hint-placeholder-val="{{ true }}">
-                <img loading="lazy" decoding="async" src="./assets/logo-pink.png" alt="Piccolo Mondo" style="height:78px;width:auto;display:block;margin:0 auto 14px;filter:brightness(0) saturate(100%) invert(9%) sepia(38%) saturate(2472%) hue-rotate(333deg) brightness(93%) contrast(97%)">
+                <img loading="lazy" decoding="async" src="./assets/logo-pink.svg" alt="Piccolo Mondo" style="height:78px;width:auto;display:block;margin:0 auto 14px;filter:brightness(0) saturate(100%) invert(9%) sepia(38%) saturate(2472%) hue-rotate(333deg) brightness(93%) contrast(97%)">
                 <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#401413;text-align:center;line-height:1.2">{{ t.chat.feedback.title }}</div>
                 <div style="font-family:'Calibre Light',sans-serif;font-size:13px;line-height:1.6;color:#401413;text-align:center;margin:8px 0 20px;text-wrap:pretty">{{ t.chat.feedback.intro }}</div>
                 <div style="font-family:'Calibre Light',sans-serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#401413;margin-bottom:8px">{{ t.chat.feedback.ratingLabel }}</div>
