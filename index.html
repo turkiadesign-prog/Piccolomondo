@@ -1699,12 +1699,12 @@ if (initialPage !== this.state.page) {
     document.addEventListener('scroll', this._menuScrollHandler, true);
 
     this._headerScriptImgs = [
-      './assets/menu-header-arabic.png',
-      './assets/menu-header-arabic-1.png',
-      './assets/menu-header-arabic-2.png',
-      './assets/menu-header-arabic-3.png',
-      './assets/menu-header-arabic-5.png',
-      './assets/menu-header-arabic-6.png'
+      './assets/menu-header-arabic.svg',
+      './assets/menu-header-arabic-1.svg',
+      './assets/menu-header-arabic-2.svg',
+      './assets/menu-header-arabic-3.svg',
+      './assets/menu-header-arabic-5.svg',
+      './assets/menu-header-arabic-6.svg'
     ];
     this._headerScriptIdx = 0;
     this._headerScriptInterval = setInterval(() => {
@@ -2359,7 +2359,7 @@ facebookUrl:
 }
 };
     const headerScriptIdx = this.state.headerScriptIdx || 0;
-    const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.png'];
+    const headerScriptImgs = this._headerScriptImgs || ['./assets/menu-header-arabic.svg'];
     const headerScriptImages = headerScriptImgs.map((src, i) => {
       const isLastTwo = i >= headerScriptImgs.length - 2;
       return {
