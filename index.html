@@ -83,6 +83,10 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
+     Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
+     update this preload URL to the new asset to avoid an unused preload. -->
+<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=2000&amp;auto=format&amp;q=80" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 <link rel="preconnect" href="https://widget.ialoc.ro" crossorigin>
 <link rel="dns-prefetch" href="//widget.ialoc.ro">
