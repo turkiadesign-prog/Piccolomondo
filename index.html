@@ -70,8 +70,8 @@
 </script>
 
 <link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Regular.otf" crossorigin>
-
-
+<link rel="preload" as="font" type="font/otf" href="./fonts/Calibre-Light.otf" crossorigin>
+<link rel="preload" as="font" type="font/ttf" href="./fonts/InstrumentSerif-Regular.ttf" crossorigin>
 <style>x-dc{display:none!important}</style>
 <script defer src="./image-slot.js"></script>
 <script defer src="./support.js"></script>
@@ -84,11 +84,10 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
-<link rel="dns-prefetch" href="https://cdn.sanity.io">
 <!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
      Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
      update this preload URL to the new asset to avoid an unused preload. -->
-<link rel="preload" as="image" href="./assets/story-collage-mobile.webp" fetchpriority="high" media="(max-width: 767px)">
+<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=1600&amp;auto=format&amp;q=82" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 
 
@@ -137,7 +136,7 @@ MENU_CATEGORIES
       </sc-for>
     </div>
     <div style="margin-top:26px;width:160px;height:2px;background:rgba(244,238,232,0.25);position:relative;overflow:hidden;borderRadius:2px">
-      <div style="position:absolute;left:0;top:0;bottom:0;background:#FED0CF;width:100%;transform-origin:left center;transform:scaleX({{ stampProgressFraction }});transition:transform 1.4s ease"></div>
+      <div style="position:absolute;left:0;top:0;bottom:0;background:#FED0CF;width:{{ stampProgress }}%;transition:width 1.4s ease"></div>
     </div>
   </div>
 
@@ -240,7 +239,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img src="./assets/story-collage-desktop.webp" loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
@@ -252,7 +251,7 @@ MENU_CATEGORIES
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img src="./assets/story-collage-mobile.webp" loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
@@ -261,7 +260,7 @@ MENU_CATEGORIES
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
-        <div style="height:100%;width:45%;background:#401413;border-radius:2px;position:absolute;top:0;left:0;transform:translateX({{ storyScrollBarTranslate }});transition:transform 0.05s linear"></div>
+        <div style="height:100%;width:45%;background:#401413;border-radius:2px;position:absolute;top:0;left:{{ storyScrollBarLeft }};transition:left 0.05s linear"></div>
       </div>
     </div>
     </sc-if>
@@ -2303,7 +2302,7 @@ const storyRevealImages =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
-    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [500, 500, 360, 680, 360] : [600, 600, 400, 800, 400])[index] || 800))
+    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [700, 700, 500, 950, 500] : [600, 600, 400, 800, 400])[index] || 800))
     : [
         './assets/story-photo-1-color.webp',
         './assets/story-photo-2-color.webp',
@@ -2600,7 +2599,6 @@ const drinkCategories =
       setStoryScrollRef: () => {},
       onStoryScroll: e => this.onStoryScroll(e),
       storyScrollBarLeft: ((this.state.storyScrollPct || 0) * 55) + '%',
-      storyScrollBarTranslate: ((this.state.storyScrollPct || 0) * (55 / 45) * 100) + '%',
       storyBtnMarginTop: isMobile ? '32px' : '-8px',
       galleryPadding: isMobile ? '32px 0' : '70px 0',
       galleryMarginTop: isMobile ? '8px' : '40px',
@@ -2695,7 +2693,6 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       loaderVisibility: this.state.loading ? 'visible' : 'hidden',
       loaderPointerEvents: this.state.loading ? 'auto' : 'none',
       stampProgress: Math.round(((this.state.stampIndex + 1) / STAMPS.length) * 100),
-      stampProgressFraction: ((this.state.stampIndex + 1) / STAMPS.length),
       stamps: STAMPS.map((s, i) => {
         const visible = i <= this.state.stampIndex;
         const isTop = i === this.state.stampIndex;
@@ -2748,12 +2745,12 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       Array.isArray(this.state.sanityHome.galleryItems) &&
       this.state.sanityHome.galleryItems.length
       ? this.state.sanityHome.galleryItems.map(src => ({
-       bgStyle: 'background-image:url(' + piccoloStoryImageUrl(src, isMobile ? 400 : 640) + ')'
+       bgStyle: 'background-image:url(' + src + ')'
       }))
     : Array.from({ length: 15 }, (_, i) => ({
-        bgStyle: 'background-image:url(./assets/gallery/g' + (i + 1) + '-opt.webp)'
+        bgStyle: 'background-image:url(./assets/gallery/g' + (i + 1) + '-opt.jpg)'
       })),
-     storyGalleryItems: (this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: 42 }, (_, i) => ({ bgStyle: 'background-image:url(\'' + piccoloStoryImageUrl(this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length], isMobile ? 400 : 640) + '\')' })) : Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
+     storyGalleryItems: (this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: 42 }, (_, i) => ({ bgStyle: 'background-image:url(\'' + this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length] + '\')' })) : Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
 
 handwriteRef: this._handwriteRefCb,
 handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
@@ -3105,14 +3102,12 @@ if (choice === 'rejected') {
   }
   hydrate(document);
   var observer = new MutationObserver(function (changes) {
-    var roots = new Set();
     changes.forEach(function (change) {
-      if (change.type === 'attributes') roots.add(change.target);
+      if (change.type === 'attributes') hydrate(change.target);
       else change.addedNodes.forEach(function (node) {
-        if (node.nodeType === 1) roots.add(node);
+        if (node.nodeType === 1) hydrate(node);
       });
     });
-    roots.forEach(hydrate);
   });
   observer.observe(document.documentElement, {
     subtree: true, childList: true, attributes: true,
