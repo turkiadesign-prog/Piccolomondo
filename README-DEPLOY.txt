@@ -1,13 +1,15 @@
-PICCOLO MONDO — SAFE IMAGE-SLOT OPTIMIZATION
+PICCOLO MONDO — MOBILE PERFORMANCE PASS 2
 
-Upload these files to the same website root folder as the current index.html:
-- index.html (safe HTML adjustments: logo SVG, preconnect, collage dimensions)
-- support.js and image-slot.js (original, unchanged)
-- .image-slots.state.json (optimized references)
-- image-slot-assets/ (all 27 original decoded images)
+This is an overlay for the existing GitHub website, NOT a replacement for the entire assets folder.
+Copy index.html and assets/chair-floating-mobile.webp into the corresponding repository paths. Keep all other existing files, including image-slot.js, support.js, .image-slots.state.json, image-slot-assets, and Sanity configuration.
 
-IMPORTANT: Keep the existing assets/ and fonts/ directories, and all other existing website files. Do not remove any files. The .image-slots.state.json filename begins with a dot and must remain exactly that. Deploy all files together. Back up your existing site first.
+Changes:
+- Mobile Sanity Story collage uses w=1200 rather than w=2000 (desktop unchanged).
+- Mobile Story reveal photos request smaller widths; desktop unchanged.
+- Mobile hero chair requests a 360x540 WebP, preserving the original 800x1200 desktop image.
+- Adds intrinsic dimensions to hero chair.
+- Removes one low-priority preconnect.
 
-The original image data is preserved byte-for-byte. Each entry keeps its s/x/y framing values. The image-slot editor can still save new dropped images as data URLs, so later edits may increase the JSON size again; permanent optimization would require adapting the editing workflow.
+IMPORTANT: The Story collage preload URL refers to the currently published Sanity asset; update it if that asset changes. Script loading is deliberately unchanged because changing generated runtime execution order without browser testing risks breaking the website.
 
-This targets the large JSON transfer. The JS files remain unchanged to avoid breaking runtime dependencies. Retest PageSpeed after deployment; do not expect every warning to be eliminated.
+After deployment, check mobile and desktop pages, story reveal hover, menu images, bilingual content, booking, and Sanity updates. Then run PageSpeed again. Score improvement is not guaranteed.
