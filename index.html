@@ -2291,12 +2291,8 @@ function piccoloStoryImageUrl(value, width) {
   }
 }
 
-const storyCollageBase =
-  this.state.sanityHome &&
-  this.state.sanityHome.storyTeaser &&
-  this.state.sanityHome.storyTeaser.collageBase
-    ? piccoloStoryImageUrl(this.state.sanityHome.storyTeaser.collageBase, typeof window !== 'undefined' && window.innerWidth <= 767 ? 1600 : 2000)
-    : './assets/story-collage-opt.webp';
+// Use the approved high-resolution collage directly. Sanity still controls reveal images.
+const storyCollageBase = './assets/story-collage-hq-20261122.webp';
 
 const storyRevealImages =
   this.state.sanityHome &&
