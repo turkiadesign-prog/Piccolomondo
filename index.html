@@ -1381,6 +1381,20 @@ const T = {
   }
 };
 
+// Deliver resized images from Sanity CDN without modifying original CMS assets.
+// Non-Sanity URLs (including local fallbacks and videos) remain unchanged.
+function piccoloCdnImage(value, width, quality = 80) {
+  if (typeof value !== 'string' || !value) return value;
+  try {
+    const url = new URL(value);
+    if (url.hostname !== 'cdn.sanity.io' || !url.pathname.startsWith('/images/ob9d80dz/')) return value;
+    url.searchParams.set('w', String(width));
+    url.searchParams.set('auto', 'format');
+    url.searchParams.set('q', String(quality));
+    return url.toString();
+  } catch (_) { return value; }
+}
+
 class Component extends DCLogic {
   state = {
     lang: this.props.defaultLanguage === 'ro' ? 'ro' : 'en',
@@ -1462,7 +1476,7 @@ fetchSanityGallery() {
           : [];
 
       if (images.length) {
-        this.setState({ sanityStoryGallery: images });
+        this.setState({ sanityStoryGallery: images.map(url => piccoloCdnImage(url, 800)) });
       }
 const timeline =
   data &&
@@ -1472,7 +1486,7 @@ const timeline =
     : [];
 
 if (timeline.length) {
-  this.setState({ sanityStoryTimeline: timeline });
+  this.setState({ sanityStoryTimeline: timeline.map(item => ({ ...item, images: Array.isArray(item.images) ? item.images.map(url => piccoloCdnImage(url, 1200)) : item.images })) });
 }
 const legacyTitle =
   data &&
@@ -1525,7 +1539,7 @@ fetchSanityJiddoGallery() {
           : [];
 
   if (images.length) {
-  this.setState({ sanityJiddoGallery: images });
+  this.setState({ sanityJiddoGallery: images.map(item => item.mediaType === 'image' ? { ...item, imageUrl: piccoloCdnImage(item.imageUrl, 1200) } : item) });
 }
 
 
