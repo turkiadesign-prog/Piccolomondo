@@ -8,9 +8,8 @@
 <meta name="description" content="A Lebanese restaurant in Bucharest, where a grandfather’s story lives on through generations, authentic Lebanese food, family traditions, and hospitality.">
 
 <link rel="canonical" href="https://piccolomondo.ro/">
-<!-- Make the desktop Story collage discoverable before the application renders. -->
-<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" media="(min-width: 768px)" fetchpriority="high">
 
+<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" imagesrcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w" imagesizes="(min-width: 1600px) 1600px, 100vw" media="(min-width: 768px)" fetchpriority="high">
 <!-- FAVICONS -->
 <link rel="icon" type="image/png" href="./assets/favicon-dark.png" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./assets/favicon-light.png" media="(prefers-color-scheme: dark)">
@@ -89,7 +88,6 @@
 <!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
      Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
      update this preload URL to the new asset to avoid an unused preload. -->
-<link rel="preload" as="image" href="https://cdn.sanity.io/images/ob9d80dz/production/1be14c45bdaa492917e9165b55e0bd9e563ed1ea-3841x1795.png?w=1600&amp;auto=format&amp;q=82" fetchpriority="high" media="(max-width: 767px)">
 <!-- Start loading the reservation widget while the page renders. -->
 
 
@@ -219,7 +217,7 @@ MENU_CATEGORIES
       <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
       <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
         <sc-if value="{{ chairVisible }}" hint-placeholder-val="{{ true }}">
-          <img src="./assets/chair-floating.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating.webp 800w" sizes="(max-width: 767px) 180px, 400px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
+          <img src="./assets/chair-floating-400.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating-400.webp 400w" sizes="(max-width: 767px) 180px, 240px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
         </sc-if>
         <sc-if value="{{ hoverPreviewSrc }}" hint-placeholder-val="{{ false }}">
           <div style="{{ hoverPreviewStyle }}"></div>
@@ -241,7 +239,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+      <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="desktop" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
@@ -253,7 +251,7 @@ MENU_CATEGORIES
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="mobile" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
@@ -2300,7 +2298,7 @@ const storyRevealImages =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
-    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [700, 700, 500, 950, 500] : [460, 460, 300, 640, 300])[index] || 800))
+    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [550, 550, 400, 750, 400] : [460, 460, 300, 640, 300])[index] || 800))
     : [
         './assets/story-photo-1-color.webp',
         './assets/story-photo-2-color.webp',
@@ -3087,13 +3085,24 @@ if (choice === 'rejected') {
           if (u.hostname === 'cdn.sanity.io' && u.pathname.indexOf('/images/ob9d80dz/') === 0) {
             var isCollage = node.hasAttribute('width') && node.getAttribute('width') === '3841';
             var small = window.matchMedia('(max-width: 767px)').matches;
-            var requestedWidth = isCollage ? (small ? 1600 : 2000) : (small ? 550 : 850);
+            var requestedWidth = isCollage ? (small ? 1600 : 2000) : (small ? 550 : 640);
             u.searchParams.set('w', String(requestedWidth));
             u.searchParams.set('auto', 'format');
             u.searchParams.set('q', '82');
             value = u.toString();
           }
         } catch (_) {}
+      }
+      // Responsive collage variants retain the exact same artwork and transparent layout.
+      // Set srcset BEFORE src so the full 3841px image is never requested needlessly.
+      if (node.tagName === 'IMG' && node.hasAttribute('data-piccolo-collage') &&
+          /(?:^|\/)story-collage-corrected-20261123\.webp(?:[?#]|$)/.test(value)) {
+        var prefix = value.replace(/story-collage-corrected-20261123\.webp(?:[?#].*)?$/, 'story-collage-corrected-20261123-');
+        var set = prefix + '1600.webp 1600w, ' + prefix + '2400.webp 2400w, ' + prefix + '3200.webp 3200w';
+        var sizes = node.getAttribute('data-piccolo-collage') === 'mobile' ? '280vw' : '(min-width: 1600px) 1600px, 100vw';
+        if (node.getAttribute('sizes') !== sizes) node.setAttribute('sizes', sizes);
+        if (node.getAttribute('srcset') !== set) node.setAttribute('srcset', set);
+        value = prefix + '1600.webp';
       }
       if (node.getAttribute('src') !== value) node.setAttribute('src', value);
     });
