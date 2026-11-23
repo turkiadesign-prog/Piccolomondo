@@ -217,7 +217,7 @@ MENU_CATEGORIES
       <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
       <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
         <sc-if value="{{ chairVisible }}" hint-placeholder-val="{{ true }}">
-          <img src="./assets/chair-floating.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating.webp 800w" sizes="(max-width: 767px) 180px, 400px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
+          <img src="./assets/chair-floating.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating-480.webp 480w, ./assets/chair-floating.webp 800w" sizes="(max-width: 767px) 180px, 240px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
         </sc-if>
         <sc-if value="{{ hoverPreviewSrc }}" hint-placeholder-val="{{ false }}">
           <div style="{{ hoverPreviewStyle }}"></div>
@@ -239,7 +239,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+      <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
