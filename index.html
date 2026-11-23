@@ -8,6 +8,8 @@
 <meta name="description" content="A Lebanese restaurant in Bucharest, where a grandfather’s story lives on through generations, authentic Lebanese food, family traditions, and hospitality.">
 
 <link rel="canonical" href="https://piccolomondo.ro/">
+<!-- Make the desktop Story collage discoverable before the application renders. -->
+<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" media="(min-width: 768px)" fetchpriority="high">
 
 <!-- FAVICONS -->
 <link rel="icon" type="image/png" href="./assets/favicon-dark.png" media="(prefers-color-scheme: light)">
@@ -217,7 +219,7 @@ MENU_CATEGORIES
       <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
       <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
         <sc-if value="{{ chairVisible }}" hint-placeholder-val="{{ true }}">
-          <img src="./assets/chair-floating.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating-480.webp 480w, ./assets/chair-floating.webp 800w" sizes="(max-width: 767px) 180px, 240px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
+          <img src="./assets/chair-floating.webp" srcset="./assets/chair-floating-mobile.webp 360w, ./assets/chair-floating.webp 800w" sizes="(max-width: 767px) 180px, 400px" width="800" height="1200" alt="" fetchpriority="high" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain;transform:{{ chairTiltTransform }};transition:transform 0.25s ease-out;animation:chairFloat 3.2s ease-in-out infinite;will-change:transform">
         </sc-if>
         <sc-if value="{{ hoverPreviewSrc }}" hint-placeholder-val="{{ false }}">
           <div style="{{ hoverPreviewStyle }}"></div>
@@ -239,7 +241,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
       <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
@@ -1381,20 +1383,6 @@ const T = {
   }
 };
 
-// Deliver resized images from Sanity CDN without modifying original CMS assets.
-// Non-Sanity URLs (including local fallbacks and videos) remain unchanged.
-function piccoloCdnImage(value, width, quality = 80) {
-  if (typeof value !== 'string' || !value) return value;
-  try {
-    const url = new URL(value);
-    if (url.hostname !== 'cdn.sanity.io' || !url.pathname.startsWith('/images/ob9d80dz/')) return value;
-    url.searchParams.set('w', String(width));
-    url.searchParams.set('auto', 'format');
-    url.searchParams.set('q', String(quality));
-    return url.toString();
-  } catch (_) { return value; }
-}
-
 class Component extends DCLogic {
   state = {
     lang: this.props.defaultLanguage === 'ro' ? 'ro' : 'en',
@@ -1476,7 +1464,7 @@ fetchSanityGallery() {
           : [];
 
       if (images.length) {
-        this.setState({ sanityStoryGallery: images.map(url => piccoloCdnImage(url, 800)) });
+        this.setState({ sanityStoryGallery: images });
       }
 const timeline =
   data &&
@@ -1486,7 +1474,7 @@ const timeline =
     : [];
 
 if (timeline.length) {
-  this.setState({ sanityStoryTimeline: timeline.map(item => ({ ...item, images: Array.isArray(item.images) ? item.images.map(url => piccoloCdnImage(url, 1200)) : item.images })) });
+  this.setState({ sanityStoryTimeline: timeline });
 }
 const legacyTitle =
   data &&
@@ -1539,7 +1527,7 @@ fetchSanityJiddoGallery() {
           : [];
 
   if (images.length) {
-  this.setState({ sanityJiddoGallery: images.map(item => item.mediaType === 'image' ? { ...item, imageUrl: piccoloCdnImage(item.imageUrl, 1200) } : item) });
+  this.setState({ sanityJiddoGallery: images });
 }
 
 
@@ -2312,7 +2300,7 @@ const storyRevealImages =
   this.state.sanityHome &&
   this.state.sanityHome.storyTeaser &&
   Array.isArray(this.state.sanityHome.storyTeaser.revealImages)
-    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [700, 700, 500, 950, 500] : [600, 600, 400, 800, 400])[index] || 800))
+    ? this.state.sanityHome.storyTeaser.revealImages.map((url, index) => piccoloStoryImageUrl(url, (typeof window !== 'undefined' && window.innerWidth <= 767 ? [700, 700, 500, 950, 500] : [460, 460, 300, 640, 300])[index] || 800))
     : [
         './assets/story-photo-1-color.webp',
         './assets/story-photo-2-color.webp',
@@ -3106,15 +3094,6 @@ if (choice === 'rejected') {
             value = u.toString();
           }
         } catch (_) {}
-      }
-      // Responsive local Story collage: identical artwork at smaller pixel dimensions.
-      // Keep the full-resolution original as a fallback for large/high-density displays.
-      if (node.tagName === 'IMG' && value.indexOf('story-collage-corrected-20261123.webp') !== -1) {
-        node.setAttribute('srcset',
-          './assets/story-collage-corrected-20261123-1600.webp 1600w, ' +
-          './assets/story-collage-corrected-20261123-2400.webp 2400w, ' +
-          './assets/story-collage-corrected-20261123.webp 3841w');
-        node.setAttribute('sizes', node.closest('.story-scroll-hide') ? '280vw' : '(max-width: 1600px) 100vw, 1600px');
       }
       if (node.getAttribute('src') !== value) node.setAttribute('src', value);
     });
