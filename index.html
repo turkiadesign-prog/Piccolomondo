@@ -91,6 +91,8 @@
 <!-- ialoc: initialize once and attach a reliable click handler below -->
 
 
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.sanity.io">
 </head>
 <body>
 <x-dc>
@@ -485,12 +487,12 @@ MENU_CATEGORIES
           <div style="{{ col.trackStyle }}">
             <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
-                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
+                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="none" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
               </sc-if>
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
               </sc-if>
               <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
-                <img loading="{{ it.loading }}" decoding="async" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
+                <img loading="{{ it.loading }}" fetchpriority="{{ it.priority }}" decoding="async" data-jiddo-gallery-image="true" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
               </sc-if>
             </sc-for>
           </div>
@@ -1892,10 +1894,10 @@ if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
 }
 
   return Array.from({ length: 20 }, (_, i) =>
-    './assets/jiddo-photo-' + (i + 1) + '.png'
+    './assets/jiddo-photo-' + (i + 1) + '.webp'
   ).filter(src =>
-    src !== './assets/jiddo-photo-2.png' &&
-    src !== './assets/jiddo-photo-15.png'
+    src !== './assets/jiddo-photo-2.webp' &&
+    src !== './assets/jiddo-photo-15.webp'
   );
 }
   teardownJiddoParallax() {
@@ -1937,7 +1939,7 @@ const videos = sanityVideos.length
     const neededCount = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / imgHeightPx)));
     return Array.from({ length: numCols }, (_, c) => {
       const start = c * 5;
-      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: i < 3 ? 'eager' : 'lazy' }));
+      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: i < 2 ? 'eager' : 'lazy', priority: i === 0 ? 'high' : 'low' }));
       const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
       const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
       const doubled = single.concat(single);
@@ -3092,6 +3094,20 @@ if (choice === 'rejected') {
               node.removeAttribute('srcset');
               node.removeAttribute('sizes');
             }
+          }
+        } catch (_) {}
+      }
+      // Jiddo: keep Sanity as the source of truth, but download only mobile-sized
+      // versions of its images. The original asset URLs can be several MB each.
+      if (node.tagName === 'IMG' && node.hasAttribute('data-jiddo-gallery-image')) {
+        try {
+          var jiddoUrl = new URL(value, document.baseURI);
+          if (jiddoUrl.hostname === 'cdn.sanity.io' && jiddoUrl.pathname.indexOf('/images/ob9d80dz/') === 0) {
+            var mobileJiddo = window.matchMedia('(max-width: 767px)').matches;
+            jiddoUrl.searchParams.set('w', mobileJiddo ? '360' : '520');
+            jiddoUrl.searchParams.set('auto', 'format');
+            jiddoUrl.searchParams.set('q', mobileJiddo ? '68' : '78');
+            value = jiddoUrl.toString();
           }
         } catch (_) {}
       }
