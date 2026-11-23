@@ -3107,6 +3107,15 @@ if (choice === 'rejected') {
           }
         } catch (_) {}
       }
+      // Responsive local Story collage: identical artwork at smaller pixel dimensions.
+      // Keep the full-resolution original as a fallback for large/high-density displays.
+      if (node.tagName === 'IMG' && value.indexOf('story-collage-corrected-20261123.webp') !== -1) {
+        node.setAttribute('srcset',
+          './assets/story-collage-corrected-20261123-1600.webp 1600w, ' +
+          './assets/story-collage-corrected-20261123-2400.webp 2400w, ' +
+          './assets/story-collage-corrected-20261123.webp 3841w');
+        node.setAttribute('sizes', node.closest('.story-scroll-hide') ? '280vw' : '(max-width: 1600px) 100vw, 1600px');
+      }
       if (node.getAttribute('src') !== value) node.setAttribute('src', value);
     });
   }
