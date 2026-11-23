@@ -9,8 +9,6 @@
 
 <link rel="canonical" href="https://piccolomondo.ro/">
 
-<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" imagesrcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w" imagesizes="(min-width: 1600px) 1600px, 100vw" media="(min-width: 768px)" fetchpriority="high">
-<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" imagesrcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w, ./assets/story-collage-corrected-20261123-3200.webp 3200w" imagesizes="280vw" media="(max-width: 767px)" fetchpriority="high">
 <!-- FAVICONS -->
 <link rel="icon" type="image/png" href="./assets/favicon-dark.png" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./assets/favicon-light.png" media="(prefers-color-scheme: dark)">
@@ -86,9 +84,7 @@
 </script>
 
 <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
-<!-- Preload the currently published Sanity Story collage for early mobile LCP discovery.
-     Keep the CMS-driven image below unchanged. If the collage is replaced in Sanity,
-     update this preload URL to the new asset to avoid an unused preload. -->
+<!-- Story images are loaded from their rendered img elements; CMS images remain editable. -->
 <!-- Start loading the reservation widget while the page renders. -->
 
 
@@ -240,12 +236,12 @@ MENU_CATEGORIES
   <div data-screen-label="story-teaser" style="background:#F4EEE8;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:70px">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative;width:100%;max-width:1600px">
-      <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="desktop" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
-      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="desktop" src="./assets/story-collage-corrected-20261123-1600.webp" srcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w, ./assets/story-collage-corrected-20261123-3200.webp 3200w" sizes="(min-width: 1600px) 1600px, 100vw" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
+      <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.5s ease;cursor:pointer" style-hover="opacity:1">
     </div>
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
@@ -253,11 +249,11 @@ MENU_CATEGORIES
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
           <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="mobile" src="./assets/story-collage-corrected-20261123-1600.webp" srcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w, ./assets/story-collage-corrected-20261123-3200.webp 3200w" sizes="280vw" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
@@ -3080,17 +3076,22 @@ if (choice === 'rejected') {
       // Sanity content is CMS-editable. Request an appropriately sized version
       // of the *selected* asset, not a hard-coded image from an earlier publish.
       // Only story collage/reveal photos get these transforms.
-      if (node.tagName === 'IMG' && node.closest('.story-scroll-hide')) {
+      if (node.tagName === 'IMG' && (node.hasAttribute('data-piccolo-reveal') || node.hasAttribute('data-piccolo-collage'))) {
         try {
           var u = new URL(value, document.baseURI);
           if (u.hostname === 'cdn.sanity.io' && u.pathname.indexOf('/images/ob9d80dz/') === 0) {
-            var isCollage = node.hasAttribute('width') && node.getAttribute('width') === '3841';
+            var isCollage = node.hasAttribute('data-piccolo-collage');
             var small = window.matchMedia('(max-width: 767px)').matches;
             var requestedWidth = isCollage ? (small ? 1600 : 2000) : (small ? 420 : 480);
             u.searchParams.set('w', String(requestedWidth));
             u.searchParams.set('auto', 'format');
             u.searchParams.set('q', '82');
             value = u.toString();
+            // A new CMS image must never be overridden by stale local srcset variants.
+            if (isCollage) {
+              node.removeAttribute('srcset');
+              node.removeAttribute('sizes');
+            }
           }
         } catch (_) {}
       }
