@@ -10,6 +10,7 @@
 <link rel="canonical" href="https://piccolomondo.ro/">
 
 <link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" imagesrcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w" imagesizes="(min-width: 1600px) 1600px, 100vw" media="(min-width: 768px)" fetchpriority="high">
+<link rel="preload" as="image" href="./assets/story-collage-corrected-20261123-1600.webp" imagesrcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w, ./assets/story-collage-corrected-20261123-3200.webp 3200w" imagesizes="280vw" media="(max-width: 767px)" fetchpriority="high">
 <!-- FAVICONS -->
 <link rel="icon" type="image/png" href="./assets/favicon-dark.png" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./assets/favicon-light.png" media="(prefers-color-scheme: dark)">
@@ -251,7 +252,7 @@ MENU_CATEGORIES
     <div style="width:100%">
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
-          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="mobile" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
+          <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="mobile" src="./assets/story-collage-corrected-20261123-1600.webp" srcset="./assets/story-collage-corrected-20261123-1600.webp 1600w, ./assets/story-collage-corrected-20261123-2400.webp 2400w, ./assets/story-collage-corrected-20261123-3200.webp 3200w" sizes="280vw" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
           <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
