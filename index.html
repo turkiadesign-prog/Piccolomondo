@@ -490,7 +490,7 @@ MENU_CATEGORIES
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
               </sc-if>
               <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
-                <img loading="lazy" decoding="async" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
+                <img loading="{{ it.loading }}" decoding="async" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
               </sc-if>
             </sc-for>
           </div>
@@ -1937,7 +1937,7 @@ const videos = sanityVideos.length
     const neededCount = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / imgHeightPx)));
     return Array.from({ length: numCols }, (_, c) => {
       const start = c * 5;
-      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false }));
+      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: i < 3 ? 'eager' : 'lazy' }));
       const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
       const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
       const doubled = single.concat(single);
