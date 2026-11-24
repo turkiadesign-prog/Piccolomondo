@@ -281,7 +281,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative">
       <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform;transition:none!important;animation:none!important;width:max-content">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -296,7 +296,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="position:relative">
       <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform;transition:none!important;animation:none!important;width:max-content">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:200px;height:260px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -471,7 +471,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-gallery" style="background:#F4EEE8;padding:30px 0 70px;overflow:hidden">
     <div style="position:relative">
       <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform;transition:none!important;animation:none!important;width:max-content">
           <sc-for list="{{ storyGalleryItems }}" as="item" hint-placeholder-count="18">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -1856,23 +1856,28 @@ if (initialPage !== this.state.page) {
   scrollStoryGallery(dir) { this._nudgeGallery('_storyLoop', dir); }
   _bindGallery(key, el) {
     const old = this[key];
+    if (!el) return; // transient ref cleanup during rendering
     if (old && old.el === el) return;
     if (old) cancelAnimationFrame(old.frame);
-    if (!el) { this[key] = null; return; }
-    const state = this[key] = { el, pos: 0, last: 0, nudge: 0, frame: 0 };
+    const state = this[key] = { el, pos: old ? old.pos : 0, last: 0, nudge: 0, frame: 0, track: null, period: 0 };
     const tick = now => {
       if (this[key] !== state) return;
+      if (!el.isConnected) { this[key] = null; return; }
       const dt = state.last ? Math.min((now - state.last) / 1000, 0.05) : 0;
       state.last = now;
       const track = el.firstElementChild;
-      if (track && track.children.length >= 2 && el.clientWidth) {
-        const half = Math.floor(track.children.length / 2);
-        const period = track.children[half].offsetLeft - track.children[0].offsetLeft;
-        if (period > 0) {
-          const step = state.nudge * (1 - Math.exp(-dt * 9));
+      if (track && track.children.length >= 2) {
+        if (state.track !== track || state.count !== track.children.length || state.width !== el.clientWidth) {
+          state.track = track;
+          state.count = track.children.length;
+          state.width = el.clientWidth;
+          state.period = track.children[state.count / 2 | 0].offsetLeft - track.children[0].offsetLeft;
+        }
+        if (state.period > 0) {
+          const step = state.nudge * (1 - Math.exp(-dt * 5));
           state.nudge -= step;
-          state.pos = ((state.pos + 90 * dt + step) % period + period) % period;
-          track.style.transform = 'translate3d(' + (-state.pos) + 'px,0,0)';
+          state.pos = ((state.pos + 90 * dt + step) % state.period + state.period) % state.period;
+          track.style.setProperty('transform', 'translate3d(' + (-state.pos) + 'px,0,0)', 'important');
         }
       }
       state.frame = requestAnimationFrame(tick);
