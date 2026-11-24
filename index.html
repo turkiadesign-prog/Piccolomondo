@@ -497,11 +497,6 @@ MENU_CATEGORIES
         <div style="flex:1;position:relative;overflow:hidden">
           <div style="{{ col.trackStyle }}">
             <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
-              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
-                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="{{ it.preload }}" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
-              </sc-if>
-              <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
-              </sc-if>
               <sc-if value="{{ it.isImage }}" hint-placeholder-val="{{ true }}">
                 <img loading="{{ it.loading }}" decoding="async" data-piccolo-src="{{ it.src }}" alt="" style="width:100%;display:block;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(0.97);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}">
               </sc-if>
@@ -1950,13 +1945,6 @@ if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
   }
   jiddoBuildColumns() {
     const pool = this.jiddoImagePool();
-    const sanityVideos = (this.state.sanityJiddoGallery || [])
-  .filter(item => item.mediaType === 'video' && item.videoUrl)
-  .map(item => item.videoUrl);
-
-const videos = sanityVideos.length
-  ? sanityVideos
-  : ['./assets/jiddo-video-1.mp4', './assets/jiddo-video-2.mp4', './assets/jiddo-video-3.mp4', './assets/jiddo-video-4.mp4'];
     const isMobile = this.state.isMobile;
     const numCols = isMobile ? 3 : 6;
     const durations = [36, 44, 30, 46, 38, 42];
@@ -1966,8 +1954,8 @@ const videos = sanityVideos.length
     return Array.from({ length: numCols }, (_, c) => {
       const start = c * 5;
       const images = Array.from({ length: neededCount }, (_, i) => ({ src: isMobile ? this.jiddoMobileImage(pool[(start + i) % pool.length]) : pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: isMobile || i < 3 ? 'eager' : 'lazy' }));
-      const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c, preload: isMobile ? 'auto' : 'metadata' } : null;
-      const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
+      const replacement = { ...images[0], src: isMobile ? this.jiddoMobileImage(pool[(start + neededCount) % pool.length]) : pool[(start + neededCount) % pool.length], loading: 'eager' };
+      const single = c < 4 ? [images[0], replacement].concat(images.slice(1)) : images;
       const doubled = single.concat(single);
       const dir = c % 2 === 0 ? 'jiddoScrollDown' : 'jiddoScrollUp';
       const duration = durations[c % durations.length];
