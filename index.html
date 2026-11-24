@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Piccolo Mondo | Lebanese Restaurant</title>
-<meta name="description" content="A Lebanese restaurant in Bucharest, where a grandfather’s story lives on through generations, authentic Lebanese food, family traditions, and hospitality.">
+<title>Piccolo Mondo | Lebanese Restaurant in Bucharest Since 1993</title>
+<meta name="description" content="Discover authentic Lebanese cuisine at Piccolo Mondo in Bucharest. A family restaurant since 1993, rooted in tradition and warm hospitality.">
 
 <link rel="canonical" href="https://piccolomondo.ro/">
 
@@ -17,16 +17,16 @@
 <!-- SOCIAL SHARING -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://piccolomondo.ro/">
-<meta property="og:title" content="Piccolo Mondo | Lebanese Restaurant">
-<meta property="og:description" content="A Lebanese restaurant in Bucharest, where a grandfather’s story lives on through generations, authentic Lebanese food, family traditions, and hospitality.">
+<meta property="og:title" content="Piccolo Mondo | Lebanese Restaurant in Bucharest Since 1993">
+<meta property="og:description" content="Discover authentic Lebanese cuisine at Piccolo Mondo in Bucharest. A family restaurant since 1993, rooted in tradition and warm hospitality.">
 <meta property="og:image" content="https://piccolomondo.ro/assets/social-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Piccolo Mondo | Lebanese Restaurant">
-<meta name="twitter:description" content="A Lebanese restaurant in Bucharest, where a grandfather’s story lives on through generations, authentic Lebanese food, family traditions, and hospitality.">
+<meta name="twitter:title" content="Piccolo Mondo | Lebanese Restaurant in Bucharest Since 1993">
+<meta name="twitter:description" content="Discover authentic Lebanese cuisine at Piccolo Mondo in Bucharest. A family restaurant since 1993, rooted in tradition and warm hospitality.">
 <meta name="twitter:image" content="https://piccolomondo.ro/assets/social-preview.jpg">
 
 <!-- RESTAURANT STRUCTURED DATA -->
@@ -93,6 +93,13 @@
 
 </head>
 <body>
+<noscript><main style="background:#F4EEE8;color:#401413;padding:32px;font-family:Georgia,serif">
+<h1>Piccolo Mondo – Lebanese restaurant in Bucharest</h1>
+<p>Generations at the table, Lebanese at heart. Since 1993.</p>
+<h2>Our Story</h2><p>What began at a small table with our grandfather has grown into a place where generations gather, shaped by family, tradition and the warmth of Lebanese hospitality.</p>
+<h2>Contact</h2><p>Strada Clucerului 9, București. 11:30–00:30.</p><p><a href="tel:+40722205020">0722 20 50 20</a> · <a href="tel:+40212225755">021 222 57 55</a></p>
+<p>Please enable JavaScript to explore the interactive website and menu.</p></main></noscript>
+<template id="piccolo-source-template">
 <x-dc>
 <helmet>
   <style>
@@ -893,6 +900,13 @@ MENU_CATEGORIES
 </div>
 
 </x-dc>
+</template>
+<script>
+(function () {
+  var source = document.getElementById('piccolo-source-template');
+  source.replaceWith(source.content);
+})();
+</script>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;$preview&quot;: {},
   &quot;defaultLanguage&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;en&quot;, &quot;options&quot;: [&quot;en&quot;, &quot;ro&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot; },
@@ -1389,6 +1403,18 @@ const T = {
   }
 };
 
+const PICCOLO_SEO = {"en": {"home": ["Piccolo Mondo | Lebanese Restaurant in Bucharest Since 1993", "Discover authentic Lebanese cuisine at Piccolo Mondo in Bucharest. A family restaurant since 1993, rooted in tradition and warm hospitality."], "story": ["Our Story | Piccolo Mondo Bucharest", "Discover the family story behind Piccolo Mondo, a Lebanese restaurant in Bucharest since 1993."], "jiddo": ["Our Jiddo | Piccolo Mondo Bucharest", "Meet the grandfather whose generosity and Lebanese hospitality inspired Piccolo Mondo."], "menu": ["Lebanese Menu | Piccolo Mondo Bucharest", "Explore the Lebanese food and drinks menu at Piccolo Mondo in Bucharest."], "contact": ["Contact & Reservations | Piccolo Mondo Bucharest", "Visit Piccolo Mondo at Strada Clucerului 9, Bucharest. Contact us to reserve a table."]}, "ro": {"home": ["Piccolo Mondo | Restaurant libanez în București din 1993", "Descoperă bucătăria libaneză autentică la Piccolo Mondo în București. Un restaurant de familie din 1993, cu tradiție și ospitalitate."], "story": ["Povestea noastră | Piccolo Mondo București", "Descoperă povestea familiei Piccolo Mondo, restaurant libanez în București din 1993."], "jiddo": ["Bunicul nostru | Piccolo Mondo București", "Descoperă povestea bunicului care a inspirat Piccolo Mondo prin generozitate și ospitalitate libaneză."], "menu": ["Meniu libanez | Piccolo Mondo București", "Explorează meniul de preparate libaneze și băuturi la Piccolo Mondo în București."], "contact": ["Contact și rezervări | Piccolo Mondo București", "Te așteptăm la Piccolo Mondo, Strada Clucerului 9, București. Contactează-ne pentru rezervări."]}};
+function updatePiccoloSeo(lang, page) {
+  const locale = lang === 'ro' ? 'ro' : 'en';
+  const [title, description] = PICCOLO_SEO[locale][page] || PICCOLO_SEO[locale].home;
+  document.documentElement.lang = locale;
+  if (document.title !== title) document.title = title;
+  for (const [selector, value] of [['meta[name="description"]',description],['meta[property="og:title"]',title],['meta[property="og:description"]',description],['meta[name="twitter:title"]',title],['meta[name="twitter:description"]',description]]) {
+    const tag = document.querySelector(selector);
+    if (tag && tag.content !== value) tag.content = value;
+  }
+}
+
 class Component extends DCLogic {
   state = {
     lang: this.props.defaultLanguage === 'ro' ? 'ro' : 'en',
@@ -1708,7 +1734,7 @@ fetchSanityMenu() {
     });
 }
 componentDidMount() {
-  document.documentElement.lang = this.state.lang;
+  updatePiccoloSeo(this.state.lang, this.state.page);
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 const pageByPath = {
@@ -1811,7 +1837,7 @@ if (initialPage !== this.state.page) {
     }, 2200);
   }
   componentDidUpdate() {
-    if (document.documentElement.lang !== this.state.lang) document.documentElement.lang = this.state.lang;
+    updatePiccoloSeo(this.state.lang, this.state.page);
     const closedNow = (this.state.storyActiveYear === undefined ? 0 : this.state.storyActiveYear) === -1;
     if (closedNow !== this._wasStoryClosed) {
       this._wasStoryClosed = closedNow;
