@@ -498,7 +498,7 @@ MENU_CATEGORIES
           <div style="{{ col.trackStyle }}">
             <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="0">
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ false }}">
-                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
+                <video data-jiddo-video="{{ it.id }}" ref="{{ setMutedVideoRef }}" data-piccolo-src="{{ it.src }}" muted="{{ true }}" defaultMuted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="{{ it.preload }}" style="width:100%;display:block;object-fit:cover;filter:grayscale(1);aspect-ratio:3/4;margin-bottom:{{ jiddoColGap }}"></video>
               </sc-if>
               <sc-if value="{{ it.isVideo }}" hint-placeholder-val="{{ true }}">
               </sc-if>
@@ -1966,7 +1966,7 @@ const videos = sanityVideos.length
     return Array.from({ length: numCols }, (_, c) => {
       const start = c * 5;
       const images = Array.from({ length: neededCount }, (_, i) => ({ src: isMobile ? this.jiddoMobileImage(pool[(start + i) % pool.length]) : pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: isMobile || i < 3 ? 'eager' : 'lazy' }));
-      const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
+      const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c, preload: isMobile ? 'auto' : 'metadata' } : null;
       const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
       const doubled = single.concat(single);
       const dir = c % 2 === 0 ? 'jiddoScrollDown' : 'jiddoScrollUp';
@@ -3138,7 +3138,10 @@ if (choice === 'rejected') {
       }
       var mobileJiddoVideo = node.tagName === 'VIDEO' && node.hasAttribute('data-jiddo-video') && window.innerWidth < 860;
       if (mobileJiddoVideo) {
-        node.preload = 'metadata';
+        node.preload = 'auto';
+        node.setAttribute('muted', '');
+        node.setAttribute('playsinline', '');
+        node.setAttribute('webkit-playsinline', '');
         node.muted = true;
         node.defaultMuted = true;
         node.playsInline = true;
@@ -3150,7 +3153,10 @@ if (choice === 'rejected') {
           node.addEventListener('loadeddata', node._piccoloReadyHandler);
         }
       }
-      if (node.getAttribute('src') !== value) node.setAttribute('src', value);
+      if (node.getAttribute('src') !== value) {
+        node.setAttribute('src', value);
+        if (mobileJiddoVideo) node.load();
+      }
       if (mobileJiddoVideo) {
         var rect = node.getBoundingClientRect();
         if (rect.width > 0 && rect.bottom > 0 && rect.top < window.innerHeight) { node.preload = 'auto'; node.play().catch(function () {}); }
