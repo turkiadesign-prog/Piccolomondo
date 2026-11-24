@@ -1758,6 +1758,13 @@ if (initialPage !== this.state.page) {
 
     this._chairTilt = { rx: 0, ry: 0 };
     this._onPointerMove = e => {
+      // On desktop, only the home hero needs pointer-driven chair updates.
+      // Avoid re-rendering the galleries on every mouse movement.
+      if (e.pointerType === 'mouse') {
+        if (this.state.page !== 'home') return;
+        const hero = document.querySelector('[data-screen-label="hero"]');
+        if (!hero || !hero.contains(e.target)) return;
+      }
       const nx = (e.clientX / window.innerWidth) * 2 - 1;
       const ny = (e.clientY / window.innerHeight) * 2 - 1;
       this._chairTilt = { rx: -ny * 6, ry: nx * 10 };
