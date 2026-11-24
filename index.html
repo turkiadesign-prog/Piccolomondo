@@ -1439,7 +1439,26 @@ class Component extends DCLogic {
     window.history.pushState({}, '', paths[page] || '/');
 
     this.setState({ page, navOpen: false });
-    window.scrollTo(0, 0);
+    if (window.innerWidth < 860) {
+      const resetScroll = () => {
+        if (window.innerWidth >= 860) return;
+        const root = document.documentElement;
+        const previous = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        window.scrollTo(0, 0);
+        root.style.scrollBehavior = previous;
+      };
+      resetScroll();
+      requestAnimationFrame(() => {
+        if (this.state.page !== page) return;
+        resetScroll();
+        requestAnimationFrame(() => {
+          if (this.state.page === page) resetScroll();
+        });
+      });
+    } else {
+      window.scrollTo(0, 0);
+    }
   };
 }
 fetchSanityGallery() {
