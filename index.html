@@ -844,7 +844,7 @@ MENU_CATEGORIES
                 <input value="{{ feedbackName }}" onChange="{{ onFeedbackNameChange }}" placeholder="{{ t.chat.feedback.namePlaceholder }}" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;margin-bottom:10px">
                 <textarea value="{{ feedbackText }}" onChange="{{ onFeedbackTextChange }}" placeholder="{{ t.chat.feedback.messagePlaceholder }}" rows="4" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;resize:vertical;margin-bottom:16px"></textarea>
                 <button onClick="{{ submitFeedback }}" style="width:100%;background:#401413;color:#FED0CF;border:none;padding:13px;borderRadius:999px;font-family:'Calibre Light',sans-serif;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer" style-hover="background:#344315">{{ t.chat.feedback.submit }}</button>
-                <a href="https://www.google.com/maps?cid=4951164950577469656" target="_blank" rel="noopener noreferrer" style="align-self:center;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;text-decoration:underline;margin-top:14px">{{ t.chat.feedback.googleLabel }}</a>
+                <a href="https://search.google.com/local/writereview?placeid=ChIJv5IF9RkCskAR2NiIR0oStkQ" target="_blank" rel="noopener noreferrer" style="align-self:center;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;text-decoration:underline;margin-top:14px">{{ t.chat.feedback.googleLabel }}</a>
                 <button onClick="{{ closeFeedback }}" style="background:none;border:none;color:#401413;font-family:'Calibre Light',sans-serif;font-size:12px;cursor:pointer;margin-top:14px;align-self:center">{{ t.chat.feedback.back }}</button>
               </sc-if>
               <sc-if value="{{ feedbackSent }}" hint-placeholder-val="{{ false }}">
@@ -852,7 +852,7 @@ MENU_CATEGORIES
                   <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:28px;color:#401413;margin-bottom:10px">{{ t.chat.feedback.thanksTitle }}</div>
                   <div style="font-family:'Calibre Light',sans-serif;font-size:13.5px;line-height:1.7;color:#401413;margin-bottom:24px;text-wrap:pretty">{{ t.chat.feedback.thanksBody }}</div>
                   <div style="font-family:'Calibre Light',sans-serif;font-size:12px;color:#401413;margin-bottom:10px">{{ t.chat.feedback.googlePrompt }}</div>
-                  <a href="https://www.google.com/maps?cid=4951164950577469656" target="_blank" rel="noopener" style="display:inline-block;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;border-bottom:1px solid #401413;text-decoration:none;padding-bottom:2px">{{ t.chat.feedback.googleLabel }}</a>
+                  <a href="https://search.google.com/local/writereview?placeid=ChIJv5IF9RkCskAR2NiIR0oStkQ" target="_blank" rel="noopener" style="display:inline-block;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;border-bottom:1px solid #401413;text-decoration:none;padding-bottom:2px">{{ t.chat.feedback.googleLabel }}</a>
                   <div><button onClick="{{ closeFeedback }}" style="background:none;border:none;color:#401413;font-family:'Calibre Light',sans-serif;font-size:12px;cursor:pointer;margin-top:26px">{{ t.chat.feedback.back }}</button></div>
                 </div>
               </sc-if>
@@ -2341,7 +2341,7 @@ if (this.state.sanityJiddoGallery && this.state.sanityJiddoGallery.length) {
     const botMsg = {
       style: 'align-self:flex-start;background:#FED0CF;color:#2A1002;padding:10px 14px;borderRadius:14px 14px 14px 2px;font-size:13.5px;line-height:1.5;max-width:85%;font-weight:' + (isReview ? '600' : '400'),
       text: answer,
-      linkUrl: isReview ? 'https://www.google.com/maps?cid=4951164950577469656' : (isReservation ? '#' : ''),
+      linkUrl: isReview ? 'https://search.google.com/local/writereview?placeid=ChIJv5IF9RkCskAR2NiIR0oStkQ' : (isReservation ? '#' : ''),
       isReservation: isReservation,
       linkLabel: isReview ? faq.reviewLinkLabel : (isReservation ? faq.reservationLinkLabel : '')
     };
