@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,6 +102,7 @@
     @font-face { font-family: 'Mapalie'; src: url('./fonts/Mapalie.otf') format('opentype'); font-weight: 400; font-display: swap; }
     html { scroll-behavior: smooth; }
     body { margin: 0; }
+    .piccolo-sr-heading { position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0; }
     * { box-sizing: border-box; }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes popIn { from { opacity: 0; transform: scale(0.9) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -211,6 +212,7 @@ MENU_CATEGORIES
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <!-- HERO -->
   <div id="home" data-screen-label="hero" style="position:relative;min-height:80vh;background:#F4EEE8;display:flex;align-items:center;justify-content:center;padding:150px 24px 24px;overflow:hidden;scroll-margin-top:0">
+    <h1 class="piccolo-sr-heading">{{ seoHomeHeading }}</h1>
     <div style="position:relative;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;max-width:1100px;{{ heroCompStyle }}">
       <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);color:#5b3a24;letter-spacing:1px;{{ heroTextWrap }}">Generations at the table,</span>
       <div style="width:{{ chairSize }};height:{{ chairSize }};pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onClick="{{ openPhotoStack }}" onMouseEnter="{{ onChairHoverStart }}" onMouseLeave="{{ onChairHoverEnd }}">
@@ -318,6 +320,7 @@ MENU_CATEGORIES
   <!-- BRAND STORY PAGE -->
   <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
   <div id="story" data-screen-label="brand-story" style="padding:{{ storyPageTopPadding }} 0 60px;background:#F4EEE8;min-height:60vh;overflow-x:hidden">
+    <h1 class="piccolo-sr-heading">{{ t.nav.story }}</h1>
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="max-width:1300px;margin:0 auto;padding:0 24px;display:flex;gap:48px;align-items:flex-start">
       <div style="width:60%;flex-shrink:0;position:relative;aspect-ratio:16/10;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
@@ -440,7 +443,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="max-width:440px">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-        <div style="font-family:'Instrument Serif',serif;font-size:28px;color:#344315" dangerouslySetInnerHTML="{{ legacyTitleHtml }}"></div>
+        <h2 style="font-family:'Instrument Serif',serif;font-size:28px;color:#344315;margin:0;font-weight:400" dangerouslySetInnerHTML="{{ legacyTitleHtml }}"></h2>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
             <img loading="lazy" decoding="async" data-piccolo-src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
@@ -453,7 +456,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="width:100%;max-width:600px;margin-top:{{ legacyTextMarginTop }}">
       <div onClick="{{ toggleLegacyOpen }}" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 0;border-bottom:1px solid rgba(64,20,19,0.2);cursor:pointer">
-        <div style="font-family:'Instrument Serif',serif;font-size:24px;font-style:italic;color:#344315;line-height:1.25;letter-spacing:0.5px" dangerouslySetInnerHTML="{{ legacyTitleHtmlMobile }}"></div>
+        <h2 style="font-family:'Instrument Serif',serif;font-size:24px;font-style:italic;color:#344315;line-height:1.25;letter-spacing:0.5px;margin:0;font-weight:400" dangerouslySetInnerHTML="{{ legacyTitleHtmlMobile }}"></h2>
         <div style="position:relative;width:110px;height:140px;flex-shrink:0">
           <sc-for list="{{ legacyStamps }}" as="stamp" hint-placeholder-count="4">
             <img loading="lazy" decoding="async" data-piccolo-src="{{ stamp.src }}" alt="" style="{{ stamp.style }}">
@@ -506,7 +509,7 @@ MENU_CATEGORIES
       </sc-for>
     </div>
     <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;width:100%;pointer-events:none">
-      <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:{{ jiddoTitleSize }};color:#FED0CF;line-height:1;white-space:nowrap">OUR JIDDO</div>
+      <h1 style="font-family:'Instrument Serif',serif;font-style:italic;font-size:{{ jiddoTitleSize }};margin:0;font-weight:400;color:#FED0CF;line-height:1;white-space:nowrap">OUR JIDDO</h1>
     </div>
   </div>
   <div data-screen-label="jiddo-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
@@ -529,7 +532,7 @@ MENU_CATEGORIES
       <div style="position:relative;margin-bottom:48px">
         <div style="text-align:center">
           <div style="color:#344315;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px">{{ t.menu.eyebrow }}</div>
-          <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,4.5vw,54px);color:#2A1002;margin:0">{{ t.menu.title }}</h2>
+          <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,4.5vw,54px);color:#2A1002;margin:0">{{ t.menu.title }}</h1>
         </div>
         <div style="position:absolute;top:50%;left:calc(50% + 190px);transform:translateY(-50%);width:120px;height:160px;flex-shrink:0;display:{{ illusDisplay }}">
           <img loading="lazy" decoding="async" src="./assets/stamp-hands-pink.png" alt="" style="{{ menuStampBackStyle }}">
@@ -596,7 +599,7 @@ MENU_CATEGORIES
       <sc-for list="{{ foodSections }}" as="sec" hint-placeholder-count="4">
         <div id="{{ sec.anchorId }}" data-cat-group="food" data-cat-key="{{ sec.key }}" style="scroll-margin-top:220px;margin-bottom:56px">
           <div style="text-align:center;margin-bottom:32px">
-            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315">{{ sec.label }}</div>
+            <h2 style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315;margin:0;font-weight:400">{{ sec.label }}</h2>
             <div style="font-size:16px;color:rgba(64,20,19,0.6);margin-top:4px">{{ sec.desc }}</div>
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px">
@@ -627,7 +630,7 @@ MENU_CATEGORIES
       <sc-for list="{{ drinkSections }}" as="sec" hint-placeholder-count="4">
         <div id="{{ sec.anchorId }}" data-cat-group="drinks" data-cat-key="{{ sec.key }}" style="scroll-margin-top:220px;margin-bottom:48px">
           <div style="text-align:center;margin-bottom:32px">
-            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315">{{ sec.label }}</div>
+            <h2 style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#344315;margin:0;font-weight:400">{{ sec.label }}</h2>
             <div style="font-size:16px;color:rgba(64,20,19,0.6);margin-top:4px">{{ sec.desc }}</div>
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
@@ -652,7 +655,7 @@ MENU_CATEGORIES
   <div id="reservation" data-screen-label="reservation" style="padding:{{ reservationTopPadding }} 24px 100px;background:#401413">
     <div style="max-width:640px;margin:0 auto;text-align:center">
       <div style="color: #FED0CF; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; font-family: Calibre Light">{{ t.reservation.eyebrow }}</div>
-      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#F4EEE8;margin:0 0 16px">{{ t.reservation.title }}</h2>
+      <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#F4EEE8;margin:0 0 16px">{{ t.reservation.title }}</h1>
       <p style="color: rgba(244,238,232,0.75); font-size: 15px; line-height: 1.7; margin: 0 0 44px; font-family: Calibre Light; text-wrap: balance">{{ t.reservation.blurb }}</p>
     </div>
 
@@ -665,7 +668,7 @@ MENU_CATEGORIES
     <div style="max-width:1000px;margin:0 auto 0 auto;padding-left:{{ contactPaddingLeft }};display:flex;gap:16px;flex-wrap:wrap;justify-content:{{ contactJustify }}">
       <div style="flex:0 1 340px;min-width:280px">
         <div style="color:#344315;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px">{{ t.contact.eyebrow }}</div>
-        <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#2A1002;margin:0 0 32px">{{ t.contact.title }}</h2>
+        <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,5.5vw,50px);color:#2A1002;margin:0 0 32px">{{ t.contact.title }}</h1>
 
         <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;flex-direction:column;gap:10px;font-family:'Calibre Light',sans-serif">
@@ -1705,6 +1708,7 @@ fetchSanityMenu() {
     });
 }
 componentDidMount() {
+  document.documentElement.lang = this.state.lang;
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 const pageByPath = {
@@ -1807,6 +1811,7 @@ if (initialPage !== this.state.page) {
     }, 2200);
   }
   componentDidUpdate() {
+    if (document.documentElement.lang !== this.state.lang) document.documentElement.lang = this.state.lang;
     const closedNow = (this.state.storyActiveYear === undefined ? 0 : this.state.storyActiveYear) === -1;
     if (closedNow !== this._wasStoryClosed) {
       this._wasStoryClosed = closedNow;
@@ -2741,6 +2746,7 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       hamburgerMarginLeft: isMobile ? '0px' : '6px',
       navOpen: this.state.navOpen,
       toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      seoHomeHeading: this.state.lang === 'ro' ? 'Piccolo Mondo – Restaurant libanez în București' : 'Piccolo Mondo – Lebanese restaurant in Bucharest',
       setLangEn: () => this.setState({ lang: 'en' }),
       setLangRo: () => this.setState({ lang: 'ro' }),
       langBtnEnStyle, langBtnRoStyle, langBtnEnStyleMobile, langBtnRoStyleMobile,
