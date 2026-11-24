@@ -113,6 +113,7 @@
     .story-scroll-hide::-webkit-scrollbar { display: none; }
     @keyframes stampPop { 0% { opacity: 0; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes ribbonScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @keyframes storyRibbonMobile { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
     @keyframes ribbonScrollReverse { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes gallerySlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes fadeInStoryPanel { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
@@ -279,7 +280,7 @@ MENU_CATEGORIES
   <div data-screen-label="gallery" style="background:#F4EEE8;padding:{{ galleryPadding }};overflow:hidden;margin-top:{{ galleryMarginTop }};margin-bottom:{{ galleryMarginBottom }}">
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative">
-      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -294,7 +295,7 @@ MENU_CATEGORIES
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="position:relative">
-      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:200px;height:260px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -411,6 +412,17 @@ MENU_CATEGORIES
 
   <!-- STORY RIBBON -->
   <div data-screen-label="story-ribbon" style="background:#401413;overflow:hidden;padding:10px 0;white-space:nowrap">
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <div style="display:inline-flex;width:max-content;animation:storyRibbonMobile 18s linear infinite;align-items:center;will-change:transform;min-height:24px">
+        <sc-for list="{{ storyRibbonMobileItems }}" as="i" hint-placeholder-count="6">
+          <img src="./assets/story-ribbon-arabic-optimized.webp" alt="" style="display:block;height:24px;width:auto;flex-shrink:0;margin:0 4px">
+        </sc-for>
+        <sc-for list="{{ storyRibbonMobileItems }}" as="i" hint-placeholder-count="6">
+          <img src="./assets/story-ribbon-arabic-optimized.webp" alt="" style="display:block;height:24px;width:auto;flex-shrink:0;margin:0 4px">
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="display:inline-flex;animation:ribbonScrollReverse 110s linear infinite;align-items:center">
       <sc-for list="{{ storyRibbonItemsOriginal }}" as="i" hint-placeholder-count="6">
         <img src="./assets/story-ribbon-arabic-optimized.webp" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
@@ -419,6 +431,7 @@ MENU_CATEGORIES
         <img src="./assets/story-ribbon-arabic-optimized.webp" alt="" style="height:{{ storyRibbonImgHeightOriginal }};width:auto;flex-shrink:0;margin:0 4px">
       </sc-for>
     </div>
+    </sc-if>
   </div>
 
   <!-- STORY LEGACY SECTION -->
@@ -457,7 +470,7 @@ MENU_CATEGORIES
   <!-- STORY GALLERY -->
   <div data-screen-label="story-gallery" style="background:#F4EEE8;padding:30px 0 70px;overflow:hidden">
     <div style="position:relative">
-      <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
+      <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="display:inline-flex;gap:20px">
           <sc-for list="{{ storyGalleryItems }}" as="item" hint-placeholder-count="18">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
@@ -1831,8 +1844,9 @@ if (initialPage !== this.state.page) {
     this._clearStampTimers();
   }
   setGalleryScrollRef(el) {
+    if (this._galleryScrollEl === el && (this._galleryAutoTimer || this._galleryAutoTimerResume)) return;
     this._galleryScrollEl = el;
-    this._startAutoScroll('_galleryScrollEl', '_galleryAutoTimer');
+    if (el) this._startAutoScroll('_galleryScrollEl', '_galleryAutoTimer');
   }
   scrollGallery(dir) {
     this._pauseAutoScroll('_galleryAutoTimer');
@@ -1856,20 +1870,22 @@ if (initialPage !== this.state.page) {
       const max = el.scrollWidth - el.clientWidth;
       if (max <= 0) return;
       const next = el.scrollLeft + 1.8;
-      el.scrollLeft = next >= max ? 0 : next;
+      el.scrollTo({ left: next >= max ? 0 : next, behavior: 'instant' });
     }, 20);
   }
   _pauseAutoScroll(timerKey) {
     if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
     if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
     this[timerKey + 'Resume'] = setTimeout(() => {
+      this[timerKey + 'Resume'] = null;
       const elKey = timerKey === '_galleryAutoTimer' ? '_galleryScrollEl' : '_storyGalleryScrollEl';
       this._startAutoScroll(elKey, timerKey);
     }, 4000);
   }
   setStoryGalleryScrollRef(el) {
+    if (this._storyGalleryScrollEl === el && (this._storyGalleryAutoTimer || this._storyGalleryAutoTimerResume)) return;
     this._storyGalleryScrollEl = el;
-    this._startAutoScroll('_storyGalleryScrollEl', '_storyGalleryAutoTimer');
+    if (el) this._startAutoScroll('_storyGalleryScrollEl', '_storyGalleryAutoTimer');
   }
   scrollStoryGallery(dir) {
     this._pauseAutoScroll('_storyGalleryAutoTimer');
@@ -2652,6 +2668,7 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       legacyPanelMaxHeight: (this.state.legacyOpen === undefined ? true : this.state.legacyOpen) ? '600px' : '0px',
       storyRibbonItems: Array.from({length: 12}),
       storyRibbonItemsOriginal: Array.from({length: 50}),
+      storyRibbonMobileItems: Array.from({length: 24}),
       legacyStamps: this.legacyStampList().map((s, i) => ({
         src: s.src,
         style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:' + (i === (this.state.legacyStampIndex || 0) ? 1 : 0) + ';transition:opacity 0.6s ease;transform:rotate(' + ((i % 2 === 0 ? -1 : 1) * (6 + (i * 2) % 5)) + 'deg)'
