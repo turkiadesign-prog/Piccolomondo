@@ -844,6 +844,7 @@ MENU_CATEGORIES
                 <input value="{{ feedbackName }}" onChange="{{ onFeedbackNameChange }}" placeholder="{{ t.chat.feedback.namePlaceholder }}" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;margin-bottom:10px">
                 <textarea value="{{ feedbackText }}" onChange="{{ onFeedbackTextChange }}" placeholder="{{ t.chat.feedback.messagePlaceholder }}" rows="4" style="width:100%;box-sizing:border-box;padding:12px 14px;borderRadius:8px;border:1px solid rgba(64,20,19,0.25);background:#ffffff;font-size:13px;font-family:'Calibre Light',sans-serif;color:#401413;resize:vertical;margin-bottom:16px"></textarea>
                 <button onClick="{{ submitFeedback }}" style="width:100%;background:#401413;color:#FED0CF;border:none;padding:13px;borderRadius:999px;font-family:'Calibre Light',sans-serif;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer" style-hover="background:#344315">{{ t.chat.feedback.submit }}</button>
+                <a href="https://www.google.com/maps?cid=4951164950577469656" target="_blank" rel="noopener noreferrer" style="align-self:center;color:#401413;font-family:'Calibre Light',sans-serif;font-size:13px;text-decoration:underline;margin-top:14px">{{ t.chat.feedback.googleLabel }}</a>
                 <button onClick="{{ closeFeedback }}" style="background:none;border:none;color:#401413;font-family:'Calibre Light',sans-serif;font-size:12px;cursor:pointer;margin-top:14px;align-self:center">{{ t.chat.feedback.back }}</button>
               </sc-if>
               <sc-if value="{{ feedbackSent }}" hint-placeholder-val="{{ false }}">
@@ -1262,10 +1263,10 @@ const T = {
         ratingLabel: 'How was your experience?',
         namePlaceholder: 'Your name',
         messagePlaceholder: 'Tell us about your visit…',
-        submit: 'Send feedback',
+        submit: 'Send feedback by email',
         back: '← Back to chat',
         thanksTitle: 'Thank you.',
-        thanksBody: 'Your feedback is on its way to us. It means the world.',
+        thanksBody: 'Please send the prepared message from your email application to complete your feedback.',
         googlePrompt: 'Would you share it publicly too?',
         googleLabel: 'Leave a Google review →'
       },
@@ -1385,10 +1386,10 @@ const T = {
         ratingLabel: 'Cum a fost experiența?',
         namePlaceholder: 'Numele tău',
         messagePlaceholder: 'Spune-ne despre vizita ta…',
-        submit: 'Trimite feedback',
+        submit: 'Trimite feedback prin e-mail',
         back: '← Înapoi la chat',
         thanksTitle: 'Mulțumim.',
-        thanksBody: 'Feedback-ul tău este pe drum spre noi. Înseamnă enorm.',
+        thanksBody: 'Trimite mesajul pregătit din aplicația ta de e-mail pentru a finaliza feedback-ul.',
         googlePrompt: 'Vrei să îl împarți și public?',
         googleLabel: 'Lasă o recenzie pe Google →'
       },
@@ -2960,11 +2961,6 @@ excerptLine: {
       feedbackStars: [1, 2, 3, 4, 5].map(n => ({
         onClick: () => {
           this.setState({ feedbackRating: n });
-          clearTimeout(this._feedbackJumpTimer);
-          this._feedbackJumpTimer = setTimeout(() => {
-            window.open('https://www.google.com/maps?cid=4951164950577469656', '_blank', 'noopener');
-            this.setState({ feedbackOpen: false, feedbackRating: 0 });
-          }, 900);
         },
         style: 'background:none;border:none;cursor:pointer;font-size:26px;line-height:1;padding:0;color:' + (n <= (this.state.feedbackRating || 0) ? '#401413' : 'rgba(64,20,19,0.25)') + ';transition:color 0.2s ease'
       }))
