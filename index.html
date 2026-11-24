@@ -249,11 +249,11 @@ MENU_CATEGORIES
       <div ref="{{ setStoryScrollRef }}" onScroll="{{ onStoryScroll }}" style="overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;display:flex;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
         <div style="position:relative;width:280%;flex-shrink:0;scroll-snap-align:start">
           <img loading="eager" fetchpriority="high" decoding="async" data-piccolo-src="{{ t.storyCollageBase }}" data-piccolo-collage="mobile" src="./assets/story-collage-corrected-20261123-2400.webp" srcset="./assets/story-collage-corrected-20261123-2400.webp 2400w" sizes="280vw" alt="" width="3841" height="1795" style="width:100%;height:auto;display:block">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" data-piccolo-reveal="true" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" decoding="async" data-piccolo-src="{{ t.storyRevealImages[0] }}" data-piccolo-reveal="true" data-piccolo-mobile-reveal="true" alt="" style="position:absolute;left:18.69%;top:13.71%;width:16.92%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" decoding="async" data-piccolo-src="{{ t.storyRevealImages[1] }}" data-piccolo-reveal="true" data-piccolo-mobile-reveal="true" alt="" style="position:absolute;left:37.28%;top:13.71%;width:16.87%;height:47.13%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" decoding="async" data-piccolo-src="{{ t.storyRevealImages[2] }}" data-piccolo-reveal="true" data-piccolo-mobile-reveal="true" alt="" style="position:absolute;left:55.82%;top:13.59%;width:10.78%;height:31.09%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" decoding="async" data-piccolo-src="{{ t.storyRevealImages[3] }}" data-piccolo-reveal="true" data-piccolo-mobile-reveal="true" alt="" style="position:absolute;left:55.82%;top:48.25%;width:22.96%;height:31.75%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
+          <img loading="eager" decoding="async" data-piccolo-src="{{ t.storyRevealImages[4] }}" data-piccolo-reveal="true" data-piccolo-mobile-reveal="true" alt="" style="position:absolute;left:43.06%;top:64.40%;width:11.09%;height:29.97%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;cursor:pointer" style-hover="opacity:1" style-active="opacity:1">
         </div>
       </div>
       <div style="height:3px;background:rgba(64,20,19,0.15);border-radius:2px;margin:16px 32px 0;position:relative;overflow:hidden">
@@ -357,7 +357,7 @@ MENU_CATEGORIES
     <div style="width:100vw;position:relative;left:50%;transform:translateX(-50%);aspect-ratio:16/9;overflow:hidden;background:transparent;cursor:pointer" onClick="{{ storyImageClick }}" onTouchStart="{{ storySwipeStart }}" onTouchEnd="{{ storySwipeEnd }}">
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="0">
         <sc-for list="{{ item.images }}" as="img" hint-placeholder-count="0">
-          <img loading="lazy" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
+          <img loading="eager" fetchpriority="{{ img.priority }}" decoding="async" data-piccolo-src="{{ img.src }}" alt="" style="{{ img.style }}">
         </sc-for>
       </sc-for>
       <sc-for list="{{ storyTimeline }}" as="item" hint-placeholder-count="3">
@@ -1469,6 +1469,11 @@ const timeline =
     : [];
 
 if (timeline.length) {
+  if (window.innerWidth < 860 && timeline[0].images && timeline[0].images[0]) {
+    const first = new Image();
+    first.src = timeline[0].images[0];
+    this._mobileStoryFirstImage = first;
+  }
   this.setState({ sanityStoryTimeline: timeline });
 }
 const legacyTitle =
@@ -1522,6 +1527,16 @@ fetchSanityJiddoGallery() {
           : [];
 
   if (images.length) {
+  if (window.innerWidth < 860) {
+    const pool = images.filter(item => item.mediaType === 'image' && item.imageUrl).map(item => item.imageUrl);
+    this._mobileJiddoWarmImages = [];
+    if (pool.length) {
+      const count = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / (window.innerWidth / 3 * 4 / 3))));
+      const urls = new Set();
+      for (let c = 0; c < 3; c++) for (let i = 0; i < count; i++) urls.add(pool[(c * 5 + i) % pool.length]);
+      urls.forEach(src => { const img = new Image(); img.src = src; this._mobileJiddoWarmImages.push(img); });
+    }
+  }
   this.setState({ sanityJiddoGallery: images });
 }
 
@@ -1937,7 +1952,7 @@ const videos = sanityVideos.length
     const neededCount = Math.min(pool.length, Math.max(4, Math.ceil((2 * window.innerHeight) / imgHeightPx)));
     return Array.from({ length: numCols }, (_, c) => {
       const start = c * 5;
-      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: i < 3 ? 'eager' : 'lazy' }));
+      const images = Array.from({ length: neededCount }, (_, i) => ({ src: pool[(start + i) % pool.length], isImage: true, isVideo: false, loading: isMobile || i < 3 ? 'eager' : 'lazy' }));
       const videoSlot = c < videos.length ? { src: videos[c], isImage: false, isVideo: true, id: 'v' + c } : null;
       const single = videoSlot ? [images[0], videoSlot].concat(images.slice(1)) : images;
       const doubled = single.concat(single);
@@ -2120,7 +2135,7 @@ const videos = sanityVideos.length
       onClick: () => this.setState({ storyActiveYear: i === active ? -1 : i, storySubIndex: 0 }),
       images: d.images.map((src, j) => {
         const on = closed ? (activeFlat && activeFlat.i === i && activeFlat.j === j) : (i === active && j === subIndex);
-        return { src, style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:' + (on ? 1 : 0) + ';transition:opacity 1.2s ease;z-index:' + (on ? 1 : 0) };
+        return { src, priority: on ? 'high' : 'auto', style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:' + (on ? 1 : 0) + ';transition:opacity 1.2s ease;z-index:' + (on ? 1 : 0) };
       }),
       isActive: i === active,
       hasMultipleImages: d.images.length > 1,
@@ -3082,10 +3097,11 @@ if (choice === 'rejected') {
           if (u.hostname === 'cdn.sanity.io' && u.pathname.indexOf('/images/ob9d80dz/') === 0) {
             var isCollage = node.hasAttribute('data-piccolo-collage');
             var small = window.matchMedia('(max-width: 767px)').matches;
-            var requestedWidth = isCollage ? (small ? 1600 : 2000) : (small ? 300 : 480);
+            var mobileReveal = node.hasAttribute('data-piccolo-mobile-reveal');
+            var requestedWidth = mobileReveal ? 1200 : (isCollage ? (small ? 1600 : 2000) : (small ? 300 : 480));
             u.searchParams.set('w', String(requestedWidth));
             u.searchParams.set('auto', 'format');
-            u.searchParams.set('q', isCollage ? '82' : (small ? '72' : '82'));
+            u.searchParams.set('q', mobileReveal ? '95' : (isCollage ? '82' : (small ? '72' : '82')));
             value = u.toString();
             // A new CMS image must never be overridden by stale local srcset variants.
             if (isCollage) {
@@ -3107,7 +3123,22 @@ if (choice === 'rejected') {
         if (node.getAttribute('srcset') !== set) node.setAttribute('srcset', set);
         value = prefix + (mobileCollage ? '2400.webp' : '1600.webp');
       }
+      var mobileJiddoVideo = node.tagName === 'VIDEO' && node.hasAttribute('data-jiddo-video') && window.innerWidth < 860;
+      if (mobileJiddoVideo) {
+        node.preload = 'auto';
+        node.muted = true;
+        node.defaultMuted = true;
+        node.playsInline = true;
+        if (!node._piccoloReadyHandler) {
+          node._piccoloReadyHandler = function () {
+            var r = node.getBoundingClientRect();
+            if (r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth) node.play().catch(function () {});
+          };
+          node.addEventListener('loadeddata', node._piccoloReadyHandler);
+        }
+      }
       if (node.getAttribute('src') !== value) node.setAttribute('src', value);
+      if (mobileJiddoVideo && node.readyState >= 2) node._piccoloReadyHandler();
     });
   }
   hydrate(document);
