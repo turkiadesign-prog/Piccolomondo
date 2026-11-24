@@ -281,7 +281,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative">
       <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -296,7 +296,7 @@ MENU_CATEGORIES
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div style="position:relative">
       <div ref="{{ setGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
           <sc-for list="{{ galleryItems }}" as="item" hint-placeholder-count="15">
             <div style="width:200px;height:260px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -471,7 +471,7 @@ MENU_CATEGORIES
   <div data-screen-label="story-gallery" style="background:#F4EEE8;padding:30px 0 70px;overflow:hidden">
     <div style="position:relative">
       <div ref="{{ setStoryGalleryScrollRef }}" style="overflow-x:hidden;scroll-behavior:auto;overflow-anchor:none;scrollbar-width:none;-ms-overflow-style:none" class="story-scroll-hide">
-        <div style="display:inline-flex;gap:20px">
+        <div style="display:inline-flex;gap:20px;position:relative;will-change:transform">
           <sc-for list="{{ storyGalleryItems }}" as="item" hint-placeholder-count="18">
             <div style="width:280px;height:360px;flex-shrink:0;background-size:cover;background-position:center;{{ item.bgStyle }}"></div>
           </sc-for>
@@ -1850,63 +1850,44 @@ if (initialPage !== this.state.page) {
     if (this._handwriteObserver) this._handwriteObserver.disconnect();
     this._clearStampTimers();
   }
-  setGalleryScrollRef(el) {
-    if (this._galleryScrollEl === el && (this._galleryAutoTimer || this._galleryAutoTimerResume)) return;
-    this._galleryScrollEl = el;
-    if (el) this._startAutoScroll('_galleryScrollEl', '_galleryAutoTimer');
+  setGalleryScrollRef(el) { this._bindGallery('_homeLoop', el); }
+  setStoryGalleryScrollRef(el) { this._bindGallery('_storyLoop', el); }
+  scrollGallery(dir) { this._nudgeGallery('_homeLoop', dir); }
+  scrollStoryGallery(dir) { this._nudgeGallery('_storyLoop', dir); }
+  _bindGallery(key, el) {
+    const old = this[key];
+    if (old && old.el === el) return;
+    if (old) cancelAnimationFrame(old.frame);
+    if (!el) { this[key] = null; return; }
+    const state = this[key] = { el, pos: 0, last: 0, nudge: 0, frame: 0 };
+    const tick = now => {
+      if (this[key] !== state) return;
+      const dt = state.last ? Math.min((now - state.last) / 1000, 0.05) : 0;
+      state.last = now;
+      const track = el.firstElementChild;
+      if (track && track.children.length >= 2 && el.clientWidth) {
+        const half = Math.floor(track.children.length / 2);
+        const period = track.children[half].offsetLeft - track.children[0].offsetLeft;
+        if (period > 0) {
+          const step = state.nudge * (1 - Math.exp(-dt * 9));
+          state.nudge -= step;
+          state.pos = ((state.pos + 90 * dt + step) % period + period) % period;
+          track.style.transform = 'translate3d(' + (-state.pos) + 'px,0,0)';
+        }
+      }
+      state.frame = requestAnimationFrame(tick);
+    };
+    state.frame = requestAnimationFrame(tick);
   }
-  scrollGallery(dir) {
-    this._pauseAutoScroll('_galleryAutoTimer');
-    const el = this._galleryScrollEl;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    const next = el.scrollLeft + dir * 220;
-    if (next >= max - 4 && dir > 0) {
-      el.scrollTo({ left: 0, behavior: 'auto' });
-    } else if (next <= 4 && dir < 0) {
-      el.scrollTo({ left: max, behavior: 'auto' });
-    } else {
-      el.scrollTo({ left: Math.max(0, Math.min(max, next)), behavior: 'smooth' });
-    }
+  _nudgeGallery(key, dir) {
+    const state = this[key];
+    if (state) state.nudge += dir * 220;
   }
-  _startAutoScroll(elKey, timerKey) {
-    if (this[timerKey]) clearInterval(this[timerKey]);
-    this[timerKey] = setInterval(() => {
-      const el = this[elKey];
-      if (!el) return;
-      const max = el.scrollWidth - el.clientWidth;
-      if (max <= 0) return;
-      const next = el.scrollLeft + 1.8;
-      el.scrollTo({ left: next >= max ? 0 : next, behavior: 'instant' });
-    }, 20);
-  }
-  _pauseAutoScroll(timerKey) {
-    if (this[timerKey]) { clearInterval(this[timerKey]); this[timerKey] = null; }
-    if (this[timerKey + 'Resume']) clearTimeout(this[timerKey + 'Resume']);
-    this[timerKey + 'Resume'] = setTimeout(() => {
-      this[timerKey + 'Resume'] = null;
-      const elKey = timerKey === '_galleryAutoTimer' ? '_galleryScrollEl' : '_storyGalleryScrollEl';
-      this._startAutoScroll(elKey, timerKey);
-    }, 4000);
-  }
-  setStoryGalleryScrollRef(el) {
-    if (this._storyGalleryScrollEl === el && (this._storyGalleryAutoTimer || this._storyGalleryAutoTimerResume)) return;
-    this._storyGalleryScrollEl = el;
-    if (el) this._startAutoScroll('_storyGalleryScrollEl', '_storyGalleryAutoTimer');
-  }
-  scrollStoryGallery(dir) {
-    this._pauseAutoScroll('_storyGalleryAutoTimer');
-    const el = this._storyGalleryScrollEl;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    const next = el.scrollLeft + dir * 220;
-    if (next >= max - 4 && dir > 0) {
-      el.scrollTo({ left: 0, behavior: 'auto' });
-    } else if (next <= 4 && dir < 0) {
-      el.scrollTo({ left: max, behavior: 'auto' });
-    } else {
-      el.scrollTo({ left: Math.max(0, Math.min(max, next)), behavior: 'smooth' });
-    }
+  _repeatGallery(items) {
+    if (!items.length) return [];
+    const copies = Math.max(1, Math.ceil(20 / items.length));
+    const sequence = Array.from({length: copies}, () => items).flat();
+    return sequence.concat(sequence).map(item => ({...item}));
   }
   setCatTabsScrollRef(el) { this._catTabsScrollEl = el; }
   scrollActiveCatTabIntoView(key) {
@@ -2772,8 +2753,7 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       chairVisible: !this.state.photoStackOpen,
       scrollToStory: e => { e.preventDefault(); document.querySelector('[data-screen-label="story-teaser"]')?.scrollIntoView({ behavior: 'smooth' }); },
       ribbonItems: Array(8).fill('Generations at the table. Lebanese at heart. Since 1993.'),
-      galleryItems:
-      this.state.sanityHome &&
+      galleryItems: this._repeatGallery(this.state.sanityHome &&
       Array.isArray(this.state.sanityHome.galleryItems) &&
       this.state.sanityHome.galleryItems.length
       ? this.state.sanityHome.galleryItems.map(src => ({
@@ -2781,8 +2761,8 @@ toggleLegacyOpen: () => this.toggleLegacyOpen(),
       }))
     : Array.from({ length: 15 }, (_, i) => ({
         bgStyle: 'background-image:url(./assets/gallery/g' + (i + 1) + '-opt.webp)'
-      })),
-     storyGalleryItems: (this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: 42 }, (_, i) => ({ bgStyle: 'background-image:url(\'' + this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length] + '\')' })) : Array.from({ length: 42 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; }),
+      }))),
+      storyGalleryItems: this._repeatGallery((this.state.sanityStoryGallery && this.state.sanityStoryGallery.length) ? Array.from({ length: this.state.sanityStoryGallery.length }, (_, i) => ({ bgStyle: 'background-image:url(\'' + this.state.sanityStoryGallery[i % this.state.sanityStoryGallery.length] + '\')' })) : Array.from({ length: 21 }, (_, i) => { const n = (i % 21) + 1; const optimized = n === 2 || n === 10 || n >= 11; return { bgStyle: 'background-image:url(\'./assets/story-gallery-' + n + (optimized ? '-opt.webp' : '.webp') + '\')' }; })),
 
 handwriteRef: this._handwriteRefCb,
 handwriteText: (this._handwriteText || '').slice(0, this.state.handwriteChars),
