@@ -1407,6 +1407,12 @@ const PICCOLO_SEO = {"en": {"home": ["Piccolo Mondo | Lebanese Restaurant in Buc
 function updatePiccoloSeo(lang, page) {
   const locale = lang === 'ro' ? 'ro' : 'en';
   const [title, description] = PICCOLO_SEO[locale][page] || PICCOLO_SEO[locale].home;
+  const canonicalPaths = {home: '/', story: '/story', jiddo: '/jiddo', menu: '/menu', contact: '/contact'};
+  const canonicalUrl = 'https://piccolomondo.ro' + (canonicalPaths[page] || '/');
+  const canonicalTag = document.querySelector('link[rel="canonical"]');
+  if (canonicalTag && canonicalTag.href !== canonicalUrl) canonicalTag.href = canonicalUrl;
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl && ogUrl.content !== canonicalUrl) ogUrl.content = canonicalUrl;
   document.documentElement.lang = locale;
   if (document.title !== title) document.title = title;
   for (const [selector, value] of [['meta[name="description"]',description],['meta[property="og:title"]',title],['meta[property="og:description"]',description],['meta[name="twitter:title"]',title],['meta[name="twitter:description"]',description]]) {
