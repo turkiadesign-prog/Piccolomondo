@@ -3,6 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Mobile homepage only: discover the existing full-quality collage early. -->
+<script>
+(function () {
+  var path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path !== '/' || window.innerWidth >= 860) return;
+  var link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'image';
+  link.href = '/assets/story-collage-corrected-20261123-2400.webp';
+  link.setAttribute('fetchpriority', 'high');
+  document.head.appendChild(link);
+})();
+</script>
 
 <title>Piccolo Mondo | Lebanese Restaurant in Bucharest Since 1993</title>
 <meta name="description" content="Discover authentic Lebanese cuisine at Piccolo Mondo in Bucharest. A family restaurant since 1993, rooted in tradition and warm hospitality.">
